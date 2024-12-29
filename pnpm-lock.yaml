@@ -24,7 +24,7 @@ importers:
         specifier: 5.5.4
         version: 5.5.4
 
-  apps/web:
+  apps/admin:
     dependencies:
       '@workspace/ui':
         specifier: workspace:*
