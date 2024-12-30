@@ -44,7 +44,7 @@ const items = [
 export function AdminSidebar() {
   const { state } = useSidebar();
   return (
-    <Sidebar variant="floating" collapsible="icon">
+    <Sidebar collapsible="icon">
       <SidebarContent>
         {state === "expanded" && (
           <SidebarHeader className="flex flex-row justify-between items-center">
