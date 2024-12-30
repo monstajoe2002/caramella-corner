@@ -15,6 +15,7 @@ import {
 } from "@caramella-corner/ui/components/sidebar";
 import Link from "next/link";
 import { cn } from "@caramella-corner/ui/lib/utils";
+import { ModeToggle } from "@caramella-corner/ui/components/mode-toggle";
 
 // Menu items.
 const items = [
@@ -45,13 +46,16 @@ export function AdminSidebar() {
   return (
     <Sidebar variant="floating" collapsible="icon">
       <SidebarContent>
-        <SidebarHeader
-          className={cn(
-            "px-4 text-2xl md:pb-0 font-medium tracking-tight",
-            state === "collapsed" && "hidden"
-          )}
-        >
-          Caramella Corner
+        <SidebarHeader className="flex flex-row justify-between items-center">
+          <span
+            className={cn(
+              "pl-2 text-2xl md:pb-0 font-medium tracking-tight",
+              state === "collapsed" && "hidden"
+            )}
+          >
+            Caramella Corner
+          </span>
+          <ModeToggle />
         </SidebarHeader>
         <SidebarGroup>
           <SidebarGroupLabel className="font-bold">
