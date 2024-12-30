@@ -1,8 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 
-import "@workspace/ui/globals.css";
+import "@caramella-corner/ui/globals.css";
 import { Providers } from "@/components/providers";
-import { SidebarTrigger } from "@workspace/ui/components/sidebar";
+import { SidebarTrigger } from "@caramella-corner/ui/components/sidebar";
 import { AdminSidebar } from "@/components/admin-sidebar";
 
 const fontSans = Geist({

@@ -1,4 +1,3 @@
 {
-  "extends": "@workspace/typescript-config/base.json"
+  "extends": "@caramella-corner/typescript-config/base.json"
 }
-

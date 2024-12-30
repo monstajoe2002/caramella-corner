@@ -12,9 +12,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@workspace/ui/components/sidebar";
+} from "@caramella-corner/ui/components/sidebar";
 import Link from "next/link";
-import { cn } from "@workspace/ui/lib/utils";
+import { cn } from "@caramella-corner/ui/lib/utils";
 
 // Menu items.
 const items = [

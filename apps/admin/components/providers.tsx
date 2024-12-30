@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { SidebarProvider } from "@workspace/ui/components/sidebar";
+import { SidebarProvider } from "@caramella-corner/ui/components/sidebar";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (

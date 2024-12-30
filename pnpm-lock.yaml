@@ -8,10 +8,10 @@ importers:
 
   .:
     devDependencies:
-      '@workspace/eslint-config':
+      '@caramella-corner/eslint-config':
         specifier: workspace:*
         version: link:packages/eslint-config
-      '@workspace/typescript-config':
+      '@caramella-corner/typescript-config':
         specifier: workspace:*
         version: link:packages/typescript-config
       prettier:
@@ -26,7 +26,7 @@ importers:
 
   apps/admin:
     dependencies:
-      '@workspace/ui':
+      '@caramella-corner/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       lucide-react:
@@ -45,6 +45,12 @@ importers:
         specifier: ^19.0.0
         version: 19.0.0(react@19.0.0)
     devDependencies:
+      '@caramella-corner/eslint-config':
+        specifier: workspace:^
+        version: link:../../packages/eslint-config
+      '@caramella-corner/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
       '@types/node':
         specifier: ^20
         version: 20.17.10
@@ -54,12 +60,6 @@ importers:
       '@types/react-dom':
         specifier: 18.3.1
         version: 18.3.1
-      '@workspace/eslint-config':
-        specifier: workspace:^
-        version: link:../../packages/eslint-config
-      '@workspace/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/typescript-config
       postcss:
         specifier: ^8
         version: 8.4.49
@@ -180,6 +180,12 @@ importers:
         specifier: ^3.23.8
         version: 3.24.1
     devDependencies:
+      '@caramella-corner/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@caramella-corner/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
       '@turbo/gen':
         specifier: ^2.2.3
         version: 2.3.3(@types/node@22.10.2)(typescript@5.7.2)
@@ -192,12 +198,6 @@ importers:
       '@types/react-dom':
         specifier: 18.3.1
         version: 18.3.1
-      '@workspace/eslint-config':
-        specifier: workspace:*
-        version: link:../eslint-config
-      '@workspace/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.49)
