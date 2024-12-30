@@ -46,17 +46,16 @@ export function AdminSidebar() {
   return (
     <Sidebar variant="floating" collapsible="icon">
       <SidebarContent>
-        <SidebarHeader className="flex flex-row justify-between items-center">
-          <span
-            className={cn(
-              "pl-2 text-2xl md:pb-0 font-medium tracking-tight",
-              state === "collapsed" && "hidden"
-            )}
-          >
-            Caramella Corner
-          </span>
-          <ModeToggle />
-        </SidebarHeader>
+        {state === "expanded" && (
+          <SidebarHeader className="flex flex-row justify-between items-center">
+            <span
+              className={"pl-2 text-2xl md:pb-0 font-medium tracking-tight"}
+            >
+              Caramella Corner
+            </span>
+            <ModeToggle />
+          </SidebarHeader>
+        )}
         <SidebarGroup>
           <SidebarGroupLabel className="font-bold">
             Admin Dashboard
