@@ -26,9 +26,11 @@ export default function RootLayout({
         className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}
       >
         <Providers>
-          <AdminSidebar />
-          <main className="inline-block min-h-screen p-6 md:p-4">
+          <aside className="inline-flex p-2">
+            <AdminSidebar />
             <SidebarTrigger />
+          </aside>
+          <main className="inline-block min-h-screen p-6 md:p-4 container">
             {children}
           </main>
         </Providers>
