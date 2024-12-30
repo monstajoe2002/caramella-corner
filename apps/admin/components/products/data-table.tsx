@@ -2,6 +2,8 @@
 
 import {
   ColumnDef,
+  ColumnFiltersState,
+  getFilteredRowModel,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
@@ -18,6 +20,7 @@ import {
   TableRow,
 } from "@caramella-corner/ui/components/table";
 import { Button } from "@caramella-corner/ui/components/button";
+import { Input } from "@caramella-corner/ui/components/input";
 import {
   Select,
   SelectTrigger,
@@ -31,6 +34,7 @@ import {
   ChevronRight,
   ChevronsRight,
 } from "lucide-react";
+import { useState } from "react";
 
 interface DataTablePaginationProps<TData> {
   table: ReactTable<TData>;
@@ -121,15 +125,30 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: { columnFilters },
   });
 
   return (
     <div>
+      <div className="flex items-center py-4">
+        {/* TODO: pass a prop to the data table for the column on which to be filtered */}
+        <Input
+          placeholder="Filter products..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
