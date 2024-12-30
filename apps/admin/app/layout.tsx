@@ -30,7 +30,7 @@ export default function RootLayout({
             <AdminSidebar />
             <SidebarTrigger />
           </aside>
-          <main className="inline-block min-h-screen p-6 md:p-4 container">
+          <main className="inline-block min-h-screen p-10 md:p-8 container">
             {children}
           </main>
         </Providers>
