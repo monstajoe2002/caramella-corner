@@ -20,5 +20,8 @@ export const columns: ColumnDef<{
   {
     accessorKey: "active",
     header: "Active",
+    cell(props) {
+      return <span>{props.row.getValue("active") ? "Yes" : "No"}</span>;
+    },
   },
 ];
