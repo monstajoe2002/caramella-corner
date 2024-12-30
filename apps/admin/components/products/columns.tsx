@@ -25,7 +25,10 @@ export const columns: ColumnDef<{
   },
   {
     accessorKey: "quantity",
-    header: "Quantity",
+    header: () => <span className="hidden md:table-cell">Quantity</span>,
+    cell: ({ row }) => (
+      <span className="hidden md:table-cell">{row.getValue("quantity")}</span>
+    ),
   },
   {
     accessorKey: "active",
