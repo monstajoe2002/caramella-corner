@@ -19,11 +19,10 @@ export const RecentOrdersTable = () => {
   return (
     <Card className="mt-8">
       <CardHeader>
-        <CardTitle>Recent Orders</CardTitle>
+        <CardTitle className="text-2xl">Recent Orders</CardTitle>
       </CardHeader>
       <CardContent className="overflow-x-auto">
         <Table>
-          <TableCaption>A list of your recent invoices.</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">Invoice</TableHead>
