@@ -1,4 +1,5 @@
 import { DashboardCard } from "@/components/dashboard/dashboard-card";
+import { RecentOrdersTable } from "@/components/dashboard/recent-orders-table";
 
 export default function Page() {
   return (
@@ -15,6 +16,7 @@ export default function Page() {
           <p className="text-2xl font-bold">$45,231.89</p>
         </DashboardCard>
       </div>
+      <RecentOrdersTable />
     </main>
   );
 }
