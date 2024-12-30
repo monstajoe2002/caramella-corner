@@ -14,7 +14,6 @@ import {
   useSidebar,
 } from "@caramella-corner/ui/components/sidebar";
 import Link from "next/link";
-import { cn } from "@caramella-corner/ui/lib/utils";
 import { ModeToggle } from "@caramella-corner/ui/components/mode-toggle";
 
 // Menu items.
