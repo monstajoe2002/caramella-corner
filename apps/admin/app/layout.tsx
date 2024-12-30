@@ -4,7 +4,7 @@ import "@caramella-corner/ui/globals.css";
 import { Providers } from "@/components/providers";
 import { SidebarTrigger } from "@caramella-corner/ui/components/sidebar";
 import { AdminSidebar } from "@/components/admin-sidebar";
-
+import { Metadata } from "next";
 const fontSans = Geist({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -14,6 +14,11 @@ const fontMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
 });
+
+export const metadata: Metadata = {
+  title: "Caramella Corner - Admin",
+  description: "Admin dashboard for Caramella Corner",
+};
 
 export default function RootLayout({
   children,
