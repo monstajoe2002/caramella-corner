@@ -1,5 +1,5 @@
 import { columns } from "@/components/products/columns";
-import { DataTable } from "@/components/products/data-table";
+import { DataTable } from "@/components/data-table";
 import { faker } from "@faker-js/faker";
 export default function ProductsPage() {
   const data = new Array(5).fill(null).map(() => ({
