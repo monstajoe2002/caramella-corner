@@ -40,7 +40,6 @@ import Link from "next/link";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -132,6 +131,7 @@ interface DataTableProps<TData, TValue> {
   showAddButton?: boolean;
   addButtonType?: "link" | "dialog";
   addButtonLabel?: string;
+  addButtonHref?: string;
   children?: React.ReactNode;
 }
 
@@ -141,6 +141,7 @@ export function DataTable<TData, TValue>({
   showAddButton = false,
   addButtonType = "link",
   addButtonLabel,
+  addButtonHref,
   children,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -218,7 +219,7 @@ export function DataTable<TData, TValue>({
                 <TableCell colSpan={columns.length}>
                   {addButtonType === "link" ? (
                     <Button variant="ghost" className="w-full" asChild>
-                      <Link href="/products/new">
+                      <Link href={addButtonHref || ""}>
                         <PlusCircle />
                         <span>{addButtonLabel}</span>
                       </Link>

@@ -20,6 +20,7 @@ export default function ProductsPage() {
           showAddButton
           addButtonLabel="Add Product"
           addButtonType="link"
+          addButtonHref="/products/new"
         />
       </div>
     </div>
