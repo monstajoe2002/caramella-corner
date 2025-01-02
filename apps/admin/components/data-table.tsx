@@ -40,6 +40,7 @@ import Link from "next/link";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -131,6 +132,7 @@ interface DataTableProps<TData, TValue> {
   showAddButton?: boolean;
   addButtonType?: "link" | "dialog";
   addButtonLabel?: string;
+  children?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
@@ -139,6 +141,7 @@ export function DataTable<TData, TValue>({
   showAddButton = false,
   addButtonType = "link",
   addButtonLabel,
+  children,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
@@ -232,6 +235,7 @@ export function DataTable<TData, TValue>({
                         <DialogHeader>
                           <DialogTitle>{addButtonLabel}</DialogTitle>
                         </DialogHeader>
+                        {children}
                       </DialogContent>
                     </Dialog>
                   )}
