@@ -25,7 +25,11 @@ import {
   SelectValue,
 } from "@caramella-corner/ui/components/select";
 import { Switch } from "@caramella-corner/ui/components/switch";
-
+/*
+ * TODO
+ * - Move Zod schema to a shared location
+ * - Pass an optional data prop for prefilling the form with default values
+ */
 const formSchema = z.object({
   name: z.string(),
   description: z.string(),
