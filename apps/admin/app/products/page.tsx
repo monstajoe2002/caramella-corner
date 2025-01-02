@@ -14,7 +14,13 @@ export default function ProductsPage() {
     <div>
       <h1>Products</h1>
       <div className="mt-10">
-        <DataTable columns={columns} data={data} />
+        <DataTable
+          columns={columns}
+          data={data}
+          showAddButton
+          addButtonLabel="Add Product"
+          addButtonType="link"
+        />
       </div>
     </div>
   );

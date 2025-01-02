@@ -33,8 +33,17 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronsRight,
+  PlusCircle,
 } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@caramella-corner/ui/components/dialog";
 
 interface DataTablePaginationProps<TData> {
   table: ReactTable<TData>;
@@ -119,11 +128,17 @@ function DataTablePagination<TData>({
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  showAddButton?: boolean;
+  addButtonType?: "link" | "dialog";
+  addButtonLabel?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  showAddButton = false,
+  addButtonType = "link",
+  addButtonLabel,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
@@ -139,7 +154,6 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div className="flex items-center py-4">
-        {/* TODO: pass a prop to the data table for the column on which to be filtered */}
         <Input
           placeholder="Filter products..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -193,6 +207,34 @@ export function DataTable<TData, TValue>({
                   className="h-24 text-center"
                 >
                   No results.
+                </TableCell>
+              </TableRow>
+            )}
+            {showAddButton && (
+              <TableRow>
+                <TableCell colSpan={columns.length}>
+                  {addButtonType === "link" ? (
+                    <Button variant="ghost" className="w-full" asChild>
+                      <Link href="/products/new">
+                        <PlusCircle />
+                        <span>{addButtonLabel}</span>
+                      </Link>
+                    </Button>
+                  ) : (
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="ghost" className="w-full">
+                          <PlusCircle />
+                          <span>{addButtonLabel}</span>
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>{addButtonLabel}</DialogTitle>
+                        </DialogHeader>
+                      </DialogContent>
+                    </Dialog>
+                  )}
                 </TableCell>
               </TableRow>
             )}
