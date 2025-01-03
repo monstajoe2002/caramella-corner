@@ -7,7 +7,7 @@ const productSchema = new Schema({
   category: { type: String, required: true },
   subcategory: { type: String, required: true },
   active: { type: Boolean, default: true },
-  // orders:ordersSchema,
+  // orders:[orderSchema],
   // variants: [variantSchema],
   stock: { type: Number, required: true },
   createdAt: { type: Date, default: Date.now() },
