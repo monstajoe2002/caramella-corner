@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
+import { connect } from "mongoose";
 
 export async function connectToDatabase(mongoUrl: string) {
   try {
-    await mongoose.connect(mongoUrl, {
+    await connect(mongoUrl, {
       maxPoolSize: 10,
     });
 
