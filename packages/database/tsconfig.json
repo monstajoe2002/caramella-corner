@@ -1,0 +1,12 @@
+{
+  "extends": "@caramella-corner/typescript-config/base.json",
+  "compilerOptions": {
+    //"outDir": "dist"
+    "baseUrl": ".",
+    "paths": {
+      "@caramella-corner/database/*": ["./src/*"]
+    }
+  },
+  "include": ["."],
+  "exclude": ["node_modules", "dist"]
+}

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "echo 'Add dev script here'",
+    "dev": "nodemon src/lib/connection.ts",
     "build": "echo 'Add build script here'",
     "test": "echo 'Add test script here'",
     "lint": "echo 'Add lint script here'"
@@ -11,5 +11,12 @@
   "dependencies": {
     "dotenv": "^16.4.7",
     "mongoose": "^8.9.3"
+  },
+  "exports": {
+    "./lib/*": "./src/lib/*.ts"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2"
   }
 }
