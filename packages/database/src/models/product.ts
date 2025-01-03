@@ -10,9 +10,9 @@ const productSchema = new Schema<Product>({
   active: { type: Boolean, default: true },
   // orders:[orderSchema],
   // variants: [variantSchema],
-  stock: { type: Number, required: true },
+  quantity: { type: Number, required: true },
   createdAt: { type: Date, default: Date.now() },
   updatedAt: { type: Date, default: Date.now() },
 });
 
-export const ProductModel = model<Product>("Product", productSchema);
+export const ProductModel = model<Product>("product", productSchema);

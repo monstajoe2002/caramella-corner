@@ -8,7 +8,7 @@ type Product = {
   // orders:Order[];
   // variants: Record<string,unknown>[];
   active: boolean;
-  stock: number;
+  quantity: number;
   createdAt: Date;
   updatedAt: Date;
 };
