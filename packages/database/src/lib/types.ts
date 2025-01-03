@@ -12,3 +12,4 @@ type Product = {
   createdAt: Date;
   updatedAt: Date;
 };
+export type { Product };

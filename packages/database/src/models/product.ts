@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
+import { Product } from "../lib/types";
 
-const productSchema = new Schema({
+const productSchema = new Schema<Product>({
   name: { type: String, required: true },
   slug: { type: String, required: true },
   description: { type: String, required: true },
@@ -14,4 +15,4 @@ const productSchema = new Schema({
   updatedAt: { type: Date, default: Date.now() },
 });
 
-export const Product = model("Product", productSchema);
+export const ProductModel = model<Product>("Product", productSchema);
