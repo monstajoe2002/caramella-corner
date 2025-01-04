@@ -1,4 +1,4 @@
-import { Model, Schema, model, models } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { Product } from "../lib/types";
 
 const productSchema = new Schema<Product>(
@@ -19,4 +19,5 @@ const productSchema = new Schema<Product>(
 );
 
 export const ProductModel =
-  (models.Product as Model<Product>) || model("Product", productSchema);
+  (mongoose.models.Product as mongoose.Model<Product>) ||
+  mongoose.model<Product>("Product", productSchema);

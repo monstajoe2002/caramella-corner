@@ -1,4 +1,3 @@
-import { connectToDatabase } from "../lib/connection";
 import { ProductModel } from "../models/product";
 
 export const getProducts = async () => {
