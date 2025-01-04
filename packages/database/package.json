@@ -14,7 +14,8 @@
   "exports": {
     "./lib/*": "./src/lib/*.ts",
     "./types/*": "./src/types/*.ts",
-    "./models/*": "./src/models/*.ts"
+    "./models/*": "./src/models/*.ts",
+    "./admin/*": "./src/admin/*.ts"
   },
   "devDependencies": {
     "nodemon": "^3.1.9",
