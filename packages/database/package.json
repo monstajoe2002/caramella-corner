@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon src/lib/connection.ts",
     "build": "echo 'Add build script here'",
     "test": "echo 'Add test script here'",
     "lint": "echo 'Add lint script here'"
@@ -15,7 +14,7 @@
   "exports": {
     "./lib/*": "./src/lib/*.ts",
     "./types/*": "./src/types/*.ts",
-    "./admin/*": "./src/admin/*.ts"
+    "./models/*": "./src/models/*.ts"
   },
   "devDependencies": {
     "nodemon": "^3.1.9",
