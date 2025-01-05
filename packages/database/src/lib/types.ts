@@ -21,5 +21,15 @@ type Category = {
   name: string;
   slug: string;
   subcategories: Category[];
+  createdAt: Date;
+  updatedAt: Date;
 };
-export type { Product, Variant, Category };
+
+type Order = {
+  pricePaidInPiasters: number;
+  products: Array<Product>;
+  status: "pending" | "delivered";
+  createdAt: Date;
+  updatedAt: Date;
+};
+export type { Product, Variant, Category, Order };
