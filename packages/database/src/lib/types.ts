@@ -3,6 +3,7 @@ type Product = {
   slug: string;
   description: string;
   category: Category;
+  price: number;
   orders: Order[];
   variants: Variant[];
   active: boolean;
