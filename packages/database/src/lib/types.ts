@@ -24,10 +24,19 @@ type Category = {
   createdAt: Date;
   updatedAt: Date;
 };
+type Customer = {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 type Order = {
   pricePaidInPiasters: number;
   products: Array<Product>;
+  customer: Customer;
   status: "pending" | "delivered";
   createdAt: Date;
   updatedAt: Date;
