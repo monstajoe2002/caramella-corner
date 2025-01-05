@@ -1,10 +1,8 @@
 type Product = {
-  _id: string;
   name: string;
   slug: string;
   description: string;
-  category: string;
-  subcategory: string;
+  category: Category;
   // orders:Order[];
   variants: Variant[];
   active: boolean;
@@ -19,5 +17,9 @@ type Variant = {
   quantity: number;
   options: Array<Record<string, unknown>>;
 };
-
-export type { Product, Variant };
+type Category = {
+  name: string;
+  slug: string;
+  subcategories: Category[];
+};
+export type { Product, Variant, Category };

@@ -7,7 +7,6 @@ const productSchema = new Schema<Product>(
     slug: { type: String, required: true },
     description: { type: String, required: true },
     category: { type: String, required: true },
-    subcategory: { type: String, required: true },
     active: { type: Boolean, default: true },
     // orders:[orderSchema],
     // variants: [variantSchema],
