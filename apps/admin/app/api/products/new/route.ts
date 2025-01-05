@@ -1,4 +1,3 @@
-import { connectToDatabase } from "@caramella-corner/database/lib/connection";
 import { ProductModel } from "@caramella-corner/database/models/product";
 
 export async function POST(request: Request) {
