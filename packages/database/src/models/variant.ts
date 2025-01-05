@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { Variant } from "../lib/types";
 
-const variantSchema = new mongoose.Schema<Variant>({
+export const variantSchema = new mongoose.Schema<Variant>({
   sku: { type: String, required: true, uppercase: true },
   price: { type: Number, required: true },
   quantity: { type: Number, required: true },
