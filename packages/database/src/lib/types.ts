@@ -6,10 +6,18 @@ type Product = {
   category: string;
   subcategory: string;
   // orders:Order[];
-  // variants: Record<string,unknown>[];
+  variants: Variant[];
   active: boolean;
   quantity: number;
   createdAt: Date;
   updatedAt: Date;
 };
-export type { Product };
+
+type Variant = {
+  sku: string;
+  price: number;
+  stock: number;
+  options: Array<Record<string, unknown>>;
+};
+
+export type { Product, Variant };
