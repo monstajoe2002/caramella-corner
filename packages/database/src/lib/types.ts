@@ -41,4 +41,4 @@ type Order = {
   createdAt: Date;
   updatedAt: Date;
 };
-export type { Product, Variant, Category, Order };
+export type { Product, Variant, Category, Order, Customer };
