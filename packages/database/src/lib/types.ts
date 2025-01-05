@@ -16,7 +16,7 @@ type Product = {
 type Variant = {
   sku: string;
   price: number;
-  stock: number;
+  quantity: number;
   options: Array<Record<string, unknown>>;
 };
 
