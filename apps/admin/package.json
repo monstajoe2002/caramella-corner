@@ -13,6 +13,7 @@
     "@caramella-corner/ui": "workspace:*",
     "@hookform/resolvers": "^3.9.1",
     "@tanstack/react-query": "^5.62.15",
+    "@tanstack/react-query-devtools": "^5.62.16",
     "@tanstack/react-table": "^8.20.6",
     "lucide-react": "0.456.0",
     "next": "^15.1.3",
