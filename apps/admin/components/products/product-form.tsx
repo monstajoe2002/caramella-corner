@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "@caramella-corner/ui/components/select";
 import { Switch } from "@caramella-corner/ui/components/switch";
+import { Product } from "@caramella-corner/database/lib/types";
 /*
  * TODO
  * - Pass an optional data prop for prefilling the form with default values
@@ -38,8 +39,11 @@ const formSchema = z.object({
   subcategory: z.string(),
   active: z.boolean(),
 });
+interface ProductFormProps {
+  product?: Product;
+}
 
-export default function ProductForm() {
+export default function ProductForm({ product }: ProductFormProps) {
   const [, setCountryName] = useState<string>("");
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -63,6 +67,7 @@ export default function ProductForm() {
         <FormField
           control={form.control}
           name="name"
+          defaultValue={product.name}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
