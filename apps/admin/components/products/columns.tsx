@@ -1,5 +1,6 @@
 "use client";
 
+import { Product } from "@caramella-corner/database/lib/types";
 import { Button } from "@caramella-corner/ui/components/button";
 import {
   DropdownMenu,
@@ -11,14 +12,11 @@ import {
 } from "@caramella-corner/ui/components/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
+import Link from "next/link";
 
 // TODO: define the type for the data
 
-export const columns: ColumnDef<{
-  name: string;
-  quantity: number;
-  active: boolean;
-}>[] = [
+export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "name",
     header: "Name",
@@ -39,7 +37,7 @@ export const columns: ColumnDef<{
   },
   {
     id: "actions",
-    cell: () => {
+    cell: ({ row }) => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -51,7 +49,9 @@ export const columns: ColumnDef<{
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/products/${row.original.slug}/edit`}>Edit</Link>
+            </DropdownMenuItem>
             <DropdownMenuItem className="text-red-500 focus:text-red-500 focus:bg-red-500/20">
               Delete
             </DropdownMenuItem>
