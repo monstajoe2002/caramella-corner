@@ -1,4 +1,4 @@
-import { getProductById } from "@caramella-corner/database/admin/products";
+import { getProductBySlug } from "@caramella-corner/database/admin/products";
 
 export async function GET(
   req: Request,
@@ -6,7 +6,7 @@ export async function GET(
 ) {
   const { slug } = await params;
   try {
-    const products = await getProductById(slug);
+    const products = await getProductBySlug(slug);
     return new Response(JSON.stringify(products), { status: 200 });
   } catch (error) {
     return new Response(JSON.stringify(error), { status: 500 });

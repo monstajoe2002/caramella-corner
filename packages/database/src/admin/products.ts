@@ -8,9 +8,9 @@ export const getProducts = async () => {
     throw error;
   }
 };
-export const getProductById = async (productId: string) => {
+export const getProductBySlug = async (slug: string) => {
   try {
-    const product = await ProductModel.findById(productId).lean();
+    const product = await ProductModel.findOne({ slug }).lean();
     if (!product) {
       throw new Error("Product not found");
     }
