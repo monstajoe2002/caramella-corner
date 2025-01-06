@@ -8,7 +8,7 @@ const productSchema = new Schema<Product>(
     slug: { type: String, required: true },
     description: { type: String, required: true },
     category: { type: String, required: true },
-    price: { type: Number, required: true },
+    priceInPiasters: { type: Number, required: true },
     active: { type: Boolean, default: true },
     orders: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Order" }],
     variants: [variantSchema],

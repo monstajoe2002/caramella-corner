@@ -3,7 +3,7 @@ type Product = {
   slug: string;
   description: string;
   category: Category;
-  price: number;
+  priceInPiasters: number;
   orders: Order[];
   variants: Variant[];
   active: boolean;
@@ -14,7 +14,6 @@ type Product = {
 
 type Variant = {
   sku: string;
-  price: number;
   quantity: number;
   options: Array<Record<string, unknown>>;
 };
