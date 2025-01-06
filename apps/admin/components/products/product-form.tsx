@@ -44,10 +44,10 @@ interface ProductFormProps {
 }
 
 export default function ProductForm({ product }: ProductFormProps) {
-  const [, setCountryName] = useState<string>("");
-
+  const [, setCountryName] = useState<string>(product?.countryOfOrigin || "");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: product,
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -67,7 +67,6 @@ export default function ProductForm({ product }: ProductFormProps) {
         <FormField
           control={form.control}
           name="name"
-          defaultValue={product?.name}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>

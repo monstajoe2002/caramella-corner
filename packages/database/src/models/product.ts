@@ -7,6 +7,8 @@ const productSchema = new Schema<Product>(
     name: { type: String, required: true },
     slug: { type: String, required: true },
     description: { type: String, required: true },
+    material: { type: String, required: true },
+    countryOfOrigin: { type: String, required: true },
     category: { type: String, required: true },
     priceInPiasters: { type: Number, required: true },
     active: { type: Boolean, default: true },

@@ -2,6 +2,8 @@ type Product = {
   name: string;
   slug: string;
   description: string;
+  material: string;
+  countryOfOrigin: string;
   category: Category;
   priceInPiasters: number;
   orders: Order[];
