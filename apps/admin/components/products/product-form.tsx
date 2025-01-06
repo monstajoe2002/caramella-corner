@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { cn } from "@caramella-corner/ui/lib/utils";
 import { Button } from "@caramella-corner/ui/components/button";
 import {
   Form,
@@ -27,13 +26,13 @@ import {
 import { Switch } from "@caramella-corner/ui/components/switch";
 /*
  * TODO
- * - Move Zod schema to a shared location
  * - Pass an optional data prop for prefilling the form with default values
  */
 const formSchema = z.object({
-  name: z.string(),
-  description: z.string(),
+  name: z.string().nonempty({ message: "Name is required" }),
+  description: z.string().nonempty({ message: "Description is required" }),
   material: z.string(),
+  priceInPiasters: z.number().positive({ message: "Price must be positive" }),
   countryOfOrigin: z.tuple([z.string(), z.string().optional()]),
   image: z.string(),
   subcategory: z.string(),
