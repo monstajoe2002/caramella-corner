@@ -58,55 +58,27 @@ interface CountryProps {
   emojiU: string;
 }
 
-interface StateProps {
-  id: number;
-  name: string;
-  country_id: number;
-  country_code: string;
-  country_name: string;
-  state_code: string;
-  type: string | null;
-  latitude: string;
-  longitude: string;
-}
-
 interface LocationSelectorProps {
   disabled?: boolean;
   onCountryChange?: (country: CountryProps | null) => void;
-  onStateChange?: (state: StateProps | null) => void;
 }
 
 const LocationSelector = ({
   disabled,
   onCountryChange,
-  onStateChange,
 }: LocationSelectorProps) => {
   const [selectedCountry, setSelectedCountry] = useState<CountryProps | null>(
     null
   );
-  const [selectedState, setSelectedState] = useState<StateProps | null>(null);
+
   const [openCountryDropdown, setOpenCountryDropdown] = useState(false);
-  const [openStateDropdown, setOpenStateDropdown] = useState(false);
 
   // Cast imported JSON data to their respective types
   const countriesData = countries as CountryProps[];
-  const statesData = states as StateProps[];
-
-  // Filter states for selected country
-  const availableStates = statesData.filter(
-    (state) => state.country_id === selectedCountry?.id
-  );
 
   const handleCountrySelect = (country: CountryProps | null) => {
     setSelectedCountry(country);
-    setSelectedState(null); // Reset state when country changes
     onCountryChange?.(country);
-    onStateChange?.(null);
-  };
-
-  const handleStateSelect = (state: StateProps | null) => {
-    setSelectedState(state);
-    onStateChange?.(state);
   };
 
   return (
@@ -170,62 +142,6 @@ const LocationSelector = ({
           </Command>
         </PopoverContent>
       </Popover>
-
-      {/* State Selector - Only shown if selected country has states */}
-      {availableStates.length > 0 && (
-        <Popover open={openStateDropdown} onOpenChange={setOpenStateDropdown}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              role="combobox"
-              aria-expanded={openStateDropdown}
-              disabled={!selectedCountry}
-              className="w-full justify-between"
-            >
-              {selectedState ? (
-                <span>{selectedState.name}</span>
-              ) : (
-                <span>Select State...</span>
-              )}
-              <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-[300px] p-0">
-            <Command>
-              <CommandInput placeholder="Search state..." />
-              <CommandList>
-                <CommandEmpty>No state found.</CommandEmpty>
-                <CommandGroup>
-                  <ScrollArea className="h-[300px]">
-                    {availableStates.map((state) => (
-                      <CommandItem
-                        key={state.id}
-                        value={state.name}
-                        onSelect={() => {
-                          handleStateSelect(state);
-                          setOpenStateDropdown(false);
-                        }}
-                        className="flex cursor-pointer items-center justify-between text-sm"
-                      >
-                        <span>{state.name}</span>
-                        <Check
-                          className={cn(
-                            "h-4 w-4",
-                            selectedState?.id === state.id
-                              ? "opacity-100"
-                              : "opacity-0"
-                          )}
-                        />
-                      </CommandItem>
-                    ))}
-                    <ScrollBar orientation="vertical" />
-                  </ScrollArea>
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </PopoverContent>
-        </Popover>
-      )}
     </div>
   );
 };
