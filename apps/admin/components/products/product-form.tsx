@@ -67,7 +67,7 @@ export default function ProductForm({ product }: ProductFormProps) {
         <FormField
           control={form.control}
           name="name"
-          defaultValue={product.name}
+          defaultValue={product?.name}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
