@@ -40,7 +40,7 @@ const formSchema = z.object({
 });
 
 export default function ProductForm() {
-  const [countryName, setCountryName] = useState<string>("");
+  const [, setCountryName] = useState<string>("");
   const [stateName, setStateName] = useState<string>("");
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -105,6 +105,23 @@ export default function ProductForm() {
                 <Input placeholder="100% cotton" type="" {...field} />
               </FormControl>
 
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="priceInPiasters"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Price (in Piasters)</FormLabel>
+              <FormControl>
+                <Input placeholder="100,000" type="number" {...field} />
+              </FormControl>
+              <FormDescription>
+                Enter the price in Piasters. 1 EGP is equivalent to 100
+                Piasters. e.g. 100EGP=100,000 Piasters
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
