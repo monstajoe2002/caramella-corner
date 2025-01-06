@@ -5,10 +5,9 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  try {
-    const products = await getProductBySlug(slug);
-    return new Response(JSON.stringify(products), { status: 200 });
-  } catch (error) {
-    return new Response(JSON.stringify(error), { status: 500 });
-  }
+  const product = await getProductBySlug(slug);
+
+  if (!product) return new Response("Product not found", { status: 404 });
+
+  return new Response(JSON.stringify(product), { status: 200 });
 }
