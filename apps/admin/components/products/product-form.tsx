@@ -25,10 +25,7 @@ import {
 } from "@caramella-corner/ui/components/select";
 import { Switch } from "@caramella-corner/ui/components/switch";
 import { Product } from "@caramella-corner/database/lib/types";
-/*
- * TODO
- * - Pass an optional data prop for prefilling the form with default values
- */
+
 const formSchema = z.object({
   name: z.string().nonempty({ message: "Name is required" }),
   description: z.string().nonempty({ message: "Description is required" }),
