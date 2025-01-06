@@ -33,7 +33,7 @@ const formSchema = z.object({
   description: z.string().nonempty({ message: "Description is required" }),
   material: z.string(),
   priceInPiasters: z.number().positive({ message: "Price must be positive" }),
-  countryOfOrigin: z.tuple([z.string(), z.string().optional()]),
+  countryOfOrigin: z.string(),
   image: z.string(),
   subcategory: z.string(),
   active: z.boolean(),
@@ -41,7 +41,6 @@ const formSchema = z.object({
 
 export default function ProductForm() {
   const [, setCountryName] = useState<string>("");
-  const [stateName, setStateName] = useState<string>("");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -137,10 +136,7 @@ export default function ProductForm() {
                 <LocationSelector
                   onCountryChange={(country) => {
                     setCountryName(country?.name || "");
-                    form.setValue(field.name, [
-                      country?.name || "",
-                      stateName || "",
-                    ]);
+                    form.setValue(field.name, country?.name || "");
                   }}
                 />
               </FormControl>
