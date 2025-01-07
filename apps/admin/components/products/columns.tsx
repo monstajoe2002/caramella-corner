@@ -3,13 +3,6 @@
 import { Product } from "@caramella-corner/database/lib/types";
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
   AlertDialogTrigger,
 } from "@caramella-corner/ui/components/alert-dialog";
 import { Button } from "@caramella-corner/ui/components/button";
@@ -24,6 +17,7 @@ import {
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
+import { DeleteAlert } from "./delete-alert";
 
 // TODO: define the type for the data
 
@@ -80,19 +74,7 @@ export const columns: ColumnDef<Product>[] = [
             </DropdownMenuContent>
           </DropdownMenu>
           {/* Delete confirmation dialog */}
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete this
-                product and remove its data from our servers.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction>Continue</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
+          <DeleteAlert slug={row.original.slug} />
         </AlertDialog>
       );
     },
