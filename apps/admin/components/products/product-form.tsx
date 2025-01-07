@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -25,6 +25,7 @@ import {
 } from "@caramella-corner/ui/components/select";
 import { Switch } from "@caramella-corner/ui/components/switch";
 import { Product } from "@caramella-corner/database/lib/types";
+import { useQuery } from "@tanstack/react-query";
 
 const formSchema = z.object({
   name: z.string().nonempty({ message: "Name is required" }),
@@ -37,16 +38,38 @@ const formSchema = z.object({
   active: z.boolean(),
 });
 interface ProductFormProps {
-  product?: Product;
+  productSlug?: string;
 }
 
-export default function ProductForm({ product }: ProductFormProps) {
+export default function ProductForm({ productSlug }: ProductFormProps) {
+  const { data: product } = useQuery<Product>({
+    queryKey: ["products", productSlug],
+    queryFn: async () => {
+      const response = await fetch(`/api/products/${productSlug}`);
+      const data = await response.json();
+      return data;
+    },
+  });
+
   const [, setCountryName] = useState<string>(product?.countryOfOrigin || "");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: product,
+    defaultValues: {
+      name: "",
+      description: "",
+      material: "",
+      priceInPiasters: 0,
+      countryOfOrigin: "",
+      image: "",
+      subcategory: "",
+      active: false,
+    },
   });
-
+  useEffect(() => {
+    if (product) {
+      form.reset(product);
+    }
+  }, [form, product]);
   function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       console.log(values);
