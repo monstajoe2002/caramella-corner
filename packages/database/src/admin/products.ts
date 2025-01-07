@@ -1,3 +1,4 @@
+import { DeleteResult } from "mongoose";
 import { ProductModel } from "../models/product";
 
 export const getProducts = async () => {
@@ -14,6 +15,14 @@ export const getProductBySlug = async (slug: string) => {
     if (!product) {
       throw new Error("Product not found");
     }
+    return product;
+  } catch (error) {
+    throw error;
+  }
+};
+export const deleteProduct = async (slug: string) => {
+  try {
+    const product = await ProductModel.findOneAndDelete({ slug }).lean();
     return product;
   } catch (error) {
     throw error;
