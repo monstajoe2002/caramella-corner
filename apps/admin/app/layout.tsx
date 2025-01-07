@@ -5,6 +5,7 @@ import { Providers } from "@/components/providers";
 import { SidebarTrigger } from "@caramella-corner/ui/components/sidebar";
 import { AdminSidebar } from "@/components/admin-sidebar";
 import { Metadata } from "next";
+import { Toaster } from "@caramella-corner/ui/components/sonner";
 const fontSans = Geist({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -38,6 +39,7 @@ export default function RootLayout({
           <main className="inline-block min-h-screen p-10 md:p-8 container mx-auto max-w-screen-xl">
             {children}
           </main>
+          <Toaster />
         </Providers>
       </body>
     </html>
