@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import { Product } from "../lib/types";
-import { variantSchema } from "./variant";
+import { VariantSchema } from "./variant";
 
 const productSchema = new Schema<Product>(
   {
@@ -13,7 +13,7 @@ const productSchema = new Schema<Product>(
     priceInPiasters: { type: Number, required: true },
     active: { type: Boolean, default: true },
     orders: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Order" }],
-    variants: [variantSchema],
+    variants: [VariantSchema],
     quantity: { type: Number, required: true },
   },
   {

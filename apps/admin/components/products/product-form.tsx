@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@caramella-corner/ui/components/button";
@@ -26,6 +26,13 @@ import {
 import { Switch } from "@caramella-corner/ui/components/switch";
 import { Product } from "@caramella-corner/database/lib/types";
 
+// validate any type of JSON value
+const literalSchema = z.union([z.string(), z.number(), z.boolean(), z.null()]);
+type Literal = z.infer<typeof literalSchema>;
+type Json = Literal | { [key: string]: Json } | Json[];
+const jsonSchema: z.ZodType<Json> = z.lazy(() =>
+  z.union([literalSchema, z.array(jsonSchema), z.record(jsonSchema)])
+);
 const formSchema = z.object({
   name: z.string().nonempty({ message: "Name is required" }),
   description: z.string().nonempty({ message: "Description is required" }),
@@ -33,6 +40,13 @@ const formSchema = z.object({
   priceInPiasters: z.number().positive({ message: "Price must be positive" }),
   countryOfOrigin: z.string(),
   image: z.string(),
+  variants: z.array(
+    z.object({
+      sku: z.string(),
+      quantity: z.number().positive(),
+      options: jsonSchema,
+    })
+  ),
   subcategory: z.string(),
   active: z.boolean(),
 });
@@ -42,6 +56,7 @@ interface ProductFormProps {
 
 export default function ProductForm({ product }: ProductFormProps) {
   const [, setCountryName] = useState<string>(product?.countryOfOrigin || "");
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,6 +69,10 @@ export default function ProductForm({ product }: ProductFormProps) {
       subcategory: "",
       active: false,
     },
+  });
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "variants",
   });
   useEffect(() => {
     if (product) {
@@ -159,7 +178,65 @@ export default function ProductForm({ product }: ProductFormProps) {
             </FormItem>
           )}
         />
-
+        <FormField
+          control={form.control}
+          name="variants"
+          render={() => (
+            <FormItem>
+              <FormLabel>Variants</FormLabel>
+              <div>
+                {fields.map((field, index) => (
+                  <div key={field.id}>
+                    <FormControl>
+                      <div>
+                        <Input
+                          placeholder={"SKU"}
+                          {...form.register(`variants.${index}.sku`)}
+                        />
+                        <Input
+                          type="number"
+                          placeholder={`Quantity`}
+                          {...form.register(`variants.${index}.quantity`)}
+                        />
+                        <Input
+                          placeholder="Options"
+                          {...form.register(`variants.${index}.options`)}
+                          onChange={(e) => {
+                            const parsed = JSON.parse(e.target.value);
+                            form.setValue(
+                              `variants.${index}.options`,
+                              parsed || "{}"
+                            );
+                          }}
+                        />
+                      </div>
+                    </FormControl>
+                    <Button
+                      className="mt-4"
+                      type="button"
+                      onClick={() => remove(index)}
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  type="button"
+                  className="mt-4"
+                  onClick={() =>
+                    append({
+                      sku: "",
+                      quantity: 0,
+                      options: "",
+                    })
+                  }
+                >
+                  Add Variant
+                </Button>
+              </div>
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="image"
