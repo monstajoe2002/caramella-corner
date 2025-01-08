@@ -29,7 +29,7 @@ export const VariantDialog = () => {
           <span>Manage Variants</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[600px] max-w-[900px]  overflow-y-auto">
+      <DialogContent className="max-h-[700px] max-w-[800px] overflow-y-scroll">
         <DialogHeader>
           <DialogTitle>Manage Variants</DialogTitle>
           <DialogDescription>
