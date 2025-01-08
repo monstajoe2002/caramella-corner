@@ -183,9 +183,10 @@ export default function ProductForm({ product }: ProductFormProps) {
           name="variants"
           render={() => (
             <FormItem>
-              <FormLabel>Variants</FormLabel>
-
-              <VariantDialog />
+              <div className="flex flex-col gap-4 mt-2">
+                <FormLabel>Variants</FormLabel>
+                <VariantDialog />
+              </div>
             </FormItem>
           )}
         />
