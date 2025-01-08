@@ -10,6 +10,7 @@ import {
 } from "@caramella-corner/ui/components/dialog";
 import { FormControl } from "@caramella-corner/ui/components/form";
 import { Input } from "@caramella-corner/ui/components/input";
+import { Separator } from "@caramella-corner/ui/components/separator";
 import { ChartNoAxesGantt } from "lucide-react";
 import React from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
@@ -28,7 +29,7 @@ export const VariantDialog = () => {
           <span>Manage Variants</span>
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-[600px] max-w-[900px]  overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Manage Variants</DialogTitle>
           <DialogDescription>
@@ -41,23 +42,26 @@ export const VariantDialog = () => {
             <div key={field.id}>
               <FormControl>
                 <div>
-                  <Input
-                    placeholder={"SKU"}
-                    {...register(`variants.${index}.sku`)}
-                  />
-                  <Input
-                    type="number"
-                    placeholder={`Quantity`}
-                    {...register(`variants.${index}.quantity`)}
-                  />
-                  <Input
-                    placeholder="Options"
-                    {...register(`variants.${index}.options`)}
-                    onChange={(e) => {
-                      const parsed = JSON.parse(e.target.value);
-                      setValue(`variants.${index}.options`, parsed || "{}");
-                    }}
-                  />
+                  <h2 className="my-4 font-medium">Variant #{index + 1}</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Input
+                      placeholder={"SKU"}
+                      {...register(`variants.${index}.sku`)}
+                    />
+                    <Input
+                      type="number"
+                      placeholder={`Quantity`}
+                      {...register(`variants.${index}.quantity`)}
+                    />
+                    <Input
+                      placeholder="Options"
+                      {...register(`variants.${index}.options`)}
+                      onChange={(e) => {
+                        const parsed = JSON.parse(e.target.value);
+                        setValue(`variants.${index}.options`, parsed || "{}");
+                      }}
+                    />
+                  </div>
                 </div>
               </FormControl>
               <Button
@@ -67,6 +71,7 @@ export const VariantDialog = () => {
               >
                 Remove
               </Button>
+              <Separator className="mt-4" />
             </div>
           ))}
           <Button
