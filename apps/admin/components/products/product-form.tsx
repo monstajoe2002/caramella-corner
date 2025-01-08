@@ -183,59 +183,8 @@ export default function ProductForm({ product }: ProductFormProps) {
           render={() => (
             <FormItem>
               <FormLabel>Variants</FormLabel>
-              {/* <div>
-                {fields.map((field, index) => (
-                  <div key={field.id}>
-                    <FormControl>
-                      <div>
-                        <Input
-                          placeholder={"SKU"}
-                          {...form.register(`variants.${index}.sku`)}
-                        />
-                        <Input
-                          type="number"
-                          placeholder={`Quantity`}
-                          {...form.register(`variants.${index}.quantity`)}
-                        />
-                        <Input
-                          placeholder="Options"
-                          {...form.register(`variants.${index}.options`)}
-                          onChange={(e) => {
-                            const parsed = JSON.parse(e.target.value);
-                            form.setValue(
-                              `variants.${index}.options`,
-                              parsed || "{}"
-                            );
-                          }}
-                        />
-                      </div>
-                    </FormControl>
-                    <Button
-                      className="mt-4"
-                      type="button"
-                      onClick={() => remove(index)}
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                ))}
-                <Button
-                  type="button"
-                  className="mt-4"
-                  onClick={() =>
-                    append({
-                      sku: "",
-                      quantity: 0,
-                      options: "",
-                    })
-                  }
-                >
-                  Add Variant
-                </Button>
-              </div> */}
-              <FormControl>
-                <VariantDialog />
-              </FormControl>
+
+              <VariantDialog />
             </FormItem>
           )}
         />
