@@ -77,7 +77,8 @@ export default function ProductForm({ product }: ProductFormProps) {
     if (product) {
       form.reset(product);
     }
-  }, [form, product]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product]);
   function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       console.log(values);
