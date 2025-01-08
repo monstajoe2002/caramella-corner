@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@caramella-corner/ui/components/button";
@@ -25,6 +25,7 @@ import {
 } from "@caramella-corner/ui/components/select";
 import { Switch } from "@caramella-corner/ui/components/switch";
 import { Product } from "@caramella-corner/database/lib/types";
+import { VariantDialog } from "./variant-dialog";
 
 // validate any type of JSON value
 const literalSchema = z.union([z.string(), z.number(), z.boolean(), z.null()]);
@@ -71,10 +72,7 @@ export default function ProductForm({ product }: ProductFormProps) {
       variants: [],
     },
   });
-  const { fields, append, remove } = useFieldArray({
-    control: form.control,
-    name: "variants",
-  });
+
   useEffect(() => {
     if (product) {
       form.reset(product);
@@ -185,7 +183,7 @@ export default function ProductForm({ product }: ProductFormProps) {
           render={() => (
             <FormItem>
               <FormLabel>Variants</FormLabel>
-              <div>
+              {/* <div>
                 {fields.map((field, index) => (
                   <div key={field.id}>
                     <FormControl>
@@ -234,7 +232,10 @@ export default function ProductForm({ product }: ProductFormProps) {
                 >
                   Add Variant
                 </Button>
-              </div>
+              </div> */}
+              <FormControl>
+                <VariantDialog />
+              </FormControl>
             </FormItem>
           )}
         />
