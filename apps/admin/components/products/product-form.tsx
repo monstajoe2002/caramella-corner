@@ -33,6 +33,12 @@ type Json = Literal | { [key: string]: Json } | Json[];
 const jsonSchema: z.ZodType<Json> = z.lazy(() =>
   z.union([literalSchema, z.array(jsonSchema), z.record(jsonSchema)])
 );
+
+const variantSchema = z.object({
+  sku: z.string(),
+  quantity: z.number().positive(),
+  options: jsonSchema,
+});
 const formSchema = z.object({
   name: z.string().nonempty({ message: "Name is required" }),
   description: z.string().nonempty({ message: "Description is required" }),
@@ -40,13 +46,7 @@ const formSchema = z.object({
   priceInPiasters: z.number().positive({ message: "Price must be positive" }),
   countryOfOrigin: z.string(),
   image: z.string(),
-  variants: z.array(
-    z.object({
-      sku: z.string(),
-      quantity: z.number().positive(),
-      options: jsonSchema,
-    })
-  ),
+  variants: z.array(variantSchema),
   subcategory: z.string(),
   active: z.boolean(),
 });
@@ -68,6 +68,7 @@ export default function ProductForm({ product }: ProductFormProps) {
       image: "",
       subcategory: "",
       active: false,
+      variants: [],
     },
   });
   const { fields, append, remove } = useFieldArray({
