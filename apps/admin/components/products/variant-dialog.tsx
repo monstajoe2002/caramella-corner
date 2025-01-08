@@ -10,6 +10,7 @@ import {
 } from "@caramella-corner/ui/components/dialog";
 import { FormControl } from "@caramella-corner/ui/components/form";
 import { Input } from "@caramella-corner/ui/components/input";
+import { ChartNoAxesGantt } from "lucide-react";
 import React from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
@@ -22,7 +23,10 @@ export const VariantDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-fit">Manage Variants</Button>
+        <Button className="w-fit">
+          <ChartNoAxesGantt />
+          <span>Manage Variants</span>
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
