@@ -17,7 +17,7 @@ import React from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 export const VariantDialog = () => {
-  const { control, register } = useFormContext();
+  const { control, setValue } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: "variants",
@@ -50,7 +50,10 @@ export const VariantDialog = () => {
                       <Input
                         id="sku"
                         placeholder={"CC001"}
-                        {...register(`variants.${index}.sku`)}
+                        name={`value.${index}.sku`}
+                        onChange={(e) =>
+                          setValue(`value.${index}.sku`, e.target.value)
+                        }
                       />
                     </div>
                     <div>
@@ -59,7 +62,10 @@ export const VariantDialog = () => {
                         id="quantity"
                         type="number"
                         placeholder={`10`}
-                        {...register(`variants.${index}.quantity`)}
+                        name={`value.${index}.quantity`}
+                        onChange={(e) =>
+                          setValue(`variants.${index}.quantity`, e.target.value)
+                        }
                       />
                     </div>
                     <div>
@@ -67,7 +73,10 @@ export const VariantDialog = () => {
                       <Input
                         id="color"
                         placeholder="Pink"
-                        {...register(`variants.${index}.color`)}
+                        name={`value.${index}.color`}
+                        onChange={(e) =>
+                          setValue(`variants.${index}.color`, e.target.value)
+                        }
                       />
                     </div>
                     <div>
@@ -75,7 +84,10 @@ export const VariantDialog = () => {
                       <Input
                         id="size"
                         placeholder="L / 42"
-                        {...register(`variants.${index}.size`)}
+                        name={`value.${index}.size`}
+                        onChange={(e) =>
+                          setValue(`variants.${index}.size`, e.target.value)
+                        }
                       />
                     </div>
                   </div>

@@ -37,7 +37,10 @@ const formSchema = z.object({
   name: z.string().nonempty({ message: "Name is required" }),
   description: z.string().nonempty({ message: "Description is required" }),
   material: z.string(),
-  priceInPiasters: z.number().positive({ message: "Price must be positive" }),
+  priceInPiasters: z
+    .number()
+    .int()
+    .positive({ message: "Price must be a positive integer" }),
   countryOfOrigin: z.string(),
   image: z.string(),
   variants: z.array(variantSchema),
@@ -148,7 +151,12 @@ export default function ProductForm({ product }: ProductFormProps) {
             <FormItem>
               <FormLabel>Price (in Piasters)</FormLabel>
               <FormControl>
-                <Input placeholder="100,000" type="number" {...field} />
+                <Input
+                  placeholder="100,000"
+                  type="number"
+                  {...field}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                />
               </FormControl>
               <FormDescription>
                 Enter the price in Piasters. 1 EGP is equivalent to 100
@@ -186,6 +194,7 @@ export default function ProductForm({ product }: ProductFormProps) {
               <div className="flex flex-col gap-4 mt-2">
                 <FormLabel>Variants</FormLabel>
                 <VariantDialog />
+                <FormMessage />
               </div>
             </FormItem>
           )}
