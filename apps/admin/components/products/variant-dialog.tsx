@@ -10,13 +10,14 @@ import {
 } from "@caramella-corner/ui/components/dialog";
 import { FormControl } from "@caramella-corner/ui/components/form";
 import { Input } from "@caramella-corner/ui/components/input";
+import { Label } from "@caramella-corner/ui/components/label";
 import { Separator } from "@caramella-corner/ui/components/separator";
 import { ChartNoAxesGantt } from "lucide-react";
 import React from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 export const VariantDialog = () => {
-  const { control, register, setValue } = useFormContext();
+  const { control, register } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: "variants",
@@ -44,23 +45,39 @@ export const VariantDialog = () => {
                 <div>
                   <h2 className="my-4 font-medium">Variant #{index + 1}</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Input
-                      placeholder={"SKU"}
-                      {...register(`variants.${index}.sku`)}
-                    />
-                    <Input
-                      type="number"
-                      placeholder={`Quantity`}
-                      {...register(`variants.${index}.quantity`)}
-                    />
-                    <Input
-                      placeholder="Options"
-                      {...register(`variants.${index}.options`)}
-                      onChange={(e) => {
-                        const parsed = JSON.parse(e.target.value);
-                        setValue(`variants.${index}.options`, parsed || "{}");
-                      }}
-                    />
+                    <div>
+                      <Label htmlFor="sku">SKU</Label>
+                      <Input
+                        id="sku"
+                        placeholder={"CC001"}
+                        {...register(`variants.${index}.sku`)}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="quantity">Quantity</Label>
+                      <Input
+                        id="quantity"
+                        type="number"
+                        placeholder={`10`}
+                        {...register(`variants.${index}.quantity`)}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="color">Color</Label>
+                      <Input
+                        id="color"
+                        placeholder="Pink"
+                        {...register(`variants.${index}.color`)}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="size">Size</Label>
+                      <Input
+                        id="size"
+                        placeholder="L / 42"
+                        {...register(`variants.${index}.size`)}
+                      />
+                    </div>
                   </div>
                 </div>
               </FormControl>
@@ -81,7 +98,8 @@ export const VariantDialog = () => {
               append({
                 sku: "",
                 quantity: 0,
-                options: "",
+                color: "",
+                size: "",
               })
             }
           >

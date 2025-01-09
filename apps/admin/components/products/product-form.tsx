@@ -27,18 +27,11 @@ import { Switch } from "@caramella-corner/ui/components/switch";
 import { Product } from "@caramella-corner/database/lib/types";
 import { VariantDialog } from "./variant-dialog";
 
-// validate any type of JSON value
-const literalSchema = z.union([z.string(), z.number(), z.boolean(), z.null()]);
-type Literal = z.infer<typeof literalSchema>;
-type Json = Literal | { [key: string]: Json } | Json[];
-const jsonSchema: z.ZodType<Json> = z.lazy(() =>
-  z.union([literalSchema, z.array(jsonSchema), z.record(jsonSchema)])
-);
-
 const variantSchema = z.object({
   sku: z.string(),
   quantity: z.number().positive(),
-  options: jsonSchema,
+  color: z.string().optional(),
+  size: z.union([z.string(), z.number()]).optional(),
 });
 const formSchema = z.object({
   name: z.string().nonempty({ message: "Name is required" }),
@@ -69,7 +62,14 @@ export default function ProductForm({ product }: ProductFormProps) {
       image: "",
       subcategory: "",
       active: false,
-      variants: [],
+      variants: [
+        {
+          color: "",
+          size: "",
+          quantity: undefined,
+          sku: "",
+        },
+      ],
     },
   });
 
