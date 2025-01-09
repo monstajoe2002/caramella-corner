@@ -4,7 +4,8 @@ import { Variant } from "../lib/types";
 export const VariantSchema = new mongoose.Schema<Variant>({
   sku: { type: String, required: true, uppercase: true },
   quantity: { type: Number, required: true },
-  options: [{ type: Object, required: true }],
+  color: String,
+  size: mongoose.Schema.Types.Mixed,
 });
 
 export const VariantModel =

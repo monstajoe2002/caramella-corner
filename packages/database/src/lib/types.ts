@@ -17,7 +17,8 @@ type Product = {
 type Variant = {
   sku: string;
   quantity: number;
-  options: Array<Record<string, unknown>>;
+  color?: string;
+  size?: string | number;
 };
 type Category = {
   name: string;
