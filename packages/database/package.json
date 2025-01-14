@@ -18,6 +18,7 @@
     "./admin/*": "./src/admin/*.ts"
   },
   "devDependencies": {
+    "@types/node": "^22.10.6",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2"
   }
