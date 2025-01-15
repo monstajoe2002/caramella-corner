@@ -1,5 +1,6 @@
 import { connect, connection } from "mongoose";
-
+import {dotenvLoad} from "dotenv-mono";
+const dotenv = dotenvLoad();
 export async function connectToDatabase() {
   const connectionState = connection.readyState;
   if (connectionState === 1 || connectionState === 2) {
