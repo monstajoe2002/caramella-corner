@@ -27,6 +27,29 @@ import { Switch } from "@caramella-corner/ui/components/switch";
 import { Product } from "@caramella-corner/database/lib/types";
 import { VariantDialog } from "./variant-dialog";
 
+const editProduct = async (product: Partial<Product>) => {
+  const response = await fetch(`/api/products/${product._id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(product),
+  });
+  const data = await response.json();
+  return data;
+};
+const createProduct = async (product: Product) => {
+  const response = await fetch(`/api/products/new`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(product),
+  });
+  const data = await response.json();
+  return data;
+};
+
 const variantSchema = z.object({
   sku: z.string(),
   quantity: z.number().positive(),
