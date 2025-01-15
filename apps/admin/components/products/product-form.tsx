@@ -49,6 +49,7 @@ const formSchema = z.object({
 });
 interface ProductFormProps {
   product?: Product;
+  intent:'create' | 'edit'
 }
 
 export default function ProductForm({ product }: ProductFormProps) {
