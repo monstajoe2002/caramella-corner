@@ -119,8 +119,7 @@ export default function ProductForm({ product }: ProductFormProps) {
               <FormLabel>Description</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Flattering, relaxed fit that effortlessly transitions from work to weekend"
-                  className="resize-none"
+                  placeholder="Flattering, relaxed fit that effortlessly transitions from work to weekend"                  
                   {...field}
                 />
               </FormControl>

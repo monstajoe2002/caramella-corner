@@ -8,16 +8,14 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@caramella-corner/ui/components/dialog";
-import { FormControl } from "@caramella-corner/ui/components/form";
-import { Input } from "@caramella-corner/ui/components/input";
-import { Label } from "@caramella-corner/ui/components/label";
 import { Separator } from "@caramella-corner/ui/components/separator";
 import { ChartNoAxesGantt } from "lucide-react";
 import React from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
+import { VariantFormField } from "@/components/products/variant-form-field";
 
 export const VariantDialog = () => {
-  const { control, setValue } = useFormContext();
+  const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: "variants",
@@ -38,84 +36,63 @@ export const VariantDialog = () => {
             can add different options, e.g. color and size.
           </DialogDescription>
         </DialogHeader>
-        <div>
+        <div className="space-y-6">
           {fields.map((field, index) => (
-            <div key={field.id}>
-              <FormControl>
-                <div>
-                  <h2 className="my-4 font-medium">Variant #{index + 1}</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="sku">SKU</Label>
-                      <Input
-                        id="sku"
-                        placeholder={"CC001"}
-                        name={`value.${index}.sku`}
-                        onChange={(e) =>
-                          setValue(`value.${index}.sku`, e.target.value)
-                        }
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="quantity">Quantity</Label>
-                      <Input
-                        id="quantity"
-                        type="number"
-                        placeholder={`10`}
-                        name={`value.${index}.quantity`}
-                        onChange={(e) =>
-                          setValue(`variants.${index}.quantity`, e.target.value)
-                        }
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="color">Color</Label>
-                      <Input
-                        id="color"
-                        placeholder="Pink"
-                        name={`value.${index}.color`}
-                        onChange={(e) =>
-                          setValue(`variants.${index}.color`, e.target.value)
-                        }
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="size">Size</Label>
-                      <Input
-                        id="size"
-                        placeholder="L / 42"
-                        name={`value.${index}.size`}
-                        onChange={(e) =>
-                          setValue(`variants.${index}.size`, e.target.value)
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-              </FormControl>
+            <div key={field.id} className="relative p-4 border rounded-lg">
+              <h3 className="font-medium mb-4">Variant #{index + 1}</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <VariantFormField
+                  index={index}
+                  name="sku"
+                  label="SKU"
+                  placeholder="CC001"
+                />
+                <VariantFormField
+                  index={index}
+                  name="quantity"
+                  label="Quantity"
+                  type="number"
+                  placeholder="10"
+                />
+                <VariantFormField
+                  index={index}
+                  name="color"
+                  label="Color"
+                  placeholder="Pink"
+                />
+                <VariantFormField
+                  index={index}
+                  name="size"
+                  label="Size"
+                  placeholder="L / 42"
+                />
+              </div>
+
               <Button
-                className="mt-4"
                 type="button"
+                variant="destructive"
+                size="sm"
+                className="mt-4"
                 onClick={() => remove(index)}
               >
-                Remove
+                Remove Variant
               </Button>
-              <Separator className="mt-4" />
+              <Separator className="my-4" />
             </div>
           ))}
+
           <Button
             type="button"
-            className="mt-4"
-            onClick={() =>
-              append({
-                sku: "",
-                quantity: 0,
-                color: "",
-                size: "",
-              })
-            }
+            onClick={() => append({
+              sku: "",
+              quantity: 0,
+              color: "",
+              size: "",
+            })}
+            className="w-full"
           >
-            Add Variant
+            Add New Variant
           </Button>
         </div>
       </DialogContent>

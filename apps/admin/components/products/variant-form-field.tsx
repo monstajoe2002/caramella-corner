@@ -20,6 +20,7 @@ export const VariantFormField = ({ index, name, label, placeholder, type = "text
             type={type}
             placeholder={placeholder}
             {...field}
+            onChange={(e) => name==='quantity' ? field.onChange(Number(e.target.value)) : field.onChange(e.target.value)}
           />
           <FormMessage />
         </FormItem>
