@@ -1,5 +1,10 @@
-import { FormField, FormItem, FormLabel, FormMessage } from "@caramella-corner/ui/components/form"
-import { Input } from "@caramella-corner/ui/components/input"
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@caramella-corner/ui/components/form";
+import { Input } from "@caramella-corner/ui/components/input";
 
 interface VariantFormFieldProps {
   index: number;
@@ -9,7 +14,13 @@ interface VariantFormFieldProps {
   type?: string;
 }
 
-export const VariantFormField = ({ index, name, label, placeholder, type = "text" }: VariantFormFieldProps) => {
+export const VariantFormField = ({
+  index,
+  name,
+  label,
+  placeholder,
+  type = "text",
+}: VariantFormFieldProps) => {
   return (
     <FormField
       name={`variants.${index}.${name}`}
@@ -20,11 +31,15 @@ export const VariantFormField = ({ index, name, label, placeholder, type = "text
             type={type}
             placeholder={placeholder}
             {...field}
-            onChange={(e) => name==='quantity' ? field.onChange(Number(e.target.value)) : field.onChange(e.target.value)}
+            onChange={(e) =>
+              name === "quantity"
+                ? field.onChange(Number(e.target.value))
+                : field.onChange(e.target.value)
+            }
           />
           <FormMessage />
         </FormItem>
       )}
     />
-  )
-}
+  );
+};

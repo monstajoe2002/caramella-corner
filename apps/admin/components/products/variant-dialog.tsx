@@ -40,7 +40,7 @@ export const VariantDialog = () => {
           {fields.map((field, index) => (
             <div key={field.id} className="relative p-4 border rounded-lg">
               <h3 className="font-medium mb-4">Variant #{index + 1}</h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <VariantFormField
                   index={index}
@@ -84,12 +84,14 @@ export const VariantDialog = () => {
 
           <Button
             type="button"
-            onClick={() => append({
-              sku: "",
-              quantity: 0,
-              color: "",
-              size: "",
-            })}
+            onClick={() =>
+              append({
+                sku: "",
+                quantity: 0,
+                color: "",
+                size: "",
+              })
+            }
             className="w-full"
           >
             Add New Variant

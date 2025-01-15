@@ -18,7 +18,7 @@ const productSchema = new Schema<Product>(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export const ProductModel =

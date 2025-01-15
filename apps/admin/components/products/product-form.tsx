@@ -49,7 +49,7 @@ const formSchema = z.object({
 });
 interface ProductFormProps {
   product?: Product;
-  intent:'create' | 'edit'
+  intent: "create" | "edit";
 }
 
 export default function ProductForm({ product }: ProductFormProps) {
@@ -120,7 +120,7 @@ export default function ProductForm({ product }: ProductFormProps) {
               <FormLabel>Description</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Flattering, relaxed fit that effortlessly transitions from work to weekend"                  
+                  placeholder="Flattering, relaxed fit that effortlessly transitions from work to weekend"
                   {...field}
                 />
               </FormControl>

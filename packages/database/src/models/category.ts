@@ -6,7 +6,7 @@ const categorySchema = new mongoose.Schema<Category>(
     slug: String,
     subcategories: [{ type: mongoose.Schema.Types.ObjectId, ref: "Category" }],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 export const CategoryModel =
   (mongoose.models.Category as mongoose.Model<Category>) ||

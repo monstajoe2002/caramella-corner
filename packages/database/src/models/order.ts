@@ -12,7 +12,7 @@ export const orderSchema = new mongoose.Schema<Order>(
       default: "pending",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const OrderModel =

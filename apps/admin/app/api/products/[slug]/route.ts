@@ -5,7 +5,7 @@ import {
 
 export async function GET(
   req: Request,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
@@ -21,7 +21,7 @@ export async function DELETE(
     params,
   }: {
     params: Promise<{ slug: string }>;
-  }
+  },
 ) {
   const { slug } = await params;
   if (!slug) {
