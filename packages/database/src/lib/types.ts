@@ -1,4 +1,7 @@
+import { Types } from "mongoose";
+
 type Product = {
+  _id: Types.ObjectId;
   name: string;
   slug: string;
   description: string;
@@ -15,12 +18,14 @@ type Product = {
 };
 
 type Variant = {
+  _id: Types.ObjectId;
   sku: string;
   quantity: number;
   color?: string;
   size?: string | number;
 };
 type Category = {
+  _id: Types.ObjectId;
   name: string;
   slug: string;
   subcategories: Category[];
@@ -28,6 +33,7 @@ type Category = {
   updatedAt: Date;
 };
 type Customer = {
+  _id: Types.ObjectId;
   name: string;
   email: string;
   phone: string;
@@ -37,6 +43,7 @@ type Customer = {
 };
 
 type Order = {
+  _id: Types.ObjectId;
   pricePaidInPiasters: number;
   products: Array<Product>;
   customer: Customer;
