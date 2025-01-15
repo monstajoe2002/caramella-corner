@@ -22,7 +22,6 @@ import { cn } from "@caramella-corner/ui/lib/utils";
 
 // Import JSON data directly
 import countries from "@caramella-corner/ui/data/countries.json" with { type: "json" };
-import states from "@caramella-corner/ui/data/states.json" with { type: "json" };
 
 interface Timezone {
   zoneName: string;
