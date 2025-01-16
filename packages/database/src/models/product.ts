@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { Product } from "../lib/types";
+import { Product } from "../types";
 import { VariantSchema } from "./variant";
 
 const productSchema = new Schema<Product>(
@@ -18,7 +18,7 @@ const productSchema = new Schema<Product>(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 export const ProductModel =

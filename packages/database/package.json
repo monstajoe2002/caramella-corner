@@ -16,6 +16,7 @@
   "exports": {
     "./lib/*": "./src/lib/*.ts",
     "./types/*": "./src/types/*.ts",
+    "./types":"./src/types/index.ts",
     "./models/*": "./src/models/*.ts",
     "./admin/*": "./src/admin/*.ts"
   },

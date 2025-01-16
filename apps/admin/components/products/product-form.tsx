@@ -24,7 +24,7 @@ import {
   SelectValue,
 } from "@caramella-corner/ui/components/select";
 import { Switch } from "@caramella-corner/ui/components/switch";
-import { Product } from "@caramella-corner/database/lib/types";
+import { Product } from "@caramella-corner/database/types";
 import { VariantDialog } from "./variant-dialog";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
