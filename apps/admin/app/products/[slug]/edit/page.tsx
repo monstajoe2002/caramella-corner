@@ -21,7 +21,7 @@ export default function EditProductPage({
   return (
     <div>
       <h1>Edit an existing product</h1>
-      <ProductForm product={product} intent="edit" />
+      <ProductForm product={product} intent="update" />
     </div>
   );
 }

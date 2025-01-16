@@ -26,10 +26,14 @@ import {
 import { Switch } from "@caramella-corner/ui/components/switch";
 import { Product } from "@caramella-corner/database/lib/types";
 import { VariantDialog } from "./variant-dialog";
+import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
+import { revalidatePath } from "next/cache";
+import { useRouter } from "next/navigation";
 
-const editProduct = async (product: Partial<Product>) => {
+const updateProduct = async (product: Partial<Product>) => {
   const response = await fetch(`/api/products/${product._id}`, {
-    method: "PUT",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
@@ -72,12 +76,26 @@ const formSchema = z.object({
 });
 interface ProductFormProps {
   product?: Product;
-  intent: "create" | "edit";
+  intent: "create" | "update";
 }
 
-export default function ProductForm({ product }: ProductFormProps) {
+export default function ProductForm({ product, intent }: ProductFormProps) {
   const [, setCountryName] = useState<string>(product?.countryOfOrigin || "");
+  const router = useRouter();
+  const { mutate } = useMutation({
+    mutationFn:
+      intent === "create"
+        ? async (product: Product) => await createProduct(product)
+        : async (product: Partial<Product>) => await updateProduct(product),
 
+    onSuccess: () => {
+      toast.success("Product updated successfully");
+      revalidatePath("/products");
+      router.replace("/products");
+    },
+    onError: (error) =>
+      toast.error(`Failed to update product: ${error.message}`),
+  });
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -106,12 +124,8 @@ export default function ProductForm({ product }: ProductFormProps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      console.log(values);
-    } catch (error) {
-      console.error("Form submission error", error);
-    }
+  function onSubmit(values: Omit<z.infer<typeof formSchema>, "_id">) {
+    mutate({ ...values });
   }
 
   return (
