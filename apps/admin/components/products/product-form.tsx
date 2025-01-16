@@ -124,7 +124,7 @@ export default function ProductForm({ product, intent }: ProductFormProps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
-  function onSubmit(values: Omit<z.infer<typeof formSchema>, "_id">) {
+  function onSubmit(values: z.infer<typeof formSchema>) {
     mutate({ ...values });
   }
 

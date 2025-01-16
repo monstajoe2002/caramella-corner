@@ -18,7 +18,8 @@
     "./types/*": "./src/types/*.ts",
     "./types":"./src/types/index.ts",
     "./models/*": "./src/models/*.ts",
-    "./admin/*": "./src/admin/*.ts"
+    "./admin/*": "./src/admin/*.ts",
+    "./dtos/*":"./src/dtos/*.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.6",
