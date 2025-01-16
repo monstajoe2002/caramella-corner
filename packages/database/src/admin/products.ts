@@ -33,7 +33,7 @@ export const deleteProduct = async (slug: string) => {
 
 export const createProduct = async (product: Product) => {
   try {
-    const newProduct: Product = await ProductModel.create({
+    const newProduct = await ProductModel.create({
       ...product,
       slug: slugify(product.name, { lower: true }),
     });
@@ -47,12 +47,13 @@ export const updateProduct = async (
   slug: string,
   product: Partial<Product>
 ) => {
-  const existingProduct = await ProductModel.findOne({ slug }).lean();
-  if (!existingProduct) {
+  const updatedProduct = await ProductModel.findOneAndUpdate(
+    { slug },
+    product,
+    { new: true }
+  ).lean();
+  if (!updatedProduct) {
     throw new Error("Product not found");
   }
-  const updatedProduct = await ProductModel.findByIdAndUpdate(slug, product, {
-    new: true,
-  });
   return updatedProduct;
 };
