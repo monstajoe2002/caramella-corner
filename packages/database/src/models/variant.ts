@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Variant } from "../lib/types";
+import { Variant } from "../types";
 
 export const VariantSchema = new mongoose.Schema<Variant>({
   sku: { type: String, required: true, uppercase: true },

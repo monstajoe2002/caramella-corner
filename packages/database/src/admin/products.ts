@@ -1,7 +1,7 @@
 import { DeleteResult } from "mongoose";
 import { ProductModel } from "../models/product";
-import { Product } from "../lib/types";
 import slugify from "slugify";
+import { CreateProductDto, UpdateProductDto } from "../dtos/product";
 
 export const getProducts = async () => {
   try {
@@ -31,7 +31,7 @@ export const deleteProduct = async (slug: string) => {
   }
 };
 
-export const createProduct = async (product: Product) => {
+export const createProduct = async (product: CreateProductDto) => {
   try {
     const newProduct = await ProductModel.create({
       ...product,
@@ -45,7 +45,7 @@ export const createProduct = async (product: Product) => {
 
 export const updateProduct = async (
   slug: string,
-  product: Partial<Product>
+  product: UpdateProductDto
 ) => {
   const updatedProduct = await ProductModel.findOneAndUpdate(
     { slug },

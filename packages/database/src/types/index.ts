@@ -12,7 +12,6 @@ type Product = {
   orders: Order[];
   variants: Variant[];
   active: boolean;
-  quantity: number;
   createdAt: Date;
   updatedAt: Date;
 };

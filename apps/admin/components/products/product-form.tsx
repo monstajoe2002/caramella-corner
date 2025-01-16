@@ -30,8 +30,12 @@ import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import { revalidatePath } from "next/cache";
 import { useRouter } from "next/navigation";
+import {
+  CreateProductDto,
+  UpdateProductDto,
+} from "@caramella-corner/database/dtos/product";
 
-const updateProduct = async (product: Partial<Product>) => {
+const updateProduct = async (product: UpdateProductDto) => {
   const response = await fetch(`/api/products/${product._id}`, {
     method: "PATCH",
     headers: {
@@ -42,7 +46,7 @@ const updateProduct = async (product: Partial<Product>) => {
   const data = await response.json();
   return data;
 };
-const createProduct = async (product: Product) => {
+const createProduct = async (product: CreateProductDto) => {
   const response = await fetch(`/api/products/new`, {
     method: "POST",
     headers: {
@@ -85,8 +89,8 @@ export default function ProductForm({ product, intent }: ProductFormProps) {
   const { mutate } = useMutation({
     mutationFn:
       intent === "create"
-        ? async (product: Product) => await createProduct(product)
-        : async (product: Partial<Product>) => await updateProduct(product),
+        ? async (product: CreateProductDto) => await createProduct(product)
+        : async (product: UpdateProductDto) => await updateProduct(product),
 
     onSuccess: () => {
       toast.success("Product updated successfully");

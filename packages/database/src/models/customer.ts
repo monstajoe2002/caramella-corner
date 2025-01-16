@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Customer } from "../lib/types";
+import { Customer } from "../types";
 
 const CustomerSchema = new mongoose.Schema<Customer>(
   {
@@ -8,7 +8,7 @@ const CustomerSchema = new mongoose.Schema<Customer>(
     phone: { type: String, required: true },
     address: { type: String, required: true },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 export const CustomerModel =

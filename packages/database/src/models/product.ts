@@ -14,7 +14,6 @@ const productSchema = new Schema<Product>(
     active: { type: Boolean, default: true },
     orders: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Order" }],
     variants: [VariantSchema],
-    quantity: { type: Number, required: true },
   },
   {
     timestamps: true,

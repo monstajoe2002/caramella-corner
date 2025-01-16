@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Order } from "../lib/types";
+import { Order } from "../types";
 
 export const orderSchema = new mongoose.Schema<Order>(
   {
@@ -12,7 +12,7 @@ export const orderSchema = new mongoose.Schema<Order>(
       default: "pending",
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 export const OrderModel =
