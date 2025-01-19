@@ -17,7 +17,15 @@ export default function CategoriesPage() {
     <div>
       <h1>Categories</h1>
       <div className="mt-10">
-        <DataTable columns={columns} data={data} />
+        <DataTable
+          columns={columns}
+          data={data}
+          addButtonLabel="Create Category"
+          showAddButton
+          addButtonType="dialog"
+        >
+          {/* Create category dialog content goes here */}
+        </DataTable>
       </div>
     </div>
   );
