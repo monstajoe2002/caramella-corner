@@ -14,7 +14,7 @@ export default function CategoriesPage() {
           showAddButton
           addButtonType="dialog"
         >
-          {/* Create category dialog content goes here */}
+          {/* Create category form content goes here */}
           <CategoryForm />
         </DataTable>
       </div>
