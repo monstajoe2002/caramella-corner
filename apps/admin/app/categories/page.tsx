@@ -1,3 +1,4 @@
+import CategoryForm from "@/components/categories/category-form";
 import { columns } from "@/components/categories/columns";
 import { DataTable } from "@/components/data-table";
 
@@ -14,6 +15,7 @@ export default function CategoriesPage() {
           addButtonType="dialog"
         >
           {/* Create category dialog content goes here */}
+          <CategoryForm />
         </DataTable>
       </div>
     </div>
