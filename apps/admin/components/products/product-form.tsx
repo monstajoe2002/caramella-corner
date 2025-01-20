@@ -34,6 +34,7 @@ import {
   CreateProductDto,
   UpdateProductDto,
 } from "@caramella-corner/database/dtos/product";
+import { FormIntent } from "@/lib/types";
 
 const updateProduct = async (product: UpdateProductDto) => {
   const response = await fetch(`/api/products/${product._id}`, {
@@ -80,7 +81,7 @@ const formSchema = z.object({
 });
 interface ProductFormProps {
   product?: Product;
-  intent: "create" | "update";
+  intent: FormIntent;
 }
 
 export default function ProductForm({ product, intent }: ProductFormProps) {

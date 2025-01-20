@@ -16,13 +16,20 @@ import {
 } from "@caramella-corner/ui/components/form";
 import { Input } from "@caramella-corner/ui/components/input";
 import { TagsInput } from "@caramella-corner/ui/components/tags-input";
+import type { Category } from "@caramella-corner/database/types";
+import { FormIntent } from "@/lib/types";
+
+interface CategoryFormProps {
+  category?: Category;
+  intent: FormIntent;
+}
 
 const formSchema = z.object({
   category: z.string(),
   subcategory: z.array(z.string()).nonempty("Please at least one item"),
 });
 
-export default function CategoryForm() {
+export default function CategoryForm({ category, intent }: CategoryFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
