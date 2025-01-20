@@ -1,3 +1,4 @@
+import slugify from "slugify";
 import { CreateCategoryDto } from "../dtos/category";
 import { CategoryModel } from "../models/category";
 
@@ -10,7 +11,10 @@ export const getCategories = async () => {
 };
 
 export const createCategory = async (category: CreateCategoryDto) => {
-  const newCategory = await CategoryModel.create(category);
+  const newCategory = await CategoryModel.create({
+    ...category,
+    slug: slugify(category.name, { lower: true }),
+  });
   if (!newCategory) {
     throw new Error("Failed to create category");
   }

@@ -31,7 +31,7 @@ interface CategoryFormProps {
 
 const formSchema = z.object({
   name: z.string(),
-  subcategory: z.array(z.string()).nonempty("Please at least one item"),
+  subcategories: z.array(z.string()).nonempty("Please at least one item"),
 });
 
 export default function CategoryForm({
@@ -57,12 +57,15 @@ export default function CategoryForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      subcategory: [],
+      subcategories: [],
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    mutate({ ...values });
+    mutate({
+      ...values,
+      subcategories: values.subcategories.map((name) => ({ name }) as Category),
+    });
   }
 
   return (
@@ -74,12 +77,16 @@ export default function CategoryForm({
         <FormField
           control={form.control}
           name="name"
-          defaultValue={category?.name}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Clothes" type="" {...field} />
+                <Input
+                  defaultValue={category?.name}
+                  placeholder="Clothes"
+                  type=""
+                  {...field}
+                />
               </FormControl>
               <FormDescription>This is your main category.</FormDescription>
               <FormMessage />
@@ -89,13 +96,13 @@ export default function CategoryForm({
 
         <FormField
           control={form.control}
-          name="subcategory"
-          // defaultValue={[...category?.subcategories.map((s) => s.name)]}
+          name="subcategories"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Subcategories</FormLabel>
               <FormControl>
                 <TagsInput
+                  defaultValue={field.value.map((name) => name)}
                   value={field.value}
                   onValueChange={field.onChange}
                   placeholder="Enter your tags"
