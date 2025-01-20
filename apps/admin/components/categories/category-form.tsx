@@ -26,7 +26,7 @@ export default function CategoryForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      subcategory: ["test"],
+      subcategory: [],
     },
   });
 

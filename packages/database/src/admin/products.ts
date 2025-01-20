@@ -1,4 +1,3 @@
-import { DeleteResult } from "mongoose";
 import { ProductModel } from "../models/product";
 import slugify from "slugify";
 import { CreateProductDto, UpdateProductDto } from "../dtos/product";

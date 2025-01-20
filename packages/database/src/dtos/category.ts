@@ -1,5 +1,11 @@
 import { Category } from "../types";
 
-export type CreateCategoryDto = Omit<Category, "_id">;
+export type CreateCategoryDto = Omit<
+  Category,
+  "_id" | "createdAt" | "updatedAt"
+>;
 
-export type UpdateCategoryDto = Partial<Category>;
+export type UpdateCategoryDto = Omit<
+  Partial<Category>,
+  "createdAt" | "updatedAt"
+>;
