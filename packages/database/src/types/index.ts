@@ -27,7 +27,7 @@ type Category = {
   _id: Types.ObjectId;
   name: string;
   slug: string;
-  subcategories: Category[];
+  subcategories: string[];
   createdAt: Date;
   updatedAt: Date;
 };

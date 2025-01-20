@@ -4,7 +4,7 @@ const categorySchema = new mongoose.Schema<Category>(
   {
     name: String,
     slug: String,
-    subcategories: [{ type: mongoose.Schema.Types.ObjectId, ref: "Category" }],
+    subcategories: [{ type: String }],
   },
   { timestamps: true }
 );

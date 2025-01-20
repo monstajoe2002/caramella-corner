@@ -20,12 +20,10 @@ import type { Category } from "@caramella-corner/database/types";
 import { FormIntent } from "@/lib/types";
 import { useMutation } from "@tanstack/react-query";
 import { CreateCategoryDto } from "@caramella-corner/database/dtos/category";
-import { createCategory } from "@caramella-corner/database/admin/categories";
-import { revalidatePath } from "next/cache";
 
 interface CategoryFormProps {
   category?: Category;
-  intent: FormIntent;
+  intent?: FormIntent;
 }
 
 const formSchema = z.object({
@@ -48,10 +46,7 @@ export default function CategoryForm({
             })
         : undefined,
 
-    onSuccess: () => {
-      toast.success("Category updated successfully");
-      revalidatePath("/categories");
-    },
+    onSuccess: () => toast.success("Success!"),
     onError: (error) =>
       toast.error(`Failed to update product: ${error.message}`),
   });
@@ -64,9 +59,7 @@ export default function CategoryForm({
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    mutate({
-      ...values,
-    });
+    mutate(values);
   }
 
   return (
