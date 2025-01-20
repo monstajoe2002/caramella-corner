@@ -22,7 +22,6 @@ import { useMutation } from "@tanstack/react-query";
 import { CreateCategoryDto } from "@caramella-corner/database/dtos/category";
 import { createCategory } from "@caramella-corner/database/admin/categories";
 import { revalidatePath } from "next/cache";
-import { useRouter } from "next/navigation";
 
 interface CategoryFormProps {
   category?: Category;
@@ -38,17 +37,20 @@ export default function CategoryForm({
   category,
   intent = "create",
 }: CategoryFormProps) {
-  const router = useRouter();
   const { mutate } = useMutation({
     mutationFn:
       intent === "create"
-        ? async (category: CreateCategoryDto) => await createCategory(category!)
+        ? async (category: CreateCategoryDto) =>
+            await fetch("/api/categories/new", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(category),
+            })
         : undefined,
 
     onSuccess: () => {
       toast.success("Category updated successfully");
       revalidatePath("/categories");
-      router.replace("/categories");
     },
     onError: (error) =>
       toast.error(`Failed to update product: ${error.message}`),
@@ -64,7 +66,6 @@ export default function CategoryForm({
   function onSubmit(values: z.infer<typeof formSchema>) {
     mutate({
       ...values,
-      subcategories: values.subcategories.map((name) => ({ name }) as Category),
     });
   }
 

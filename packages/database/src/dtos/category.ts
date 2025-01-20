@@ -7,5 +7,5 @@ export type CreateCategoryDto = Omit<
 
 export type UpdateCategoryDto = Omit<
   Partial<Category>,
-  "createdAt" | "updatedAt"
+  "createdAt" | "updatedAt" | "slug"
 >;
