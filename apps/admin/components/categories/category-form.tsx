@@ -30,7 +30,7 @@ interface CategoryFormProps {
 }
 
 const formSchema = z.object({
-  category: z.string(),
+  name: z.string(),
   subcategory: z.array(z.string()).nonempty("Please at least one item"),
 });
 
@@ -62,7 +62,7 @@ export default function CategoryForm({
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    mutate(values);
+    mutate({ ...values });
   }
 
   return (
@@ -73,10 +73,11 @@ export default function CategoryForm({
       >
         <FormField
           control={form.control}
-          name="category"
+          name="name"
+          defaultValue={category?.name}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input placeholder="Clothes" type="" {...field} />
               </FormControl>
@@ -89,6 +90,7 @@ export default function CategoryForm({
         <FormField
           control={form.control}
           name="subcategory"
+          // defaultValue={[...category?.subcategories.map((s) => s.name)]}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Subcategories</FormLabel>
