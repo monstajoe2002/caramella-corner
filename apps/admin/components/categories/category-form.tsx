@@ -18,6 +18,11 @@ import { Input } from "@caramella-corner/ui/components/input";
 import { TagsInput } from "@caramella-corner/ui/components/tags-input";
 import type { Category } from "@caramella-corner/database/types";
 import { FormIntent } from "@/lib/types";
+import { useMutation } from "@tanstack/react-query";
+import { CreateCategoryDto } from "@caramella-corner/database/dtos/category";
+import { createCategory } from "@caramella-corner/database/admin/categories";
+import { revalidatePath } from "next/cache";
+import { useRouter } from "next/navigation";
 
 interface CategoryFormProps {
   category?: Category;
@@ -29,7 +34,26 @@ const formSchema = z.object({
   subcategory: z.array(z.string()).nonempty("Please at least one item"),
 });
 
-export default function CategoryForm({ category, intent }: CategoryFormProps) {
+export default function CategoryForm({
+  category,
+  intent = "create",
+}: CategoryFormProps) {
+  const router = useRouter();
+  const { mutate } = useMutation({
+    mutationFn:
+      intent === "create"
+        ? async (category: CreateCategoryDto) => await createCategory(category!)
+        : undefined,
+
+    onSuccess: () => {
+      toast.success("Category updated successfully");
+      revalidatePath("/categories");
+      router.replace("/categories");
+    },
+    onError: (error) =>
+      toast.error(`Failed to update product: ${error.message}`),
+  });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,17 +62,7 @@ export default function CategoryForm({ category, intent }: CategoryFormProps) {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      console.log(values);
-      toast(
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      );
-    } catch (error) {
-      console.error("Form submission error", error);
-      toast.error("Failed to submit the form. Please try again.");
-    }
+    mutate(values);
   }
 
   return (
