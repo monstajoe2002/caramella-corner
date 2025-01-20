@@ -44,7 +44,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@caramella-corner/ui/components/dialog";
-
+import { TableSkeleton } from "./table-skeleton";
 interface DataTablePaginationProps<TData> {
   table: ReactTable<TData>;
 }
@@ -157,6 +157,7 @@ export function DataTable<TData, TValue>({
     state: { columnFilters },
   });
   if (isLoading) {
+    return <TableSkeleton />;
   }
   return (
     <div>

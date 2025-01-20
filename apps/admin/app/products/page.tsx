@@ -3,7 +3,6 @@ import { columns } from "@/components/products/columns";
 import { DataTable } from "@/components/data-table";
 import { useQuery } from "@tanstack/react-query";
 import { Product } from "@caramella-corner/database/types";
-import { TableSkeleton } from "@/components/table-skeleton";
 
 export default function ProductsPage() {
   const { data, isLoading } = useQuery<Product[]>({

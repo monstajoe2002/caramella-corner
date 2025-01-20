@@ -1,6 +1,6 @@
 "use client";
 
-import { Product } from "@caramella-corner/database/lib/types";
+import { Product } from "@caramella-corner/database/types";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -18,8 +18,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { DeleteAlert } from "./delete-alert";
-
-// TODO: define the type for the data
 
 export const columns: ColumnDef<Product>[] = [
   {
