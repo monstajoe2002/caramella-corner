@@ -18,6 +18,7 @@ export default function CategoriesPage() {
       <h1>Categories</h1>
       <div className="mt-10">
         <DataTable
+          isLoading={isLoading}
           columns={columns}
           data={data ?? []}
           addButtonLabel="Create Category"

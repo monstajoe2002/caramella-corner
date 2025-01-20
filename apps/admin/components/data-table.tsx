@@ -133,6 +133,7 @@ interface DataTableProps<TData, TValue> {
   addButtonLabel?: string;
   addButtonHref?: string;
   children?: React.ReactNode;
+  isLoading?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -142,6 +143,7 @@ export function DataTable<TData, TValue>({
   addButtonType = "link",
   addButtonLabel,
   addButtonHref,
+  isLoading = false,
   children,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -154,7 +156,8 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     state: { columnFilters },
   });
-
+  if (isLoading) {
+  }
   return (
     <div>
       <div className="flex items-center py-4">
@@ -179,7 +182,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -198,7 +201,7 @@ export function DataTable<TData, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}

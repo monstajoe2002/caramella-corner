@@ -18,18 +18,15 @@ export default function ProductsPage() {
     <div>
       <h1>Products</h1>
       <div className="mt-10">
-        {isLoading ? (
-          <TableSkeleton />
-        ) : (
-          <DataTable
-            columns={columns}
-            data={data ?? []}
-            showAddButton
-            addButtonLabel="Add Product"
-            addButtonType="link"
-            addButtonHref="/products/new"
-          />
-        )}
+        <DataTable
+          isLoading={isLoading}
+          columns={columns}
+          data={data ?? []}
+          showAddButton
+          addButtonLabel="Add Product"
+          addButtonType="link"
+          addButtonHref="/products/new"
+        />
       </div>
     </div>
   );
