@@ -54,7 +54,7 @@ export default function CategoryForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      subcategories: [],
+      subcategories: category?.subcategories || [],
     },
   });
 
@@ -96,7 +96,6 @@ export default function CategoryForm({
               <FormLabel>Subcategories</FormLabel>
               <FormControl>
                 <TagsInput
-                  defaultValue={field.value.map((name) => name)}
                   value={field.value}
                   onValueChange={field.onChange}
                   placeholder="Enter your tags"

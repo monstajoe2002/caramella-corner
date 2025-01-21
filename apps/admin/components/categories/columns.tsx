@@ -16,6 +16,14 @@ import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { DeleteAlert } from "../products/delete-alert";
 import { Category } from "@caramella-corner/database/types/index";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@caramella-corner/ui/components/dialog";
+import CategoryForm from "./category-form";
 
 export const columns: ColumnDef<Category>[] = [
   {
@@ -36,28 +44,38 @@ export const columns: ColumnDef<Category>[] = [
     id: "actions",
     cell: ({ row }) => {
       return (
-        <AlertDialog>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <AlertDialogTrigger asChild>
-                <DropdownMenuItem className="text-red-500 focus:text-red-500 focus:bg-red-500/20">
-                  Delete
-                </DropdownMenuItem>
-              </AlertDialogTrigger>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          {/* Delete confirmation dialog */}
-          <DeleteAlert slug={row.original.slug} />
-        </AlertDialog>
+        <Dialog>
+          <AlertDialog>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DialogTrigger asChild>
+                  <DropdownMenuItem>Edit</DropdownMenuItem>
+                </DialogTrigger>
+                <AlertDialogTrigger asChild>
+                  <DropdownMenuItem className="text-red-500 focus:text-red-500 focus:bg-red-500/20">
+                    Delete
+                  </DropdownMenuItem>
+                </AlertDialogTrigger>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            {/* Delete confirmation dialog */}
+            <DeleteAlert slug={row.original.slug} />
+          </AlertDialog>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Edit Category</DialogTitle>
+            </DialogHeader>
+            <CategoryForm category={row.original} />
+          </DialogContent>
+        </Dialog>
       );
     },
   },
