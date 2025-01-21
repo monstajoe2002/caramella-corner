@@ -73,7 +73,7 @@ export const columns: ColumnDef<Category>[] = [
             <DialogHeader>
               <DialogTitle>Edit Category</DialogTitle>
             </DialogHeader>
-            <CategoryForm category={row.original} />
+            <CategoryForm existingCategory={row.original} intent="update" />
           </DialogContent>
         </Dialog>
       );

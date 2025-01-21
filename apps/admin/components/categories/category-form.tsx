@@ -18,11 +18,14 @@ import { Input } from "@caramella-corner/ui/components/input";
 import { TagsInput } from "@caramella-corner/ui/components/tags-input";
 import type { Category } from "@caramella-corner/database/types";
 import { FormIntent } from "@/lib/types";
-import { useMutation } from "@tanstack/react-query";
-import { CreateCategoryDto } from "@caramella-corner/database/dtos/category";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  CreateCategoryDto,
+  UpdateCategoryDto,
+} from "@caramella-corner/database/dtos/category";
 
 interface CategoryFormProps {
-  category?: Category;
+  existingCategory?: Category;
   intent?: FormIntent;
 }
 
@@ -32,9 +35,10 @@ const formSchema = z.object({
 });
 
 export default function CategoryForm({
-  category,
+  existingCategory,
   intent = "create",
 }: CategoryFormProps) {
+  const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn:
       intent === "create"
@@ -44,9 +48,17 @@ export default function CategoryForm({
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(category),
             })
-        : undefined,
+        : async (category: UpdateCategoryDto) =>
+            await fetch(`/api/categories/${existingCategory?.slug}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(category),
+            }),
 
-    onSuccess: () => toast.success("Success!"),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      toast.success("Success!");
+    },
     onError: (error) =>
       toast.error(`Failed to update product: ${error.message}`),
   });
@@ -54,7 +66,8 @@ export default function CategoryForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      subcategories: category?.subcategories || [],
+      name: existingCategory?.name || "",
+      subcategories: existingCategory?.subcategories || [],
     },
   });
 
@@ -75,12 +88,7 @@ export default function CategoryForm({
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input
-                  defaultValue={category?.name}
-                  placeholder="Clothes"
-                  type=""
-                  {...field}
-                />
+                <Input placeholder="Clothes" type="" {...field} />
               </FormControl>
               <FormDescription>This is your main category.</FormDescription>
               <FormMessage />

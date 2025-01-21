@@ -20,3 +20,17 @@ export const createCategory = async (category: CreateCategoryDto) => {
   }
   return newCategory;
 };
+
+export const updateCategory = async (
+  slug: string,
+  category: CreateCategoryDto
+) => {
+  const updatedCategory = await CategoryModel.findOneAndUpdate(
+    { slug },
+    category
+  );
+  if (!updatedCategory) {
+    throw new Error("Failed to update category");
+  }
+  return updatedCategory;
+};
