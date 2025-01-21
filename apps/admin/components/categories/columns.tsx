@@ -14,7 +14,7 @@ import {
 } from "@caramella-corner/ui/components/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-import { DeleteAlert } from "../products/delete-alert";
+import { DeleteAlert } from "../categories/delete-alert";
 import { Category } from "@caramella-corner/database/types/index";
 import {
   Dialog,

@@ -40,6 +40,8 @@ export default function CategoryForm({
 }: CategoryFormProps) {
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
+    mutationKey: ["category", existingCategory?.slug || undefined],
+
     mutationFn:
       intent === "create"
         ? async (category: CreateCategoryDto) =>

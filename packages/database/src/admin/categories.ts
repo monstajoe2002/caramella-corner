@@ -34,3 +34,11 @@ export const updateCategory = async (
   }
   return updatedCategory;
 };
+
+export const deleteCategory = async (slug: string) => {
+  const deletedCategory = await CategoryModel.findOneAndDelete({ slug });
+  if (!deletedCategory) {
+    throw new Error("Failed to delete category");
+  }
+  return deletedCategory;
+};
