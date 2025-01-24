@@ -19,15 +19,17 @@ import LocationSelector from "@caramella-corner/ui/components/location-input";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@caramella-corner/ui/components/select";
 import { Switch } from "@caramella-corner/ui/components/switch";
-import { Product } from "@caramella-corner/database/types";
+import { Category, Product } from "@caramella-corner/database/types";
 import { VariantDialog } from "./variant-dialog";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { revalidatePath } from "next/cache";
 import { useRouter } from "next/navigation";
 import {
@@ -87,6 +89,13 @@ interface ProductFormProps {
 export default function ProductForm({ product, intent }: ProductFormProps) {
   const [, setCountryName] = useState<string>(product?.countryOfOrigin || "");
   const router = useRouter();
+  const { data: categories } = useQuery<Category[]>({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      const res = await fetch("/api/categories");
+      return res.json();
+    },
+  });
   const { mutate } = useMutation({
     mutationFn:
       intent === "create"
@@ -271,9 +280,16 @@ export default function ProductForm({ product, intent }: ProductFormProps) {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
+                  {categories?.map((cat) => (
+                    <SelectGroup key={cat.name}>
+                      <SelectLabel>{cat.name}</SelectLabel>
+                      {cat.subcategories.map((subcat) => (
+                        <SelectItem key={subcat} value={subcat}>
+                          {subcat}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  ))}
                 </SelectContent>
               </Select>
 
