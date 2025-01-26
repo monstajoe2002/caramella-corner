@@ -12,6 +12,7 @@ const productSchema = new Schema<Product>(
     category: { type: mongoose.SchemaTypes.ObjectId, ref: "Category" },
     priceInPiasters: { type: Number, required: true },
     active: { type: Boolean, default: true },
+    image: { type: String, required: true },
     orders: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Order" }],
     variants: [VariantSchema],
   },

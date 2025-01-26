@@ -113,22 +113,15 @@ export default function ProductForm({ product, intent }: ProductFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      description: "",
-      material: "",
-      priceInPiasters: 0,
-      countryOfOrigin: "",
-      image: "",
-      subcategory: "",
-      active: false,
-      variants: [
-        {
-          color: "",
-          size: "",
-          quantity: undefined,
-          sku: "",
-        },
-      ],
+      name: product?.name,
+      description: product?.description,
+      material: product?.material,
+      priceInPiasters: product?.priceInPiasters,
+      countryOfOrigin: product?.countryOfOrigin,
+      image: product?.image,
+      subcategory: product?.category.name,
+      active: product?.active,
+      variants: product?.variants,
     },
   });
 

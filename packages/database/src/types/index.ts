@@ -9,6 +9,7 @@ type Product = {
   countryOfOrigin: string;
   category: Category;
   priceInPiasters: number;
+  image: string;
   orders: Order[];
   variants: Variant[];
   active: boolean;
