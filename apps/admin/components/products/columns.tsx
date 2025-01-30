@@ -25,13 +25,6 @@ export const columns: ColumnDef<Product>[] = [
     header: "Name",
   },
   {
-    accessorKey: "quantity",
-    header: () => <span className="hidden md:table-cell">Quantity</span>,
-    cell: ({ row }) => (
-      <span className="hidden md:table-cell">{row.getValue("quantity")}</span>
-    ),
-  },
-  {
     accessorKey: "createdAt",
     header: "Created At",
     cell: ({ row }) => {
