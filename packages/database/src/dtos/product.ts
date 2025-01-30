@@ -1,9 +1,17 @@
-import { Product } from "../types/index";
+import { Category, Product } from "../types/index";
+type CategoryFields = Pick<Category, "name" | "subcategories">;
 export type CreateProductDto = Omit<
-  Product,
+  Product & {
+    category: CategoryFields;
+  },
   "_id" | "orders" | "slug" | "createdAt" | "updatedAt"
 >;
+
 export type UpdateProductDto = Omit<
-  Partial<Product>,
+  Partial<
+    Product & {
+      category: Partial<CategoryFields>;
+    }
+  >,
   "orders" | "slug" | "createdAt" | "updatedAt"
 >;

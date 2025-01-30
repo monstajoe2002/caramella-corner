@@ -19,9 +19,7 @@ import LocationSelector from "@caramella-corner/ui/components/location-input";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@caramella-corner/ui/components/select";
@@ -30,7 +28,6 @@ import { Category, Product } from "@caramella-corner/database/types";
 import { VariantDialog } from "./variant-dialog";
 import { toast } from "sonner";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { revalidatePath } from "next/cache";
 import { useRouter } from "next/navigation";
 import {
   CreateProductDto,
@@ -67,6 +64,10 @@ const variantSchema = z.object({
   color: z.string().optional(),
   size: z.union([z.string(), z.number()]).optional(),
 });
+const categorySchema = z.object({
+  name: z.string({ message: "Name is required" }),
+  subcategory: z.string({ message: "Subcategory is required" }),
+});
 const formSchema = z.object({
   name: z.string().nonempty({ message: "Name is required" }),
   description: z.string().nonempty({ message: "Description is required" }),
@@ -77,8 +78,10 @@ const formSchema = z.object({
     .positive({ message: "Price must be a positive integer" }),
   countryOfOrigin: z.string(),
   image: z.string(),
-  variants: z.array(variantSchema),
-  subcategory: z.string(),
+  variants: z
+    .array(variantSchema)
+    .nonempty({ message: "Variants are required" }),
+  category: categorySchema,
   active: z.boolean(),
 });
 interface ProductFormProps {
@@ -88,6 +91,10 @@ interface ProductFormProps {
 
 export default function ProductForm({ product, intent }: ProductFormProps) {
   const [, setCountryName] = useState<string>(product?.countryOfOrigin || "");
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    product?.category || null
+  );
+
   const router = useRouter();
   const { data: categories } = useQuery<Category[]>({
     queryKey: ["categories"],
@@ -103,12 +110,11 @@ export default function ProductForm({ product, intent }: ProductFormProps) {
         : async (product: UpdateProductDto) => await updateProduct(product),
 
     onSuccess: () => {
-      toast.success("Product updated successfully");
-      revalidatePath("/products");
+      toast.success("Product submitted successfully");
       router.replace("/products");
     },
     onError: (error) =>
-      toast.error(`Failed to update product: ${error.message}`),
+      toast.error(`Failed to submit product: ${error.message}`),
   });
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -119,7 +125,7 @@ export default function ProductForm({ product, intent }: ProductFormProps) {
       priceInPiasters: product?.priceInPiasters,
       countryOfOrigin: product?.countryOfOrigin,
       image: product?.image,
-      subcategory: product?.category.name,
+      category: product?.category,
       active: product?.active,
       variants: product?.variants,
     },
@@ -132,7 +138,8 @@ export default function ProductForm({ product, intent }: ProductFormProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
   function onSubmit(values: z.infer<typeof formSchema>) {
-    mutate({ ...values });
+    if (!selectedCategory) return;
+    mutate({ ...values, category: selectedCategory });
   }
 
   return (
@@ -148,7 +155,7 @@ export default function ProductForm({ product, intent }: ProductFormProps) {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Blue Blouse" type="" {...field} />
+                <Input placeholder="Blue Blouse" {...field} />
               </FormControl>
 
               <FormMessage />
@@ -181,7 +188,7 @@ export default function ProductForm({ product, intent }: ProductFormProps) {
             <FormItem>
               <FormLabel>Material</FormLabel>
               <FormControl>
-                <Input placeholder="100% cotton" type="" {...field} />
+                <Input placeholder="100% cotton" {...field} />
               </FormControl>
 
               <FormMessage />
@@ -260,36 +267,65 @@ export default function ProductForm({ product, intent }: ProductFormProps) {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="subcategory"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Category</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select subcategory" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {categories?.map((cat) => (
-                    <SelectGroup key={cat.name}>
-                      <SelectLabel>{cat.name}</SelectLabel>
-                      {cat.subcategories.map((subcat) => (
-                        <SelectItem key={subcat} value={subcat}>
-                          {subcat}
+        <div className="flex flex-col md:flex-row gap-4 mt-2 *:w-full">
+          <FormField
+            control={form.control}
+            name="category.name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Category</FormLabel>
+                <Select
+                  onValueChange={(e) => {
+                    field.onChange(e);
+                    const cat = categories?.find((c) => c.name === e);
+                    if (!cat) return;
+                    setSelectedCategory(cat);
+                  }}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {categories?.map((cat) => (
+                      <SelectItem key={cat.slug} value={cat.slug}>
+                        {cat.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {selectedCategory && (
+            <FormField
+              control={form.control}
+              name="category.subcategory"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Subcategory</FormLabel>
+                  <Select onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select subcategory" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {selectedCategory?.subcategories.map((sub) => (
+                        <SelectItem key={sub} value={sub}>
+                          {sub}
                         </SelectItem>
                       ))}
-                    </SelectGroup>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <FormMessage />
-            </FormItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           )}
-        />
+        </div>
 
         <FormField
           control={form.control}
