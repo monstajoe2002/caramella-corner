@@ -89,7 +89,10 @@ interface ProductFormProps {
   intent: FormIntent;
 }
 
-export default function ProductForm({ product, intent }: ProductFormProps) {
+export default function ProductForm({
+  product,
+  intent = "create",
+}: ProductFormProps) {
   const [, setCountryName] = useState<string>(product?.countryOfOrigin || "");
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     product?.category || null
