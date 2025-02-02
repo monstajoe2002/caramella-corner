@@ -132,7 +132,7 @@ export default function ProductForm({
       material: product?.material,
       priceInPiasters: product?.priceInPiasters,
       countryOfOrigin: product?.countryOfOrigin,
-      image: product?.image,
+      image: imageUrl,
       category: product?.category,
       active: product?.active,
       variants: product?.variants,
@@ -317,9 +317,9 @@ export default function ProductForm({
                 <FormItem>
                   <FormLabel>Category</FormLabel>
                   <Select
-                    onValueChange={(e) => {
-                      field.onChange(e);
-                      const cat = categories?.find((c) => c.name === e);
+                    onValueChange={(val) => {
+                      field.onChange(val);
+                      const cat = categories?.find((c) => c.name === val);
                       if (!cat) return;
                       setSelectedCategory(cat);
                     }}
