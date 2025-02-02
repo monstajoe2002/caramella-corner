@@ -23,7 +23,7 @@ export const VariantDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-fit">
+        <Button type="button" className="w-fit">
           <ChartNoAxesGantt />
           <span>Manage Variants</span>
         </Button>

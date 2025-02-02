@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -34,6 +34,9 @@ import {
   UpdateProductDto,
 } from "@caramella-corner/database/dtos/product";
 import { FormIntent } from "@/lib/types";
+import { IKUpload, ImageKitProvider } from "imagekitio-next";
+import { authenticator } from "@/lib/imagekit";
+import { Upload } from "lucide-react";
 
 const updateProduct = async (product: UpdateProductDto) => {
   const response = await fetch(`/api/products/${product._id}`, {
@@ -97,6 +100,8 @@ export default function ProductForm({
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     product?.category || null
   );
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [isUploading, setIsUploading] = useState(false);
 
   const router = useRouter();
   const { data: categories } = useQuery<Category[]>({
@@ -133,7 +138,7 @@ export default function ProductForm({
       variants: product?.variants,
     },
   });
-
+  const ikUploadRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (product) {
       form.reset(product);
@@ -142,183 +147,192 @@ export default function ProductForm({
   }, [product]);
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (!selectedCategory) return;
-    mutate({ ...values, category: selectedCategory });
+    mutate({ ...values, category: selectedCategory, image: imageUrl });
   }
-
+  const publicKey = process.env.NEXT_PUBLIC_IK_PUBLIC_KEY!;
+  const urlEndpoint = process.env.NEXT_PUBLIC_IK_URL_ENDPOINT!;
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 max-w-3xl mx-auto py-10"
-      >
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Blue Blouse" {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Flattering, relaxed fit that effortlessly transitions from work to weekend"
-                  {...field}
-                />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="material"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Material</FormLabel>
-              <FormControl>
-                <Input placeholder="100% cotton" {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="priceInPiasters"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Price (in Piasters)</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="100,000"
-                  type="number"
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                />
-              </FormControl>
-              <FormDescription>
-                Enter the price in Piasters. 1 EGP is equivalent to 100
-                Piasters. e.g. 100EGP=100,000 Piasters
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="countryOfOrigin"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Country of Origin</FormLabel>
-              <FormControl>
-                <LocationSelector
-                  onCountryChange={(country) => {
-                    setCountryName(country?.name || "");
-                    form.setValue(field.name, country?.name || "");
-                  }}
-                />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="variants"
-          render={() => (
-            <FormItem>
-              <div className="flex flex-col gap-4 mt-2">
-                <FormLabel>Variants</FormLabel>
-                <VariantDialog />
-                <FormMessage />
-              </div>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="image"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Image</FormLabel>
-              <FormControl>
-                <Input placeholder="" type="file" {...field} />
-              </FormControl>
-              <FormDescription>
-                Select the image that best represents your product.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <div className="flex flex-col md:flex-row gap-4 mt-2 *:w-full">
+    <ImageKitProvider
+      publicKey={publicKey}
+      urlEndpoint={urlEndpoint}
+      authenticator={authenticator}
+    >
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8 max-w-3xl mx-auto py-10"
+        >
           <FormField
             control={form.control}
-            name="category.name"
+            name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Category</FormLabel>
-                <Select
-                  onValueChange={(e) => {
-                    field.onChange(e);
-                    const cat = categories?.find((c) => c.name === e);
-                    if (!cat) return;
-                    setSelectedCategory(cat);
-                  }}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {categories?.map((cat) => (
-                      <SelectItem key={cat.slug} value={cat.slug}>
-                        {cat.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Blue Blouse" {...field} />
+                </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}
           />
-          {selectedCategory && (
+
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Flattering, relaxed fit that effortlessly transitions from work to weekend"
+                    {...field}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="material"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Material</FormLabel>
+                <FormControl>
+                  <Input placeholder="100% cotton" {...field} />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="priceInPiasters"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Price (in Piasters)</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="100,000"
+                    type="number"
+                    {...field}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Enter the price in Piasters. 1 EGP is equivalent to 100
+                  Piasters. e.g. 100EGP=100,000 Piasters
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="countryOfOrigin"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Country of Origin</FormLabel>
+                <FormControl>
+                  <LocationSelector
+                    onCountryChange={(country) => {
+                      setCountryName(country?.name || "");
+                      form.setValue(field.name, country?.name || "");
+                    }}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="variants"
+            render={() => (
+              <FormItem>
+                <div className="flex flex-col gap-4 mt-2">
+                  <FormLabel>Variants</FormLabel>
+                  <VariantDialog />
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="image"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex flex-col gap-2">
+                  <FormLabel>Image</FormLabel>
+                  <IKUpload
+                    onUploadStart={() => setIsUploading(true)}
+                    onError={(res) => {
+                      setIsUploading(false);
+                      toast.error(res.message);
+                    }}
+                    onSuccess={({ url }) => {
+                      setImageUrl(url);
+                      setIsUploading(false);
+                      toast.success("Image uploaded successfully!");
+                    }}
+                    useUniqueFileName={true}
+                    style={{ display: "none" }}
+                    ref={ikUploadRef}
+                  />
+                  <FormControl>
+                    {ikUploadRef && (
+                      <Button
+                        onClick={() => ikUploadRef.current?.click()}
+                        disabled={isUploading}
+                        variant={"outline"}
+                        type="button"
+                        {...field}
+                      >
+                        <Upload />
+                        Upload Image
+                      </Button>
+                    )}
+                  </FormControl>
+                </div>
+                <FormDescription>
+                  Select the image that best represents your product.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="flex flex-col md:flex-row gap-4 mt-2 *:w-full">
             <FormField
               control={form.control}
-              name="category.subcategory"
+              name="category.name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Subcategory</FormLabel>
-                  <Select onValueChange={field.onChange}>
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    onValueChange={(e) => {
+                      field.onChange(e);
+                      const cat = categories?.find((c) => c.name === e);
+                      if (!cat) return;
+                      setSelectedCategory(cat);
+                    }}
+                  >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select subcategory" />
+                        <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {selectedCategory?.subcategories.map((sub) => (
-                        <SelectItem key={sub} value={sub}>
-                          {sub}
+                      {categories?.map((cat) => (
+                        <SelectItem key={cat.slug} value={cat.slug}>
+                          {cat.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -327,35 +341,61 @@ export default function ProductForm({
                 </FormItem>
               )}
             />
-          )}
-        </div>
+            {selectedCategory && (
+              <FormField
+                control={form.control}
+                name="category.subcategory"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Subcategory</FormLabel>
+                    <Select onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select subcategory" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {selectedCategory?.subcategories.map((sub) => (
+                          <SelectItem key={sub} value={sub}>
+                            {sub}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+          </div>
 
-        <FormField
-          control={form.control}
-          name="active"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-              <div className="space-y-0.5">
-                <FormLabel>Mark as Active</FormLabel>
-                <FormDescription>
-                  This product will appear on the storefront, not kept as a
-                  draft.
-                </FormDescription>
-              </div>
-              <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                  aria-readonly
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <Button type="submit" className="w-full">
-          Submit
-        </Button>
-      </form>
-    </Form>
+          <FormField
+            control={form.control}
+            name="active"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <FormLabel>Mark as Active</FormLabel>
+                  <FormDescription>
+                    This product will appear on the storefront, not kept as a
+                    draft.
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    aria-readonly
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <Button type="submit" className="w-full">
+            Submit
+          </Button>
+        </form>
+      </Form>
+    </ImageKitProvider>
   );
 }
