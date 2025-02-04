@@ -44,7 +44,10 @@ export const columns: ColumnDef<Product>[] = [
     accessorKey: "createdAt",
     header: "Created At",
     cell: ({ row }) => {
-      return new Date(row.getValue("createdAt")).toLocaleDateString();
+      return new Date(row.getValue("createdAt"))
+        .toISOString()
+        .split("T")
+        .shift();
     },
   },
 
