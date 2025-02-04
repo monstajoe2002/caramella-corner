@@ -1,6 +1,6 @@
 "use client";
 import ProductForm from "@/components/products/product-form";
-import { Product } from "@caramella-corner/database/lib/types";
+import { Product } from "@caramella-corner/database/types";
 import { useQuery } from "@tanstack/react-query";
 import { use } from "react";
 
@@ -21,7 +21,7 @@ export default function EditProductPage({
   return (
     <div>
       <h1>Edit an existing product</h1>
-      <ProductForm product={product} intent="update" />
+      <ProductForm product={product} intent="update" slug={slug} />
     </div>
   );
 }

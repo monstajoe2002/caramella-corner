@@ -13,5 +13,5 @@ export type UpdateProductDto = Omit<
       category: Partial<CategoryFields>;
     }
   >,
-  "orders" | "slug" | "createdAt" | "updatedAt"
+  "orders" | "createdAt" | "updatedAt"
 >;

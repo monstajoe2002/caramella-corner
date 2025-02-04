@@ -38,8 +38,8 @@ import { IKUpload, ImageKitProvider } from "imagekitio-next";
 import { authenticator } from "@/lib/imagekit";
 import { Upload } from "lucide-react";
 
-const updateProduct = async (product: UpdateProductDto) => {
-  const response = await fetch(`/api/products/${product._id}`, {
+const updateProduct = async (slug: string, product: UpdateProductDto) => {
+  const response = await fetch(`/api/products/${slug}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -90,17 +90,21 @@ const formSchema = z.object({
 interface ProductFormProps {
   product?: Product;
   intent: FormIntent;
+  slug?: string;
 }
 
 export default function ProductForm({
   product,
   intent = "create",
+  slug,
 }: ProductFormProps) {
-  const [, setCountryName] = useState<string>(product?.countryOfOrigin || "");
+  const [countryName, setCountryName] = useState<string>(
+    product?.countryOfOrigin || ""
+  );
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     product?.category || null
   );
-  const [imageUrl, setImageUrl] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>(product?.image ?? "");
   const [isUploading, setIsUploading] = useState(false);
 
   const router = useRouter();
@@ -115,7 +119,8 @@ export default function ProductForm({
     mutationFn:
       intent === "create"
         ? async (product: CreateProductDto) => await createProduct(product)
-        : async (product: UpdateProductDto) => await updateProduct(product),
+        : async (product: UpdateProductDto) =>
+            await updateProduct(slug!, product),
 
     onSuccess: () => {
       toast.success("Product submitted successfully");
@@ -131,8 +136,8 @@ export default function ProductForm({
       description: product?.description,
       material: product?.material,
       priceInPiasters: product?.priceInPiasters,
-      countryOfOrigin: product?.countryOfOrigin,
-      image: imageUrl,
+      countryOfOrigin: countryName ?? product?.countryOfOrigin,
+      image: imageUrl || product?.image,
       category: product?.category,
       active: product?.active,
       variants: product?.variants,
@@ -317,6 +322,7 @@ export default function ProductForm({
                 <FormItem>
                   <FormLabel>Category</FormLabel>
                   <Select
+                    defaultValue={product?.category?.name || ""}
                     onValueChange={(val) => {
                       field.onChange(val);
                       const cat = categories?.find((c) => c.name === val);
