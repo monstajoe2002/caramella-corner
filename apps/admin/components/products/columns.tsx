@@ -18,8 +18,24 @@ import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { DeleteAlert } from "./delete-alert";
+import Image from "next/image";
 
 export const columns: ColumnDef<Product>[] = [
+  {
+    accessorKey: "image",
+    header: "Image",
+    cell: ({ row }) => {
+      return (
+        <Image
+          src={row.getValue("image")}
+          alt="Product Image"
+          className="object-cover size-20"
+          width={80}
+          height={50}
+        />
+      );
+    },
+  },
   {
     accessorKey: "name",
     header: "Name",
