@@ -1,5 +1,4 @@
 import { OrderModel } from "../models/order";
-import { Order } from "../types";
 
 export const getOrders = async () => {
   const ordersData = await OrderModel.find().lean();
