@@ -8,8 +8,10 @@ export default function Page() {
   const { data: totalRevenue } = useQuery({
     queryKey: ["total-revenue"],
     queryFn: async () => {
-      const ordersData = await fetch("/api/orders").then((res) => res.json());
-      return ordersData.count;
+      const revenue = await fetch("/api/orders/revenue").then((res) =>
+        res.json()
+      );
+      return revenue;
     },
   });
   return (
