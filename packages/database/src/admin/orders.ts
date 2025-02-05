@@ -8,8 +8,9 @@ export const getOrders = async () => {
 };
 
 export const getTotalRevenue = async () => {
-  const [totalRevenue] = await OrderModel.aggregate([
+  const [totalRevenueData] = await OrderModel.aggregate([
     { $group: { _id: null, revenue: { $sum: "$pricePaidInPiasters" } } },
   ]);
+  const totalRevenue = totalRevenueData ? totalRevenueData.revenue / 100 : 0; // Assuming 100 piasters = 1 pound
   return totalRevenue;
 };
