@@ -1,7 +1,7 @@
 "use client";
 import { DashboardCard } from "@/components/dashboard/dashboard-card";
 import { RecentOrdersTable } from "@/components/dashboard/recent-orders-table";
-import { formatNumber } from "@/lib/utils";
+import { formatNumber, formatPrice } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Page() {
@@ -26,7 +26,7 @@ export default function Page() {
       <h1>Home</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
         <DashboardCard title="Total Revenue">
-          <p className="text-2xl font-bold">{totalRevenue}</p>
+          <p className="text-2xl font-bold">{formatPrice(totalRevenue)}</p>
         </DashboardCard>
         <DashboardCard title="New Customers">
           <p className="text-2xl font-bold">{formatNumber(150)}</p>
