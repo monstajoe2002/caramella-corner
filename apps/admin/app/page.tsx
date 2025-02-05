@@ -21,6 +21,15 @@ export default function Page() {
       return orders.count;
     },
   });
+  const { data: customerCount } = useQuery({
+    queryKey: ["customer-count"],
+    queryFn: async () => {
+      const customerCount = await fetch("/api/customers").then((res) =>
+        res.json()
+      );
+      return customerCount;
+    },
+  });
   return (
     <main>
       <h1>Home</h1>
@@ -29,7 +38,7 @@ export default function Page() {
           <p className="text-2xl font-bold">{formatPrice(totalRevenue)}</p>
         </DashboardCard>
         <DashboardCard title="New Customers">
-          <p className="text-2xl font-bold">{formatNumber(150)}</p>
+          <p className="text-2xl font-bold">{formatNumber(customerCount)}</p>
         </DashboardCard>
         <DashboardCard title="Total Orders">
           <p className="text-2xl font-bold">{formatNumber(orders)}</p>
