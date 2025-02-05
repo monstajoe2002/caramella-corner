@@ -1,7 +1,7 @@
 import { CustomerModel } from "../models/customer";
 
 export const getMonthlyCustomers = async () => {
-  const customerCount = await CustomerModel.aggregate([
+  const [customerCount] = await CustomerModel.aggregate([
     {
       $group: {
         _id: { month: "$createdAt.getMonth()" },
