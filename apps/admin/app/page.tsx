@@ -14,6 +14,13 @@ export default function Page() {
       return revenue;
     },
   });
+  const { data: orders } = useQuery({
+    queryKey: ["orders"],
+    queryFn: async () => {
+      const orders = await fetch("/api/orders").then((res) => res.json());
+      return orders.count;
+    },
+  });
   return (
     <main>
       <h1>Home</h1>
@@ -25,7 +32,7 @@ export default function Page() {
           <p className="text-2xl font-bold">{formatNumber(150)}</p>
         </DashboardCard>
         <DashboardCard title="Total Orders">
-          <p className="text-2xl font-bold">{formatNumber(3000)}</p>
+          <p className="text-2xl font-bold">{formatNumber(orders)}</p>
         </DashboardCard>
       </div>
       <RecentOrdersTable />
