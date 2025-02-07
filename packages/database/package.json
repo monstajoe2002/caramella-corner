@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "echo 'Add build script here'",
-    "test": "echo 'Add test script here'",
+    "test": "jest",
     "lint": "echo 'Add lint script here'"
   },
   "dependencies": {
@@ -16,13 +16,14 @@
   "exports": {
     "./lib/*": "./src/lib/*.ts",
     "./types/*": "./src/types/*.ts",
-    "./types":"./src/types/index.ts",
+    "./types": "./src/types/index.ts",
     "./models/*": "./src/models/*.ts",
     "./admin/*": "./src/admin/*.ts",
-    "./dtos/*":"./src/dtos/*.ts"
+    "./dtos/*": "./src/dtos/*.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.6",
+    "jest": "^29.7.0",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2"
   }
