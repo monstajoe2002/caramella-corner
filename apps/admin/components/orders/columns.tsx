@@ -1,15 +1,9 @@
 "use client";
 
+import { Order } from "@caramella-corner/database/types";
 import { ColumnDef } from "@tanstack/react-table";
 
-// TODO: define the type for the data
-
-export const columns: ColumnDef<{
-  name: string;
-  quantity: number;
-  orderDate: string;
-  status: string;
-}>[] = [
+export const columns: ColumnDef<Order>[] = [
   {
     accessorKey: "name",
     header: "Name",
