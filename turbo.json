@@ -16,6 +16,7 @@
       ],
       "outputs": [".next/**", "!.next/cache/**"]
     },
+    "test":{},
     "lint": {
       "dependsOn": ["^lint"]
     },
