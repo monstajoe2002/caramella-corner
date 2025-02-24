@@ -13,6 +13,7 @@ import { ChartNoAxesGantt } from "lucide-react";
 import React from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { VariantFormField } from "@/components/products/variant-form-field";
+import { VariantsTable } from "@/components/products/variants-table";
 
 export const VariantDialog = () => {
   const { control, getValues } = useFormContext();
@@ -22,14 +23,15 @@ export const VariantDialog = () => {
   });
   return (
     <div>
-      {fields.map((field, index) => (
+      {/* {fields.map((field, index) => (
         <div key={field.id}>
           <p>{getValues(`variants.${index}.sku`)}</p>
           <p>{getValues(`variants.${index}.quantity`)}</p>
           <p>{getValues(`variants.${index}.color`)}</p>
           <p>{getValues(`variants.${index}.size`)}</p>
         </div>
-      ))}
+      ))} */}
+      <VariantsTable />
       <Dialog>
         <DialogTrigger asChild>
           <Button type="button" className="w-fit">
