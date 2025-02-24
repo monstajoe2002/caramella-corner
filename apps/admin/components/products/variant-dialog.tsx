@@ -14,6 +14,7 @@ import React from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { VariantFormField } from "@/components/products/variant-form-field";
 import { VariantsTable } from "@/components/products/variants-table";
+import { Variant } from "@caramella-corner/database/types/index";
 
 export const VariantDialog = () => {
   const { control, getValues } = useFormContext();
@@ -21,17 +22,15 @@ export const VariantDialog = () => {
     control,
     name: "variants",
   });
+  const variants: Variant[] = fields.map((_, index) => ({
+    sku: getValues(`variants.${index}.sku`),
+    quantity: getValues(`variants.${index}.quantity`),
+    color: getValues(`variants.${index}.color`),
+    size: getValues(`variants.${index}.size`),
+  }));
   return (
     <div>
-      {/* {fields.map((field, index) => (
-        <div key={field.id}>
-          <p>{getValues(`variants.${index}.sku`)}</p>
-          <p>{getValues(`variants.${index}.quantity`)}</p>
-          <p>{getValues(`variants.${index}.color`)}</p>
-          <p>{getValues(`variants.${index}.size`)}</p>
-        </div>
-      ))} */}
-      <VariantsTable />
+      <VariantsTable variants={variants} />
       <Dialog>
         <DialogTrigger asChild>
           <Button type="button" className="w-fit">
