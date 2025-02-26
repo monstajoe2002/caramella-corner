@@ -283,6 +283,7 @@ export default function ProductForm({
                       setIsUploading(false);
                       toast.error(res.message);
                     }}
+                    overwriteFile={intent === "update"}
                     onSuccess={({ url }) => {
                       setImageUrls([...imageUrls, url]);
 
