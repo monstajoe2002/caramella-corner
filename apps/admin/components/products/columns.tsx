@@ -22,18 +22,19 @@ import Image from "next/image";
 
 export const columns: ColumnDef<Product>[] = [
   {
-    accessorKey: "image",
+    accessorKey: "images",
     header: "Image",
     cell: ({ row }) => {
-      return (
+      const images = row.getValue("images") as string[];
+      return images?.length ? (
         <Image
-          src={row.getValue("image")}
+          src={images[0]!}
           alt="Product Image"
           className="object-cover size-20"
           width={80}
           height={50}
         />
-      );
+      ) : null;
     },
   },
   {

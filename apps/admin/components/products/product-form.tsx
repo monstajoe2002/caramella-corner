@@ -80,7 +80,7 @@ const formSchema = z.object({
     .int()
     .positive({ message: "Price must be a positive integer" }),
   countryOfOrigin: z.string(),
-  image: z.string(),
+  images: z.array(z.string()),
   variants: z
     .array(variantSchema)
     .nonempty({ message: "Variants are required" }),
@@ -104,7 +104,7 @@ export default function ProductForm({
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     product?.category || null
   );
-  const [imageUrl, setImageUrl] = useState<string>(product?.image ?? "");
+  const [imageUrls, setImageUrls] = useState<string[]>(product?.images ?? []);
   const [isUploading, setIsUploading] = useState(false);
 
   const router = useRouter();
@@ -137,7 +137,7 @@ export default function ProductForm({
       material: product?.material,
       priceInPiasters: product?.priceInPiasters,
       countryOfOrigin: countryName ?? product?.countryOfOrigin,
-      image: imageUrl || product?.image,
+      images: imageUrls || product?.images,
       category: product?.category,
       active: product?.active,
       variants: product?.variants,
@@ -152,7 +152,7 @@ export default function ProductForm({
   }, [product]);
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (!selectedCategory) return;
-    mutate({ ...values, category: selectedCategory, image: imageUrl });
+    mutate({ ...values, category: selectedCategory, images: imageUrls });
   }
   const publicKey = process.env.NEXT_PUBLIC_IK_PUBLIC_KEY!;
   const urlEndpoint = process.env.NEXT_PUBLIC_IK_URL_ENDPOINT!;
@@ -271,20 +271,22 @@ export default function ProductForm({
           />
           <FormField
             control={form.control}
-            name="image"
+            name="images"
             render={({ field }) => (
               <FormItem>
                 <div className="flex flex-col gap-2">
-                  <FormLabel>Image</FormLabel>
+                  <FormLabel>Images</FormLabel>
                   <IKUpload
+                    multiple
                     onUploadStart={() => setIsUploading(true)}
                     onError={(res) => {
                       setIsUploading(false);
                       toast.error(res.message);
                     }}
                     onSuccess={({ url }) => {
-                      setImageUrl(url);
-                      form.setValue("image", url);
+                      setImageUrls([...imageUrls, url]);
+
+                      form.setValue("images", [...imageUrls, url]);
                       setIsUploading(false);
                       toast.success("Image uploaded successfully!");
                     }}
@@ -302,13 +304,13 @@ export default function ProductForm({
                         {...field}
                       >
                         <Upload />
-                        Upload Image
+                        Upload Images
                       </Button>
                     )}
                   </FormControl>
                 </div>
                 <FormDescription>
-                  Select the image that best represents your product.
+                  Select the images that best represent your product.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
