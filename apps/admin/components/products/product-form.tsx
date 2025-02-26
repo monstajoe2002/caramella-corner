@@ -284,6 +284,7 @@ export default function ProductForm({
                     }}
                     onSuccess={({ url }) => {
                       setImageUrl(url);
+                      form.setValue("image", url);
                       setIsUploading(false);
                       toast.success("Image uploaded successfully!");
                     }}
