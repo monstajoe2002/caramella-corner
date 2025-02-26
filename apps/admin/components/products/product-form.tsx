@@ -284,6 +284,7 @@ export default function ProductForm({
                       toast.error(res.message);
                     }}
                     overwriteFile={intent === "update"}
+                    folder={`products/${product?.slug}`}
                     onSuccess={({ url }) => {
                       setImageUrls([...imageUrls, url]);
 
