@@ -34,9 +34,10 @@ import {
   UpdateProductDto,
 } from "@caramella-corner/database/dtos/product";
 import { FormIntent } from "@/lib/types";
-import { IKUpload, ImageKitProvider } from "imagekitio-next";
+import { IKImage, IKUpload, ImageKitProvider } from "imagekitio-next";
 import { authenticator } from "@/lib/imagekit";
 import { Upload } from "lucide-react";
+import Image from "next/image";
 
 const updateProduct = async (slug: string, product: UpdateProductDto) => {
   const response = await fetch(`/api/products/${slug}`, {
@@ -274,47 +275,81 @@ export default function ProductForm({
             name="images"
             render={({ field }) => (
               <FormItem>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-4">
                   <FormLabel>Images</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    {imageUrls.map((url, index) => (
+                      <div key={index} className="relative aspect-square">
+                        <IKImage
+                          width={500}
+                          height={500}
+                          src={url}
+                          alt={`Product image ${index + 1}`}
+                          className="object-cover rounded-lg w-full h-full"
+                        />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          className="absolute top-2 right-2"
+                          onClick={() => {
+                            const newUrls = imageUrls.filter(
+                              (_, i) => i !== index
+                            );
+                            setImageUrls(newUrls);
+                            form.setValue("images", newUrls);
+                          }}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
                   <IKUpload
-                    multiple
                     onUploadStart={() => setIsUploading(true)}
-                    onError={(res) => {
+                    onError={(err) => {
                       setIsUploading(false);
-                      toast.error(res.message);
+                      toast.error(err.message);
                     }}
                     overwriteFile={intent === "update"}
-                    folder={`products/${product?.slug}`}
-                    onSuccess={({ url }) => {
-                      setImageUrls([...imageUrls, url]);
+                    folder={`products/${product?.slug || "new"}`}
+                    onSuccess={(data) => {
+                      // Handle both single and multiple file uploads
+                      const urls = Array.isArray(data)
+                        ? data.map((file) => file.url)
+                        : [data.url];
 
-                      form.setValue("images", [...imageUrls, url]);
+                      const newUrls = [...imageUrls, ...urls];
+                      setImageUrls(newUrls);
+                      form.setValue("images", newUrls);
                       setIsUploading(false);
-                      toast.success("Image uploaded successfully!");
+                      toast.success(
+                        `${urls.length} image(s) uploaded successfully!`
+                      );
                     }}
                     useUniqueFileName={true}
                     style={{ display: "none" }}
                     ref={ikUploadRef}
                   />
-                  <FormControl>
-                    {ikUploadRef && (
-                      <Button
-                        onClick={() => ikUploadRef.current?.click()}
-                        disabled={isUploading}
-                        variant={"outline"}
-                        type="button"
-                        {...field}
-                      >
-                        <Upload />
-                        Upload Images
-                      </Button>
-                    )}
-                  </FormControl>
+                  <div className="flex items-center gap-4">
+                    <Button
+                      onClick={() => ikUploadRef.current?.click()}
+                      disabled={isUploading}
+                      variant="outline"
+                      type="button"
+                      className="w-full"
+                      {...field}
+                    >
+                      <Upload className="mr-2 h-4 w-4" />
+                      {isUploading ? "Uploading..." : "Upload Images"}
+                    </Button>
+                  </div>
+                  <FormDescription>
+                    You can upload multiple images at once. Images will be
+                    displayed in the order they are uploaded.
+                  </FormDescription>
+                  <FormMessage />
                 </div>
-                <FormDescription>
-                  Select the images that best represent your product.
-                </FormDescription>
-                <FormMessage />
               </FormItem>
             )}
           />
