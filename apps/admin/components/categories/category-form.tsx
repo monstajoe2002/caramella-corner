@@ -39,7 +39,7 @@ export default function CategoryForm({
   intent = "create",
 }: CategoryFormProps) {
   const queryClient = useQueryClient();
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ["category", existingCategory?.slug || undefined],
 
     mutationFn:
@@ -119,7 +119,9 @@ export default function CategoryForm({
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button disabled={isPending} type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   );
