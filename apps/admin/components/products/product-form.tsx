@@ -37,7 +37,6 @@ import { FormIntent } from "@/lib/types";
 import { IKImage, IKUpload, ImageKitProvider } from "imagekitio-next";
 import { authenticator } from "@/lib/imagekit";
 import { Upload } from "lucide-react";
-import Image from "next/image";
 
 const updateProduct = async (slug: string, product: UpdateProductDto) => {
   const response = await fetch(`/api/products/${slug}`, {
