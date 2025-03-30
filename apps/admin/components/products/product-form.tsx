@@ -222,10 +222,12 @@ export default function ProductForm({
                 <FormLabel>Price (in Piasters)</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="100,000"
-                    type="number"
-                    {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  placeholder="100,000"
+                  type="number"
+                  {...field}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.onChange(Number(e.target.value))
+                  }
                   />
                 </FormControl>
                 <FormDescription>
