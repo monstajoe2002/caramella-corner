@@ -8,5 +8,9 @@ export const columns: ColumnDef<SelectCatgeory>[] = [
   {
     accessorKey: 'subcategories',
     header: 'Subcategories',
+    cell({ getValue }) {
+      const val = getValue() as string[]
+      return val.join(', ')
+    },
   },
 ]
