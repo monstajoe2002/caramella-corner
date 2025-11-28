@@ -25,6 +25,7 @@ import {
 } from '@/components/ui/empty'
 import { Button } from '../ui/button'
 import { FileIcon } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -92,7 +93,9 @@ export function DataTable<TData, TValue>({
                     </EmptyDescription>
                   </EmptyHeader>
                   <EmptyContent>
-                    <Button>Create Category</Button>
+                    <Button asChild>
+                      <Link to="/admin/categories/new">Create Category</Link>
+                    </Button>
                   </EmptyContent>
                 </Empty>
               </TableCell>
