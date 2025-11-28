@@ -15,6 +15,16 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/components/ui/empty'
+import { Button } from '../ui/button'
+import { FileIcon } from 'lucide-react'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -69,7 +79,22 @@ export function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                <Empty>
+                  <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                      <FileIcon />
+                    </EmptyMedia>
+                    <EmptyTitle>No categories</EmptyTitle>
+                    <EmptyDescription>
+                      This is where you can add categories to organize your
+                      products. Click <strong>"Create Category"</strong> below
+                      to get started.
+                    </EmptyDescription>
+                  </EmptyHeader>
+                  <EmptyContent>
+                    <Button>Create Category</Button>
+                  </EmptyContent>
+                </Empty>
               </TableCell>
             </TableRow>
           )}
