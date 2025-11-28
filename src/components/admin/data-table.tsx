@@ -1,5 +1,3 @@
-'use client'
-
 import {
   ColumnDef,
   flexRender,
@@ -24,7 +22,7 @@ import {
   EmptyTitle,
 } from '@/components/ui/empty'
 import { Button } from '../ui/button'
-import { FileIcon } from 'lucide-react'
+import { FileIcon, PlusIcon } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 
 interface DataTableProps<TData, TValue> {
@@ -101,6 +99,17 @@ export function DataTable<TData, TValue>({
               </TableCell>
             </TableRow>
           )}
+
+          <TableRow>
+            <TableCell colSpan={columns.length}>
+              <Button variant={'link'} asChild className="w-full">
+                <Link to="/admin/categories/new">
+                  <PlusIcon />
+                  <span>New</span>
+                </Link>
+              </Button>
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </div>

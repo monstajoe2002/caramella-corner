@@ -11,6 +11,12 @@ const getData = createServerFn().handler(async () => {
       slug: 'test',
       subcategories: ['a', 'b'],
     },
+    {
+      id: '728ed52f',
+      name: 'test',
+      slug: 'test',
+      subcategories: ['a', 'b'],
+    },
     // ...
   ]
 })
