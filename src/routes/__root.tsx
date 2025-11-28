@@ -46,7 +46,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <AdminSidebar />
           <SidebarInset>
             <SidebarTrigger />
-            {children}
+            <main className="container">{children}</main>
             <TanStackDevtools
               config={{
                 position: 'bottom-right',

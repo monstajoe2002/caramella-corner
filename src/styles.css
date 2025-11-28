@@ -139,3 +139,9 @@ code {
     @apply scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance;
   }
 }
+
+@utility container {
+  @apply max-w-4xl;
+  margin-inline: auto;
+  padding: 1rem;
+}
