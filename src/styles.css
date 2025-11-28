@@ -135,4 +135,7 @@ code {
   body {
     @apply bg-background text-foreground;
   }
+  h1 {
+    @apply scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance;
+  }
 }
