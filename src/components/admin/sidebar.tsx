@@ -38,7 +38,7 @@ const items = [
 
 export default function AdminSidebar() {
   return (
-    <Sidebar>
+    <Sidebar variant="inset" collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Admin Dashboard</SidebarGroupLabel>
@@ -46,7 +46,7 @@ export default function AdminSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton tooltip={item.title} asChild>
                     <Link to={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
