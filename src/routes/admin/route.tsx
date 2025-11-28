@@ -8,6 +8,13 @@ import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/admin')({
   component: RouteComponent,
+  head: () => ({
+    meta: [
+      {
+        title: 'Caramella Corner Admin',
+      },
+    ],
+  }),
 })
 
 function RouteComponent() {
