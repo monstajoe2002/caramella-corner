@@ -9,35 +9,42 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as AdminCategoriesNewRouteImport } from './routes/admin/categories/new'
 
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/admin/',
-  path: '/admin/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminCategoriesIndexRoute = AdminCategoriesIndexRouteImport.update({
-  id: '/admin/categories/',
-  path: '/admin/categories/',
-  getParentRoute: () => rootRouteImport,
+  id: '/categories/',
+  path: '/categories/',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminCategoriesNewRoute = AdminCategoriesNewRouteImport.update({
-  id: '/admin/categories/new',
-  path: '/admin/categories/new',
-  getParentRoute: () => rootRouteImport,
+  id: '/categories/new',
+  path: '/categories/new',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminIndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/admin/': typeof AdminIndexRoute
   '/admin/categories/new': typeof AdminCategoriesNewRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
 }
@@ -50,18 +57,25 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/admin/categories/new': typeof AdminCategoriesNewRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/admin/categories/new' | '/admin/categories'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/admin/'
+    | '/admin/categories/new'
+    | '/admin/categories'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/admin' | '/admin/categories/new' | '/admin/categories'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/admin/'
     | '/admin/categories/new'
     | '/admin/categories/'
@@ -69,13 +83,18 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminIndexRoute: typeof AdminIndexRoute
-  AdminCategoriesNewRoute: typeof AdminCategoriesNewRoute
-  AdminCategoriesIndexRoute: typeof AdminCategoriesIndexRoute
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -85,33 +104,47 @@ declare module '@tanstack/react-router' {
     }
     '/admin/': {
       id: '/admin/'
-      path: '/admin'
-      fullPath: '/admin'
+      path: '/'
+      fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/categories/': {
       id: '/admin/categories/'
-      path: '/admin/categories'
+      path: '/categories'
       fullPath: '/admin/categories'
       preLoaderRoute: typeof AdminCategoriesIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/categories/new': {
       id: '/admin/categories/new'
-      path: '/admin/categories/new'
+      path: '/categories/new'
       fullPath: '/admin/categories/new'
       preLoaderRoute: typeof AdminCategoriesNewRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+interface AdminRouteRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+  AdminCategoriesNewRoute: typeof AdminCategoriesNewRoute
+  AdminCategoriesIndexRoute: typeof AdminCategoriesIndexRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   AdminCategoriesNewRoute: AdminCategoriesNewRoute,
   AdminCategoriesIndexRoute: AdminCategoriesIndexRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

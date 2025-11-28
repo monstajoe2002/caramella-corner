@@ -42,25 +42,19 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <SidebarProvider>
-          <AdminSidebar />
-          <SidebarInset>
-            <SidebarTrigger />
-            <main className="container">{children}</main>
-            <TanStackDevtools
-              config={{
-                position: 'bottom-right',
-              }}
-              plugins={[
-                {
-                  name: 'Tanstack Router',
-                  render: <TanStackRouterDevtoolsPanel />,
-                },
-              ]}
-            />
-            <Scripts />
-          </SidebarInset>
-        </SidebarProvider>
+        {children}
+        <TanStackDevtools
+          config={{
+            position: 'bottom-right',
+          }}
+          plugins={[
+            {
+              name: 'Tanstack Router',
+              render: <TanStackRouterDevtoolsPanel />,
+            },
+          ]}
+        />
+        <Scripts />
       </body>
     </html>
   )
