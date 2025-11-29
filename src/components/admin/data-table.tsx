@@ -102,16 +102,18 @@ export function DataTable<TData, TValue>({
             </TableRow>
           )}
 
-          <TableRow>
-            <TableCell colSpan={columns.length}>
-              <Button variant={'link'} asChild className="w-full">
-                <Link to={newEntryTo}>
-                  <PlusIcon />
-                  <span>New</span>
-                </Link>
-              </Button>
-            </TableCell>
-          </TableRow>
+          {newEntryTo && (
+            <TableRow>
+              <TableCell colSpan={columns.length}>
+                <Button variant={'link'} asChild className="w-full">
+                  <Link to={newEntryTo}>
+                    <PlusIcon />
+                    <span>New</span>
+                  </Link>
+                </Button>
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </div>
