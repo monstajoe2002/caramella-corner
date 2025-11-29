@@ -161,6 +161,12 @@ export default function CategoryForm({ data }: CategoryFormProps) {
             )
           }}
         />
+        <Field orientation="horizontal">
+          <Button type="submit">Create</Button>
+          <Button variant="outline" type="button">
+            Cancel
+          </Button>
+        </Field>
       </FieldGroup>
     </form>
   )
