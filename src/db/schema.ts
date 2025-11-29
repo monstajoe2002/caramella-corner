@@ -13,6 +13,7 @@ export const subcategories = pgTable('subcategories', {
   id: varchar('id').primaryKey(),
   categoryId: varchar('category_id').references(() => categories.id),
   name: varchar('name').notNull(),
+  slug: varchar('slug').notNull(),
 })
 
 // Product table
