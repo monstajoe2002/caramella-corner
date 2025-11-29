@@ -76,6 +76,7 @@ export default function CategoryForm({ data }: CategoryFormProps) {
       console.log(values)
     },
   })
+  // manually update the subcategories field when selected changes
   useEffect(() => {
     form.setFieldValue('subcategories', selected)
   }, [selected, form])
