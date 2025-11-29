@@ -1,6 +1,13 @@
 import * as z from 'zod'
 import { CategoryWithSubcategories } from '@/db/types'
 import { useForm } from '@tanstack/react-form'
+import {
+  FieldGroup,
+  FieldLabel,
+  FieldError,
+  Field,
+} from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
 const categoryFormSchema = z.object({
   name: z.string().min(1, 'Name is required.'),
   subcategories: z
@@ -16,7 +23,7 @@ export default function CategoryForm({ data: {} }: CategoryFormProps) {
   const form = useForm({
     defaultValues: {
       name: '',
-      subcategories: [''],
+      subcategories: [] as string[],
     },
     validators: {
       onSubmit: categoryFormSchema,
