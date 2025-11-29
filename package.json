@@ -43,6 +43,7 @@
     "clsx": "^2.1.1",
     "drizzle-kit": "^0.30.0",
     "drizzle-orm": "^0.39.0",
+    "emblor": "^1.4.8",
     "lucide-react": "^0.544.0",
     "nitro": "latest",
     "pg": "^8.11.0",
