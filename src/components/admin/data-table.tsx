@@ -23,16 +23,18 @@ import {
 } from '@/components/ui/empty'
 import { Button } from '../ui/button'
 import { FileIcon, PlusIcon } from 'lucide-react'
-import { Link } from '@tanstack/react-router'
+import { Link, type ToOptions } from '@tanstack/react-router'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  newEntryTo: Pick<ToOptions, 'to'>
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  newEntryTo: { to },
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -103,7 +105,7 @@ export function DataTable<TData, TValue>({
           <TableRow>
             <TableCell colSpan={columns.length}>
               <Button variant={'link'} asChild className="w-full">
-                <Link to="/admin/categories/new">
+                <Link to={to}>
                   <PlusIcon />
                   <span>New</span>
                 </Link>

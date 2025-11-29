@@ -30,7 +30,11 @@ function RouteComponent() {
   return (
     <div>
       <h1>Categories</h1>
-      <DataTable columns={categoryCols} data={data} />
+      <DataTable
+        newEntryTo={{ to: '/admin/categories/new' }}
+        columns={categoryCols}
+        data={data}
+      />
     </div>
   )
 }
