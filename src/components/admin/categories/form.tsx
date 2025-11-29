@@ -8,7 +8,7 @@ import {
   Field,
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Tags,
   TagsContent,
@@ -36,14 +36,14 @@ type CategoryFormProps = {
 export default function CategoryForm({ data }: CategoryFormProps) {
   const [selected, setSelected] = useState<string[]>([])
   const [newTag, setNewTag] = useState<string>('')
-  const [tags, setTags] = useState<string[]>(
-    data?.subcategories.map((sub) => sub.name) || [],
+  const [tags, setTags] = useState<{ id: string; name: string }[]>(
+    data?.subcategories ?? [],
   )
+
   const handleRemove = (value: string) => {
     if (!selected.includes(value)) {
       return
     }
-    console.log(`removed: ${value}`)
     setSelected((prev) => prev.filter((v) => v !== value))
   }
   const handleSelect = (value: string) => {
@@ -54,7 +54,13 @@ export default function CategoryForm({ data }: CategoryFormProps) {
     setSelected((prev) => [...prev, value])
   }
   const handleCreateTag = () => {
-    setTags((prev) => [...prev, newTag])
+    setTags((prev) => [
+      ...prev,
+      {
+        id: crypto.randomUUID(),
+        name: newTag,
+      },
+    ])
     setSelected((prev) => [...prev, newTag])
     setNewTag('')
   }
@@ -70,6 +76,9 @@ export default function CategoryForm({ data }: CategoryFormProps) {
       console.log(values)
     },
   })
+  useEffect(() => {
+    form.setFieldValue('subcategories', selected)
+  }, [selected, form])
   return (
     <form
       onSubmit={(e) => {
@@ -113,7 +122,7 @@ export default function CategoryForm({ data }: CategoryFormProps) {
                   <TagsTrigger>
                     {selected.map((tag) => (
                       <TagsValue key={tag} onRemove={() => handleRemove(tag)}>
-                        {tags.find((t) => t === tag)}
+                        {tags.find((t) => t.name === tag)?.name}
                       </TagsValue>
                     ))}
                   </TagsTrigger>
@@ -124,7 +133,8 @@ export default function CategoryForm({ data }: CategoryFormProps) {
                     />
                     <TagsList>
                       <TagsEmpty>
-                        <button
+                        <Button
+                          variant={'link'}
                           className="mx-auto flex cursor-pointer items-center gap-2"
                           onClick={handleCreateTag}
                           type="button"
@@ -134,17 +144,17 @@ export default function CategoryForm({ data }: CategoryFormProps) {
                             size={14}
                           />
                           Create new tag: {newTag}
-                        </button>
+                        </Button>
                       </TagsEmpty>
                       <TagsGroup>
-                        {tags.map((tag, idx) => (
+                        {tags.map((tag) => (
                           <TagsItem
-                            key={idx}
+                            key={tag.id}
                             onSelect={handleSelect}
-                            value={tag}
+                            value={tag.name}
                           >
-                            {tag}
-                            {selected.includes(tag) && (
+                            {tag.name}
+                            {selected.includes(tag.name) && (
                               <CheckIcon
                                 className="text-muted-foreground"
                                 size={14}
