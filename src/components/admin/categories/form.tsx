@@ -8,6 +8,20 @@ import {
   Field,
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
+import { useState } from 'react'
+import {
+  Tags,
+  TagsContent,
+  TagsEmpty,
+  TagsGroup,
+  TagsInput,
+  TagsItem,
+  TagsList,
+  TagsTrigger,
+  TagsValue,
+} from '@/components/ui/shadcn-io/tags'
+import { PlusIcon, CheckIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 const categoryFormSchema = z.object({
   name: z.string().min(1, 'Name is required.'),
   subcategories: z
@@ -16,10 +30,34 @@ const categoryFormSchema = z.object({
 })
 
 type CategoryFormProps = {
-  data: CategoryWithSubcategories
+  data?: CategoryWithSubcategories
 }
 
-export default function CategoryForm({ data: {} }: CategoryFormProps) {
+export default function CategoryForm({ data }: CategoryFormProps) {
+  const [selected, setSelected] = useState<string[]>([])
+  const [newTag, setNewTag] = useState<string>('')
+  const [tags, setTags] = useState<string[]>(
+    data?.subcategories.map((sub) => sub.name) || [],
+  )
+  const handleRemove = (value: string) => {
+    if (!selected.includes(value)) {
+      return
+    }
+    console.log(`removed: ${value}`)
+    setSelected((prev) => prev.filter((v) => v !== value))
+  }
+  const handleSelect = (value: string) => {
+    if (selected.includes(value)) {
+      handleRemove(value)
+      return
+    }
+    setSelected((prev) => [...prev, value])
+  }
+  const handleCreateTag = () => {
+    setTags((prev) => [...prev, newTag])
+    setSelected((prev) => [...prev, newTag])
+    setNewTag('')
+  }
   const form = useForm({
     defaultValues: {
       name: '',
@@ -34,7 +72,6 @@ export default function CategoryForm({ data: {} }: CategoryFormProps) {
   })
   return (
     <form
-      id="bug-report-form"
       onSubmit={(e) => {
         e.preventDefault()
         form.handleSubmit()
@@ -48,7 +85,7 @@ export default function CategoryForm({ data: {} }: CategoryFormProps) {
               field.state.meta.isTouched && !field.state.meta.isValid
             return (
               <Field data-invalid={isInvalid}>
-                <FieldLabel htmlFor={field.name}>Bug Title</FieldLabel>
+                <FieldLabel htmlFor={field.name}>Name</FieldLabel>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -56,7 +93,7 @@ export default function CategoryForm({ data: {} }: CategoryFormProps) {
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                   aria-invalid={isInvalid}
-                  placeholder="Login button not working on mobile"
+                  placeholder="New Collection"
                   autoComplete="off"
                 />
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -71,17 +108,54 @@ export default function CategoryForm({ data: {} }: CategoryFormProps) {
               field.state.meta.isTouched && !field.state.meta.isValid
             return (
               <Field data-invalid={isInvalid}>
-                <FieldLabel htmlFor={field.name}>Bug Title</FieldLabel>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  aria-invalid={isInvalid}
-                  placeholder="Login button not working on mobile"
-                  autoComplete="off"
-                />
+                <FieldLabel htmlFor={field.name}>Subcategories</FieldLabel>
+                <Tags>
+                  <TagsTrigger>
+                    {selected.map((tag) => (
+                      <TagsValue key={tag} onRemove={() => handleRemove(tag)}>
+                        {tags.find((t) => t === tag)}
+                      </TagsValue>
+                    ))}
+                  </TagsTrigger>
+                  <TagsContent>
+                    <TagsInput
+                      onValueChange={setNewTag}
+                      placeholder="Search tag..."
+                    />
+                    <TagsList>
+                      <TagsEmpty>
+                        <button
+                          className="mx-auto flex cursor-pointer items-center gap-2"
+                          onClick={handleCreateTag}
+                          type="button"
+                        >
+                          <PlusIcon
+                            className="text-muted-foreground"
+                            size={14}
+                          />
+                          Create new tag: {newTag}
+                        </button>
+                      </TagsEmpty>
+                      <TagsGroup>
+                        {tags.map((tag, idx) => (
+                          <TagsItem
+                            key={idx}
+                            onSelect={handleSelect}
+                            value={tag}
+                          >
+                            {tag}
+                            {selected.includes(tag) && (
+                              <CheckIcon
+                                className="text-muted-foreground"
+                                size={14}
+                              />
+                            )}
+                          </TagsItem>
+                        ))}
+                      </TagsGroup>
+                    </TagsList>
+                  </TagsContent>
+                </Tags>
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
             )
