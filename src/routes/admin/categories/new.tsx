@@ -5,5 +5,9 @@ export const Route = createFileRoute('/admin/categories/new')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/admin/categories/new"!</div>
+  return (
+    <div>
+      <h1>New Category</h1>
+    </div>
+  )
 }
