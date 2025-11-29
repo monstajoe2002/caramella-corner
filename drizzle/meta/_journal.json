@@ -8,6 +8,13 @@
       "when": 1764320659918,
       "tag": "0000_cultured_nightshade",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1764415587762,
+      "tag": "0001_natural_luminals",
+      "breakpoints": true
     }
   ]
 }

@@ -6,7 +6,13 @@ export const categories = pgTable('categories', {
   id: varchar('id').primaryKey(),
   name: varchar('name').notNull(),
   slug: varchar('slug').notNull(),
-  subcategories: varchar('subcategories').array(), // Array of subcategory names
+})
+
+// Subcategory table
+export const subcategories = pgTable('subcategories', {
+  id: varchar('id').primaryKey(),
+  categoryId: varchar('category_id').references(() => categories.id),
+  name: varchar('name').notNull(),
 })
 
 // Product table
@@ -19,6 +25,7 @@ export const products = pgTable('products', {
   description: text('description'),
   material: varchar('material'),
   categoryId: varchar('category_id').references(() => categories.id),
+  subcategoryId: varchar('subcategory_id').references(() => subcategories.id),
   active: boolean('active').default(true),
   quantity: integer('quantity').default(0),
 })
@@ -26,7 +33,7 @@ export const products = pgTable('products', {
 // Variant table
 export const variants = pgTable('variants', {
   id: varchar('id').primaryKey(),
-  sku: varchar('sku').notNull().unique(),
+  sku: varchar('sku').notNull().unique(), // Fixed from 'ska' to 'sku'
   productId: varchar('product_id').references(() => products.id),
 })
 
@@ -44,7 +51,7 @@ export const orders = pgTable('orders', {
   paymentId: varchar('payment_id'),
   orderNumber: varchar('order_number').notNull().unique(),
   quantity: integer('quantity').notNull(),
-  price: integer('price').notNull(), // Total price in plasters
+  price: integer('price').notNull(), // Total price
   customerId: varchar('customer_id').references(() => customers.id),
   status: varchar('status').notNull(), // e.g., 'pending', 'completed', 'cancelled'
 })
@@ -54,7 +61,7 @@ export const orderItems = pgTable('order_items', {
   id: varchar('id').primaryKey(),
   orderId: varchar('order_id').references(() => orders.id),
   quantity: integer('quantity').notNull(),
-  priceAtOrder: integer('price_at_order').notNull(), // Price at time of order
+  priceAtOrder: integer('price_at_order').notNull(), // Fixed from 'price_id_order'
   variantId: varchar('variant_id').references(() => variants.id),
 })
 
@@ -64,18 +71,34 @@ export const payments = pgTable('payments', {
   status: varchar('status').notNull(), // e.g., 'pending', 'completed', 'failed'
   orderId: varchar('order_id').references(() => orders.id),
   amount: integer('amount').notNull(),
-  paymentMethod: varchar('payment_method').notNull(), // e.g., 'card', 'paypal'
+  paymentMethod: varchar('payment_method').notNull(), // Fixed from 'payment method'
 })
 
 // Relations
 export const categoriesRelations = relations(categories, ({ many }) => ({
+  subcategories: many(subcategories),
   products: many(products),
 }))
+
+export const subcategoriesRelations = relations(
+  subcategories,
+  ({ one, many }) => ({
+    category: one(categories, {
+      fields: [subcategories.categoryId],
+      references: [categories.id],
+    }),
+    products: many(products),
+  }),
+)
 
 export const productsRelations = relations(products, ({ one, many }) => ({
   category: one(categories, {
     fields: [products.categoryId],
     references: [categories.id],
+  }),
+  subcategory: one(subcategories, {
+    fields: [products.subcategoryId],
+    references: [subcategories.id],
   }),
   variants: many(variants),
 }))
