@@ -1,6 +1,6 @@
 import { columns as categoryCols } from '@/components/admin/categories/columns'
 import { DataTable } from '@/components/admin/data-table'
-import { SelectCatgeory } from '@/db/types'
+import { SelectCategory } from '@/db/types'
 import { createFileRoute } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 const getData = createServerFn().handler(async () => {
@@ -26,7 +26,7 @@ export const Route = createFileRoute('/admin/categories/')({
 })
 
 function RouteComponent() {
-  const data: SelectCatgeory[] = Route.useLoaderData()
+  const data: SelectCategory[] = Route.useLoaderData()
   return (
     <div>
       <h1>Categories</h1>

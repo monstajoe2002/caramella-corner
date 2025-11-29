@@ -1,5 +1,5 @@
 import * as z from 'zod'
-import { SelectCatgeory } from '@/db/types'
+import { CategoryWithSubcategories, SelectCategory } from '@/db/types'
 const categoryFormSchema = z.object({
   name: z.string().min(1, 'Name is required.'),
   subcategories: z
@@ -8,9 +8,9 @@ const categoryFormSchema = z.object({
 })
 
 type CategoryFormProps = {
-  data: SelectCatgeory
+  data: CategoryWithSubcategories
 }
 
-export default function CategoryForm({}: CategoryFormProps) {
+export default function CategoryForm({ data: {} }: CategoryFormProps) {
   return <div>CategoryForm</div>
 }
