@@ -28,13 +28,13 @@ import { Link, type ToOptions } from '@tanstack/react-router'
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  newEntryTo: Pick<ToOptions, 'to'>
+  newEntryTo?: ToOptions['to']
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  newEntryTo: { to },
+  newEntryTo,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -105,7 +105,7 @@ export function DataTable<TData, TValue>({
           <TableRow>
             <TableCell colSpan={columns.length}>
               <Button variant={'link'} asChild className="w-full">
-                <Link to={to}>
+                <Link to={newEntryTo}>
                   <PlusIcon />
                   <span>New</span>
                 </Link>

@@ -31,7 +31,7 @@ function RouteComponent() {
     <div>
       <h1>Categories</h1>
       <DataTable
-        newEntryTo={{ to: '/admin/categories/new' }}
+        newEntryTo={'/admin/categories/new'}
         columns={categoryCols}
         data={data}
       />
