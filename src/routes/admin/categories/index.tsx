@@ -1,4 +1,4 @@
-import { columns as categoryCols } from '@/components/admin/categories/columns'
+import { columns as categoryCols } from '@/features/admin/categories/components/columns'
 import { DataTable } from '@/components/admin/data-table'
 import { SelectCategory } from '@/db/types'
 import { createFileRoute } from '@tanstack/react-router'
