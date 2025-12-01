@@ -1,4 +1,4 @@
-import { SelectCategory } from '@/db/types'
+import { Category } from '@/db/types'
 import { ColumnDef } from '@tanstack/react-table'
 import { MoreHorizontal, PencilIcon, Trash2Icon } from 'lucide-react'
 
@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-export const columns: ColumnDef<SelectCategory>[] = [
+export const columns: ColumnDef<Category>[] = [
   {
     accessorKey: 'name',
     header: 'Name',
