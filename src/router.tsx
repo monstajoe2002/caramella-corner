@@ -16,9 +16,15 @@ export const getRouter = () => {
   if (!router.isServer) {
     Sentry.init({
       dsn: process.env.VITE_SENTRY_DSN,
-      integrations: [],
+      integrations: [
+        Sentry.replayIntegration(),
+        Sentry.feedbackIntegration({ colorScheme: true }),
+      ],
       tracesSampleRate: 1.0,
       sendDefaultPii: true,
+      enableLogs: true,
+      replaysSessionSampleRate: 0.1,
+      replaysOnErrorSampleRate: 1.0,
     })
   }
 
