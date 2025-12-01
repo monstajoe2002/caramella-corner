@@ -1,24 +1,47 @@
-import { pgTable, varchar, integer, boolean, text } from 'drizzle-orm/pg-core'
+import {
+  pgTable,
+  varchar,
+  integer,
+  boolean,
+  text,
+  pgEnum,
+} from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
+import { createdAt, id, updatedAt } from './schema-helpers'
+
+export const orderStatusEnum = pgEnum('status', [
+  'pending',
+  'delivered',
+  'canceled',
+])
+export const paymentStatusEnum = pgEnum('status', [
+  'pending',
+  'completed',
+  'cancelled',
+])
 
 // Category table
 export const categories = pgTable('categories', {
-  id: varchar('id').primaryKey(),
+  id,
   name: varchar('name').notNull(),
   slug: varchar('slug').notNull(),
+  createdAt,
+  updatedAt,
 })
 
 // Subcategory table
 export const subcategories = pgTable('subcategories', {
-  id: varchar('id').primaryKey(),
+  id,
   categoryId: varchar('category_id').references(() => categories.id),
   name: varchar('name').notNull(),
   slug: varchar('slug').notNull(),
+  createdAt,
+  updatedAt,
 })
 
 // Product table
 export const products = pgTable('products', {
-  id: varchar('id').primaryKey(),
+  id,
   name: varchar('name').notNull(),
   slug: varchar('slug').notNull(),
   images: text('images'), // Storing as text, could be JSON or array
@@ -29,50 +52,62 @@ export const products = pgTable('products', {
   subcategoryId: varchar('subcategory_id').references(() => subcategories.id),
   active: boolean('active').default(true),
   quantity: integer('quantity').default(0),
+  createdAt,
+  updatedAt,
 })
 
 // Variant table
 export const variants = pgTable('variants', {
-  id: varchar('id').primaryKey(),
-  sku: varchar('sku').notNull().unique(), // Fixed from 'ska' to 'sku'
+  id,
+  sku: varchar('sku').notNull().unique(),
   productId: varchar('product_id').references(() => products.id),
+  createdAt,
+  updatedAt,
 })
 
 // Customer table
 export const customers = pgTable('customers', {
-  id: varchar('id').primaryKey(),
+  id,
   name: varchar('name').notNull(),
   email: varchar('email').notNull().unique(),
   address: text('address'),
+  createdAt,
+  updatedAt,
 })
 
 // Order table (main orders table)
 export const orders = pgTable('orders', {
-  id: varchar('id').primaryKey(),
+  id,
   paymentId: varchar('payment_id'),
   orderNumber: varchar('order_number').notNull().unique(),
   quantity: integer('quantity').notNull(),
   price: integer('price').notNull(), // Total price
   customerId: varchar('customer_id').references(() => customers.id),
-  status: varchar('status').notNull(), // e.g., 'pending', 'completed', 'cancelled'
+  status: orderStatusEnum(), // e.g., 'pending', 'completed', 'cancelled'
+  createdAt,
+  updatedAt,
 })
 
 // Order items table (for individual items in an order)
 export const orderItems = pgTable('order_items', {
-  id: varchar('id').primaryKey(),
+  id,
   orderId: varchar('order_id').references(() => orders.id),
   quantity: integer('quantity').notNull(),
-  priceAtOrder: integer('price_at_order').notNull(), // Fixed from 'price_id_order'
+  priceAtOrder: integer('price_at_order').notNull(),
   variantId: varchar('variant_id').references(() => variants.id),
+  createdAt,
+  updatedAt,
 })
 
 // Payment table
 export const payments = pgTable('payments', {
-  id: varchar('id').primaryKey(),
-  status: varchar('status').notNull(), // e.g., 'pending', 'completed', 'failed'
+  id,
+  status: paymentStatusEnum(), // e.g., 'pending', 'completed', 'failed'
   orderId: varchar('order_id').references(() => orders.id),
   amount: integer('amount').notNull(),
   paymentMethod: varchar('payment_method').notNull(), // Fixed from 'payment method'
+  createdAt,
+  updatedAt,
 })
 
 // Relations
