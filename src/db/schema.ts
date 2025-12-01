@@ -5,20 +5,22 @@ import {
   boolean,
   text,
   pgEnum,
+  uuid,
 } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
 import { createdAt, id, updatedAt } from './schema-helpers'
 
-export const orderStatusEnum = pgEnum('status', [
+export const orderStatusEnum = pgEnum('order_status', [
   'pending',
   'delivered',
   'canceled',
 ])
-export const paymentStatusEnum = pgEnum('status', [
+export const paymentStatusEnum = pgEnum('payment_status', [
   'pending',
   'completed',
-  'cancelled',
+  'failed',
 ])
+export const paymentMethodEnum = pgEnum('payment_method', ['credit', 'cash'])
 
 // Category table
 export const categories = pgTable('categories', {
@@ -32,7 +34,7 @@ export const categories = pgTable('categories', {
 // Subcategory table
 export const subcategories = pgTable('subcategories', {
   id,
-  categoryId: varchar('category_id').references(() => categories.id),
+  categoryId: uuid('category_id').references(() => categories.id),
   name: varchar('name').notNull(),
   slug: varchar('slug').notNull(),
   createdAt,
@@ -48,8 +50,8 @@ export const products = pgTable('products', {
   priceInPlasters: integer('price_in_plasters').notNull(),
   description: text('description'),
   material: varchar('material'),
-  categoryId: varchar('category_id').references(() => categories.id),
-  subcategoryId: varchar('subcategory_id').references(() => subcategories.id),
+  categoryId: uuid('category_id').references(() => categories.id),
+  subcategoryId: uuid('subcategory_id').references(() => subcategories.id),
   active: boolean('active').default(true),
   quantity: integer('quantity').default(0),
   createdAt,
@@ -60,7 +62,9 @@ export const products = pgTable('products', {
 export const variants = pgTable('variants', {
   id,
   sku: varchar('sku').notNull().unique(),
-  productId: varchar('product_id').references(() => products.id),
+  productId: uuid('product_id').references(() => products.id),
+  color: varchar('color'),
+  size: varchar('size'),
   createdAt,
   updatedAt,
 })
@@ -78,12 +82,12 @@ export const customers = pgTable('customers', {
 // Order table (main orders table)
 export const orders = pgTable('orders', {
   id,
-  paymentId: varchar('payment_id'),
+  paymentId: uuid('payment_id'),
   orderNumber: varchar('order_number').notNull().unique(),
   quantity: integer('quantity').notNull(),
   price: integer('price').notNull(), // Total price
-  customerId: varchar('customer_id').references(() => customers.id),
-  status: orderStatusEnum(), // e.g., 'pending', 'completed', 'cancelled'
+  customerId: uuid('customer_id').references(() => customers.id),
+  status: orderStatusEnum().notNull(), // e.g., 'pending', 'completed', 'cancelled'
   createdAt,
   updatedAt,
 })
@@ -91,10 +95,10 @@ export const orders = pgTable('orders', {
 // Order items table (for individual items in an order)
 export const orderItems = pgTable('order_items', {
   id,
-  orderId: varchar('order_id').references(() => orders.id),
+  orderId: uuid('order_id').references(() => orders.id),
   quantity: integer('quantity').notNull(),
   priceAtOrder: integer('price_at_order').notNull(),
-  variantId: varchar('variant_id').references(() => variants.id),
+  variantId: uuid('variant_id').references(() => variants.id),
   createdAt,
   updatedAt,
 })
@@ -102,10 +106,10 @@ export const orderItems = pgTable('order_items', {
 // Payment table
 export const payments = pgTable('payments', {
   id,
-  status: paymentStatusEnum(), // e.g., 'pending', 'completed', 'failed'
-  orderId: varchar('order_id').references(() => orders.id),
+  status: paymentStatusEnum().notNull(), // e.g., 'pending', 'completed', 'failed'
+  orderId: uuid('order_id').references(() => orders.id),
   amount: integer('amount').notNull(),
-  paymentMethod: varchar('payment_method').notNull(), // Fixed from 'payment method'
+  paymentMethod: paymentMethodEnum().notNull(), // Fixed from 'payment method'
   createdAt,
   updatedAt,
 })
