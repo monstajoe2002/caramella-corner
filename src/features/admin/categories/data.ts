@@ -2,7 +2,7 @@ import { db } from '@/db'
 import { createServerFn } from '@tanstack/react-start'
 import z from 'zod'
 import { insertCategory } from './db'
-
+import { redirect } from '@tanstack/react-router'
 const categorySchema = z.object({
   name: z.string().min(1),
   slug: z.string().min(1),
@@ -31,5 +31,5 @@ export const createCategory = createServerFn({ method: 'POST' })
         message: 'Error creating category',
       }
     }
-    return { error: false }
+    throw redirect({ href: '..', replace: true })
   })

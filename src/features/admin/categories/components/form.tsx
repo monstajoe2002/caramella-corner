@@ -22,6 +22,9 @@ import {
 } from '@/components/ui/shadcn-io/tags'
 import { PlusIcon, CheckIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useServerFn } from '@tanstack/react-start'
+import { createCategory } from '../data'
+import slugify from 'slugify'
 const categoryFormSchema = z.object({
   name: z.string().min(1, 'Name is required.'),
   subcategories: z
@@ -34,6 +37,7 @@ type CategoryFormProps = {
 }
 
 export default function CategoryForm({ data }: CategoryFormProps) {
+  const createCategoryFn = useServerFn(createCategory)
   const [selected, setSelected] = useState<string[]>([])
   const [newTag, setNewTag] = useState<string>('')
   const [tags, setTags] = useState<{ id: string; name: string }[]>(
@@ -64,6 +68,7 @@ export default function CategoryForm({ data }: CategoryFormProps) {
     setSelected((prev) => [...prev, newTag])
     setNewTag('')
   }
+
   const form = useForm({
     defaultValues: {
       name: '',
@@ -72,8 +77,20 @@ export default function CategoryForm({ data }: CategoryFormProps) {
     validators: {
       onSubmit: categoryFormSchema,
     },
-    onSubmit: (values) => {
-      console.log(values)
+    onSubmit: async ({ value }) => {
+      const res = await createCategoryFn({
+        data: {
+          name: value.name,
+          slug: slugify(value.name),
+          subcategories: selected.map((sel) => ({
+            name: sel,
+            slug: slugify(sel),
+          })),
+        },
+      })
+      if (res.error) {
+        alert(res.message)
+      }
     },
   })
   // manually update the subcategories field when selected changes
