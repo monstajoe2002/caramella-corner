@@ -78,18 +78,22 @@ export default function CategoryForm({ data }: CategoryFormProps) {
       onSubmit: categoryFormSchema,
     },
     onSubmit: async ({ value }) => {
-      const res = await createCategoryFn({
-        data: {
-          name: value.name,
-          slug: slugify(value.name),
-          subcategories: selected.map((sel) => ({
-            name: sel,
-            slug: slugify(sel),
-          })),
-        },
-      })
-      if (res.error) {
-        alert(res.message)
+      if (!data) {
+        const res = await createCategoryFn({
+          data: {
+            name: value.name,
+            slug: slugify(value.name),
+            subcategories: selected.map((sel) => ({
+              name: sel,
+              slug: slugify(sel),
+            })),
+          },
+        })
+        if (res.error) {
+          alert(res.message)
+        }
+      } else {
+        // TODO: implement update logic
       }
     },
   })
