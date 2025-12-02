@@ -3,7 +3,7 @@ import { categories, subcategories } from '@/db/schema'
 import { NewCategoryWithSubcategories } from '@/db/types'
 import slugify from 'slugify'
 
-export async function createCategory(category: NewCategoryWithSubcategories) {
+export async function insertCategory(category: NewCategoryWithSubcategories) {
   return db.transaction(async (trx) => {
     const [newCat] = await db
       .insert(categories)
