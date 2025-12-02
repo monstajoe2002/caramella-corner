@@ -1,4 +1,4 @@
-import { Category } from '@/db/types'
+import { CategoryWithSubcategories } from '@/db/types'
 import { ColumnDef } from '@tanstack/react-table'
 import { MoreHorizontal, PencilIcon, Trash2Icon } from 'lucide-react'
 
@@ -9,17 +9,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-export const columns: ColumnDef<Category>[] = [
+export const columns: ColumnDef<CategoryWithSubcategories>[] = [
   {
     accessorKey: 'name',
     header: 'Name',
+    cell: ({ row }) => {
+      return <strong>{row.original.name}</strong>
+    },
   },
   {
     accessorKey: 'subcategories',
     header: 'Subcategories',
-    cell({ getValue }) {
-      const val = getValue() as string[]
-      return val.join(', ')
+    cell({ row }) {
+      const formattedSubcats = row.original.subcategories
+        .map((s) => s.name)
+        .join(', ')
+      return formattedSubcats
     },
   },
   {
