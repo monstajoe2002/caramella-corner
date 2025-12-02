@@ -34,7 +34,9 @@ export const categories = pgTable('categories', {
 // Subcategory table
 export const subcategories = pgTable('subcategories', {
   id,
-  categoryId: uuid('category_id').references(() => categories.id),
+  categoryId: uuid('category_id').references(() => categories.id, {
+    onDelete: 'cascade',
+  }),
   name: varchar('name').notNull(),
   slug: varchar('slug').notNull(),
   createdAt,
@@ -62,7 +64,9 @@ export const products = pgTable('products', {
 export const variants = pgTable('variants', {
   id,
   sku: varchar('sku').notNull().unique(),
-  productId: uuid('product_id').references(() => products.id),
+  productId: uuid('product_id').references(() => products.id, {
+    onDelete: 'cascade',
+  }),
   color: varchar('color'),
   size: varchar('size'),
   createdAt,
@@ -86,7 +90,9 @@ export const orders = pgTable('orders', {
   orderNumber: varchar('order_number').notNull().unique(),
   quantity: integer('quantity').notNull(),
   price: integer('price').notNull(), // Total price
-  customerId: uuid('customer_id').references(() => customers.id),
+  customerId: uuid('customer_id').references(() => customers.id, {
+    onDelete: 'cascade',
+  }),
   status: orderStatusEnum().notNull(), // e.g., 'pending', 'completed', 'cancelled'
   createdAt,
   updatedAt,
@@ -95,7 +101,9 @@ export const orders = pgTable('orders', {
 // Order items table (for individual items in an order)
 export const orderItems = pgTable('order_items', {
   id,
-  orderId: uuid('order_id').references(() => orders.id),
+  orderId: uuid('order_id').references(() => orders.id, {
+    onDelete: 'cascade',
+  }),
   quantity: integer('quantity').notNull(),
   priceAtOrder: integer('price_at_order').notNull(),
   variantId: uuid('variant_id').references(() => variants.id),
@@ -107,7 +115,9 @@ export const orderItems = pgTable('order_items', {
 export const payments = pgTable('payments', {
   id,
   status: paymentStatusEnum().notNull(), // e.g., 'pending', 'completed', 'failed'
-  orderId: uuid('order_id').references(() => orders.id),
+  orderId: uuid('order_id').references(() => orders.id, {
+    onDelete: 'cascade',
+  }),
   amount: integer('amount').notNull(),
   paymentMethod: paymentMethodEnum().notNull(), // Fixed from 'payment method'
   createdAt,
