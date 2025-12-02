@@ -25,6 +25,7 @@ import { Button } from '@/components/ui/button'
 import { useServerFn } from '@tanstack/react-start'
 import { createCategory } from '../data'
 import slugify from 'slugify'
+import { LoadingSwap } from '@/components/ui/loading-swap'
 const categoryFormSchema = z.object({
   name: z.string().min(1, 'Name is required.'),
   subcategories: z
@@ -38,6 +39,7 @@ type CategoryFormProps = {
 
 export default function CategoryForm({ data }: CategoryFormProps) {
   const createCategoryFn = useServerFn(createCategory)
+  const [isLoading, setIsLoading] = useState(false)
   const [selected, setSelected] = useState<string[]>([])
   const [newTag, setNewTag] = useState<string>('')
   const [tags, setTags] = useState<{ id: string; name: string }[]>(
@@ -78,6 +80,7 @@ export default function CategoryForm({ data }: CategoryFormProps) {
       onSubmit: categoryFormSchema,
     },
     onSubmit: async ({ value }) => {
+      setIsLoading(true)
       if (!data) {
         const res = await createCategoryFn({
           data: {
@@ -95,6 +98,7 @@ export default function CategoryForm({ data }: CategoryFormProps) {
       } else {
         // TODO: implement update logic
       }
+      setIsLoading(false)
     },
   })
   // manually update the subcategories field when selected changes
@@ -193,12 +197,21 @@ export default function CategoryForm({ data }: CategoryFormProps) {
             )
           }}
         />
-        <Field orientation="horizontal">
-          <Button type="submit">Create</Button>
-          <Button variant="outline" type="button">
-            Cancel
-          </Button>
-        </Field>
+
+        <Button type="submit" disabled={isLoading}>
+          <LoadingSwap
+            isLoading={isLoading}
+            className="flex gap-2 items-center"
+          >
+            {!data ? (
+              <>
+                <PlusIcon /> Create
+              </>
+            ) : (
+              'Update'
+            )}
+          </LoadingSwap>
+        </Button>
       </FieldGroup>
     </form>
   )
