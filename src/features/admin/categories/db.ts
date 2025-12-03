@@ -1,7 +1,7 @@
 import { db } from '@/db'
 import { categories, subcategories } from '@/db/schema'
 import { NewCategoryWithSubcategories } from '@/db/types'
-import { eq } from 'drizzle-orm'
+import { and, eq, notInArray } from 'drizzle-orm'
 import { notFound } from '@tanstack/react-router'
 
 export async function getCategoryById(id: string) {
@@ -35,7 +35,48 @@ export async function deleteCategory(id: string) {
 }
 export async function updateCategory(
   id: string,
-  category: NewCategoryWithSubcategories,
+  updatedCategory: NewCategoryWithSubcategories,
 ) {
-  throw new Error('Not implemented')
+  return db.transaction(async (trx) => {
+    // Update main category fields
+    const [newCat] = await db
+      .update(categories)
+      .set(updatedCategory)
+      .where(eq(categories.id, id))
+      .returning()
+
+    if (updatedCategory.subcategories) {
+      // Extract IDs from updated subcategories
+      const updatedIds = updatedCategory.subcategories
+        .map((sc) => sc.id)
+        .filter((id) => id != null)
+
+      // Delete subcategories not present in updated list
+      await trx
+        .delete(subcategories)
+        .where(
+          and(
+            eq(subcategories.categoryId, id),
+            notInArray(subcategories.id, updatedIds),
+          ),
+        )
+
+      for (const subcat of updatedCategory.subcategories) {
+        if (subcat.id) {
+          // Update existing subcategory by id
+          await trx
+            .update(subcategories)
+            .set(subcat)
+            .where(eq(subcategories.id, subcat.id))
+        } else {
+          // Insert new subcategory
+          await trx.insert(subcategories).values({
+            ...subcat,
+            categoryId: id,
+          })
+        }
+      }
+    }
+    return newCat
+  })
 }
