@@ -68,6 +68,7 @@ export const editCategory = createServerFn({ method: 'POST' })
     }),
   )
   .handler(async ({ data: { id, ...data } }) => {
+    // TODO: Fix invalidation
     const newCat = await updateCategory(id, data)
     if (!newCat) {
       return {
