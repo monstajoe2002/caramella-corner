@@ -23,7 +23,7 @@ import {
 import { PlusIcon, CheckIcon, SaveIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useServerFn } from '@tanstack/react-start'
-import { createCategory } from '../data'
+import { createCategory, editCategory } from '../data'
 import slugify from 'slugify'
 import { LoadingSwap } from '@/components/ui/loading-swap'
 const categoryFormSchema = z.object({
@@ -39,6 +39,7 @@ type CategoryFormProps = {
 
 export default function CategoryForm({ data }: CategoryFormProps) {
   const createCategoryFn = useServerFn(createCategory)
+  const editCategoryFn = useServerFn(editCategory)
   const [isLoading, setIsLoading] = useState(false)
   const [selected, setSelected] = useState<string[]>(
     data?.subcategories.map((s) => s.name) ?? [],
@@ -98,7 +99,20 @@ export default function CategoryForm({ data }: CategoryFormProps) {
           alert(res.message)
         }
       } else {
-        // TODO: implement update logic
+        const res = await editCategoryFn({
+          data: {
+            id: data.id,
+            name: value.name,
+            slug: slugify(value.name, { lower: true }),
+            subcategories: selected.map((sel) => ({
+              name: sel,
+              slug: slugify(sel, { lower: true }),
+            })),
+          },
+        })
+        if (res.error) {
+          alert(res.message)
+        }
       }
       setIsLoading(false)
     },
