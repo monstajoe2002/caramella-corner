@@ -21,6 +21,8 @@ import {
 import { useServerFn } from '@tanstack/react-start'
 import { deleteCategory } from '../data'
 import { ActionButton } from '@/components/ui/action-button'
+import { useState } from 'react'
+import { useRouter } from '@tanstack/react-router'
 export const columns: ColumnDef<CategoryWithSubcategories>[] = [
   {
     accessorKey: 'name',
@@ -42,11 +44,13 @@ export const columns: ColumnDef<CategoryWithSubcategories>[] = [
   {
     id: 'actions',
     cell: ({ row }) => {
+      const [isDialogOpen, setIsDialogOpen] = useState(false)
       const category = row.original
       const deleteCategoryFn = useServerFn(deleteCategory)
+      const router = useRouter()
 
       return (
-        <Dialog>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
@@ -77,9 +81,14 @@ export const columns: ColumnDef<CategoryWithSubcategories>[] = [
             </DialogHeader>
             <DialogFooter>
               <ActionButton
-                action={async () =>
-                  await deleteCategoryFn({ data: { id: category.id } })
-                }
+                action={async () => {
+                  const res = await deleteCategoryFn({
+                    data: { id: category.id },
+                  })
+                  setIsDialogOpen(false)
+                  router.invalidate()
+                  return res
+                }}
               >
                 Confirm
               </ActionButton>
