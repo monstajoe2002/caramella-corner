@@ -94,7 +94,7 @@ export function DataTable<TData, TValue>({
                   </EmptyHeader>
                   <EmptyContent>
                     <Button asChild>
-                      <Link to="/admin/categories/new">Create Category</Link>
+                      <Link to={newEntryTo}>Create Category</Link>
                     </Button>
                   </EmptyContent>
                 </Empty>
