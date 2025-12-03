@@ -18,6 +18,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { useServerFn } from '@tanstack/react-start'
+import { deleteCategory } from '../data'
+import { ActionButton } from '@/components/ui/action-button'
 export const columns: ColumnDef<CategoryWithSubcategories>[] = [
   {
     accessorKey: 'name',
@@ -39,7 +42,8 @@ export const columns: ColumnDef<CategoryWithSubcategories>[] = [
   {
     id: 'actions',
     cell: ({ row }) => {
-      // const category = row.original
+      const category = row.original
+      const deleteCategoryFn = useServerFn(deleteCategory)
 
       return (
         <Dialog>
@@ -72,7 +76,13 @@ export const columns: ColumnDef<CategoryWithSubcategories>[] = [
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
-              <Button type="submit">Confirm</Button>
+              <ActionButton
+                action={async () =>
+                  await deleteCategoryFn({ data: { id: category.id } })
+                }
+              >
+                Confirm
+              </ActionButton>
             </DialogFooter>
           </DialogContent>
         </Dialog>

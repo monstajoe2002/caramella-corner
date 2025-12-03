@@ -43,4 +43,7 @@ export const deleteCategory = createServerFn({ method: 'POST' })
         message: 'Error creating category',
       }
     }
+    return {
+      error: false,
+    }
   })
