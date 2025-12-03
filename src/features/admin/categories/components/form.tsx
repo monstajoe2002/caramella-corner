@@ -20,7 +20,7 @@ import {
   TagsTrigger,
   TagsValue,
 } from '@/components/ui/shadcn-io/tags'
-import { PlusIcon, CheckIcon } from 'lucide-react'
+import { PlusIcon, CheckIcon, SaveIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useServerFn } from '@tanstack/react-start'
 import { createCategory } from '../data'
@@ -210,7 +210,9 @@ export default function CategoryForm({ data }: CategoryFormProps) {
                 <PlusIcon /> Create
               </>
             ) : (
-              'Update'
+              <>
+                <SaveIcon /> Save changes
+              </>
             )}
           </LoadingSwap>
         </Button>
