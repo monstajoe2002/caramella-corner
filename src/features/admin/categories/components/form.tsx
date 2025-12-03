@@ -85,10 +85,10 @@ export default function CategoryForm({ data }: CategoryFormProps) {
         const res = await createCategoryFn({
           data: {
             name: value.name,
-            slug: slugify(value.name),
+            slug: slugify(value.name, { lower: true }),
             subcategories: selected.map((sel) => ({
               name: sel,
-              slug: slugify(sel),
+              slug: slugify(sel, { lower: true }),
             })),
           },
         })
