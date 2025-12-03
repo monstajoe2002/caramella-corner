@@ -1,7 +1,7 @@
 import { db } from '@/db'
 import { createServerFn } from '@tanstack/react-start'
 import z from 'zod'
-import { insertCategory } from './db'
+import { deleteCategory as deleteCategoryDb, insertCategory } from './db'
 import { redirect } from '@tanstack/react-router'
 const categorySchema = z.object({
   name: z.string().min(1),
@@ -32,4 +32,15 @@ export const createCategory = createServerFn({ method: 'POST' })
       }
     }
     throw redirect({ href: '..', replace: true })
+  })
+export const deleteCategory = createServerFn({ method: 'POST' })
+  .inputValidator(z.object({ id: z.string() }))
+  .handler(async ({ data }) => {
+    const deletedCat = await deleteCategoryDb(data.id)
+    if (!deletedCat) {
+      return {
+        error: true,
+        message: 'Error creating category',
+      }
+    }
   })
