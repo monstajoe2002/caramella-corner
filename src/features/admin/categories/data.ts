@@ -75,5 +75,5 @@ export const editCategory = createServerFn({ method: 'POST' })
         message: 'Error creating category',
       }
     }
-    throw redirect({ href: '..', replace: true })
+    throw redirect({ to: '/admin/categories', replace: true })
   })
