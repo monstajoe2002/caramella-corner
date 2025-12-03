@@ -40,7 +40,9 @@ type CategoryFormProps = {
 export default function CategoryForm({ data }: CategoryFormProps) {
   const createCategoryFn = useServerFn(createCategory)
   const [isLoading, setIsLoading] = useState(false)
-  const [selected, setSelected] = useState<string[]>([])
+  const [selected, setSelected] = useState<string[]>(
+    data?.subcategories.map((s) => s.name) ?? [],
+  )
   const [newTag, setNewTag] = useState<string>('')
   const [tags, setTags] = useState<{ id: string; name: string }[]>(
     data?.subcategories ?? [],
@@ -73,7 +75,7 @@ export default function CategoryForm({ data }: CategoryFormProps) {
 
   const form = useForm({
     defaultValues: {
-      name: '',
+      name: data?.name ?? '',
       subcategories: [] as string[],
     },
     validators: {
