@@ -9,6 +9,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 export const columns: ColumnDef<CategoryWithSubcategories>[] = [
   {
     accessorKey: 'name',
@@ -33,24 +42,40 @@ export const columns: ColumnDef<CategoryWithSubcategories>[] = [
       // const category = row.original
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>
-              <PencilIcon />
-              <span>Edit</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem variant="destructive">
-              <Trash2Icon />
-              <span>Delete</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Dialog>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>
+                <PencilIcon />
+                <span>Edit</span>
+              </DropdownMenuItem>
+              <DialogTrigger asChild>
+                <DropdownMenuItem variant="destructive">
+                  <Trash2Icon />
+                  <span>Delete</span>
+                </DropdownMenuItem>
+              </DialogTrigger>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Are you absolutely sure?</DialogTitle>
+              <DialogDescription>
+                This action cannot be undone. Are you sure you want to
+                permanently delete this category?
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button type="submit">Confirm</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       )
     },
   },
