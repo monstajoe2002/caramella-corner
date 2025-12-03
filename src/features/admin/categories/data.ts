@@ -1,7 +1,11 @@
 import { db } from '@/db'
 import { createServerFn } from '@tanstack/react-start'
 import z from 'zod'
-import { deleteCategory as deleteCategoryDb, insertCategory } from './db'
+import {
+  deleteCategory as deleteCategoryDb,
+  getCategoryById as getCategoryByIdDb,
+  insertCategory,
+} from './db'
 import { redirect } from '@tanstack/react-router'
 const categorySchema = z.object({
   name: z.string().min(1),
@@ -15,6 +19,12 @@ const categorySchema = z.object({
     )
     .min(1),
 })
+
+export const getCategoryById = createServerFn({ method: 'GET' })
+  .inputValidator((data: { id: string }) => data)
+  .handler(async ({ data: { id } }) => {
+    return await getCategoryByIdDb(id)
+  })
 
 export const getCategories = createServerFn().handler(async () => {
   return await db.query.categories.findMany({
