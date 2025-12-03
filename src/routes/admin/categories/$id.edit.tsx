@@ -1,3 +1,4 @@
+import CategoryForm from '@/features/admin/categories/components/form'
 import { getCategoryById } from '@/features/admin/categories/data'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -8,5 +9,10 @@ export const Route = createFileRoute('/admin/categories/$id/edit')({
 
 function RouteComponent() {
   const category = Route.useLoaderData()
-  return <div>{JSON.stringify(category, null, 2)} </div>
+  return (
+    <div>
+      <h1>Edit Category</h1>
+      <CategoryForm data={category} />{' '}
+    </div>
+  )
 }
