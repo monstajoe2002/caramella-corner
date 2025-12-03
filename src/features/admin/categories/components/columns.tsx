@@ -22,7 +22,7 @@ import { useServerFn } from '@tanstack/react-start'
 import { deleteCategory } from '../data'
 import { ActionButton } from '@/components/ui/action-button'
 import { useState } from 'react'
-import { useRouter } from '@tanstack/react-router'
+import { Link, useRouter } from '@tanstack/react-router'
 export const columns: ColumnDef<CategoryWithSubcategories>[] = [
   {
     accessorKey: 'name',
@@ -59,9 +59,14 @@ export const columns: ColumnDef<CategoryWithSubcategories>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <PencilIcon />
-                <span>Edit</span>
+              <DropdownMenuItem asChild>
+                <Link
+                  params={{ id: category.id }}
+                  to="/admin/categories/$id/edit"
+                >
+                  <PencilIcon />
+                  <span>Edit</span>
+                </Link>
               </DropdownMenuItem>
               <DialogTrigger asChild>
                 <DropdownMenuItem variant="destructive">
