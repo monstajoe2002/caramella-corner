@@ -1,6 +1,7 @@
 import { db } from '@/db'
 import { categories, subcategories } from '@/db/schema'
 import { NewCategoryWithSubcategories } from '@/db/types'
+import { eq } from 'drizzle-orm'
 
 export async function insertCategory(category: NewCategoryWithSubcategories) {
   return db.transaction(async (trx) => {
@@ -15,4 +16,13 @@ export async function insertCategory(category: NewCategoryWithSubcategories) {
 
     return newCat
   })
+}
+export async function deleteCategory(id: string) {
+  return await db.delete(categories).where(eq(categories.id, id))
+}
+export async function updateCategory(
+  id: string,
+  category: NewCategoryWithSubcategories,
+) {
+  throw new Error('Not implemented')
 }
