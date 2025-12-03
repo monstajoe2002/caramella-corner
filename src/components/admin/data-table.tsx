@@ -102,7 +102,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           )}
 
-          {newEntryTo && (
+          {newEntryTo && data.length > 0 ? (
             <TableRow>
               <TableCell colSpan={columns.length}>
                 <Button variant={'link'} asChild className="w-full">
@@ -113,7 +113,7 @@ export function DataTable<TData, TValue>({
                 </Button>
               </TableCell>
             </TableRow>
-          )}
+          ) : null}
         </TableBody>
       </Table>
     </div>
