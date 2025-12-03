@@ -5,6 +5,7 @@ import {
   deleteCategory as deleteCategoryDb,
   getCategoryById as getCategoryByIdDb,
   insertCategory,
+  updateCategory,
 } from './db'
 import { redirect } from '@tanstack/react-router'
 const categorySchema = z.object({
@@ -31,6 +32,7 @@ export const getCategories = createServerFn().handler(async () => {
     with: { subcategories: true },
   })
 })
+
 export const createCategory = createServerFn({ method: 'POST' })
   .inputValidator(categorySchema)
   .handler(async ({ data }) => {
@@ -43,6 +45,7 @@ export const createCategory = createServerFn({ method: 'POST' })
     }
     throw redirect({ href: '..', replace: true })
   })
+
 export const deleteCategory = createServerFn({ method: 'POST' })
   .inputValidator(z.object({ id: z.string() }))
   .handler(async ({ data }) => {
@@ -56,4 +59,21 @@ export const deleteCategory = createServerFn({ method: 'POST' })
     return {
       error: false,
     }
+  })
+
+export const editCategory = createServerFn({ method: 'POST' })
+  .inputValidator(
+    categorySchema.extend({
+      id: z.string().min(1),
+    }),
+  )
+  .handler(async ({ data: { id, ...data } }) => {
+    const newCat = await updateCategory(id, data)
+    if (!newCat) {
+      return {
+        error: true,
+        message: 'Error creating category',
+      }
+    }
+    throw redirect({ href: '..', replace: true })
   })
