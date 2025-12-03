@@ -7,6 +7,9 @@ import { notFound } from '@tanstack/react-router'
 export async function getCategoryById(id: string) {
   const todo = await db.query.categories.findFirst({
     where: eq(categories.id, id),
+    with: {
+      subcategories: true,
+    },
   })
 
   if (todo == null) throw notFound()
