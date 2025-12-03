@@ -2,6 +2,16 @@ import { db } from '@/db'
 import { categories, subcategories } from '@/db/schema'
 import { NewCategoryWithSubcategories } from '@/db/types'
 import { eq } from 'drizzle-orm'
+import { notFound } from '@tanstack/react-router'
+
+export async function getCategoryById(id: string) {
+  const todo = await db.query.categories.findFirst({
+    where: eq(categories.id, id),
+  })
+
+  if (todo == null) throw notFound()
+  return todo
+}
 
 export async function insertCategory(category: NewCategoryWithSubcategories) {
   return db.transaction(async (trx) => {
