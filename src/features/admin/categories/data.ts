@@ -64,7 +64,7 @@ export const deleteCategory = createServerFn({ method: 'POST' })
 export const editCategory = createServerFn({ method: 'POST' })
   .inputValidator(
     categorySchema.extend({
-      id: z.string().min(1),
+      id: z.uuid().min(1),
     }),
   )
   .handler(async ({ data: { id, ...data } }) => {
