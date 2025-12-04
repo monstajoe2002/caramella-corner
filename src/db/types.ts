@@ -1,4 +1,4 @@
-import { categories, subcategories } from './schema'
+import { categories, products, subcategories } from './schema'
 // category
 export type Category = typeof categories.$inferSelect
 export type NewCategory = typeof categories.$inferInsert
@@ -12,3 +12,7 @@ export type CategoryWithSubcategories = Category & {
 export type NewCategoryWithSubcategories = NewCategory & {
   subcategories: Array<NewSubcategory>
 }
+
+// product
+export type Product = typeof products.$inferSelect
+export type NewProduct = typeof products.$inferInsert
