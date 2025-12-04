@@ -49,7 +49,7 @@ export const products = pgTable('products', {
   name: varchar('name').notNull(),
   slug: varchar('slug').notNull(),
   images: text('images'), // Storing as text, could be JSON or array
-  priceInPlasters: integer('price_in_plasters').notNull(),
+  priceInPiasters: integer('price_in_piasters').notNull(),
   description: text('description'),
   material: varchar('material'),
   categoryId: uuid('category_id').references(() => categories.id),

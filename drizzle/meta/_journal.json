@@ -36,6 +36,13 @@
       "when": 1764698116257,
       "tag": "0004_lively_carmella_unuscione",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1764889671386,
+      "tag": "0005_open_namor",
+      "breakpoints": true
     }
   ]
 }
