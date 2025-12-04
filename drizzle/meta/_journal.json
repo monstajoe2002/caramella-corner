@@ -43,6 +43,13 @@
       "when": 1764889671386,
       "tag": "0005_open_namor",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1764890276528,
+      "tag": "0006_odd_mattie_franklin",
+      "breakpoints": true
     }
   ]
 }
