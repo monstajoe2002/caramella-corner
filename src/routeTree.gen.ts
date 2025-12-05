@@ -14,6 +14,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminProductsIndexRouteImport } from './routes/admin/products/index'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
+import { Route as AdminProductsNewRouteImport } from './routes/admin/products/new'
 import { Route as AdminCategoriesNewRouteImport } from './routes/admin/categories/new'
 import { Route as AdminCategoriesIdEditRouteImport } from './routes/admin/categories/$id.edit'
 
@@ -42,6 +43,11 @@ const AdminCategoriesIndexRoute = AdminCategoriesIndexRouteImport.update({
   path: '/categories/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminProductsNewRoute = AdminProductsNewRouteImport.update({
+  id: '/products/new',
+  path: '/products/new',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminCategoriesNewRoute = AdminCategoriesNewRouteImport.update({
   id: '/categories/new',
   path: '/categories/new',
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/admin/categories/new': typeof AdminCategoriesNewRoute
+  '/admin/products/new': typeof AdminProductsNewRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/products': typeof AdminProductsIndexRoute
   '/admin/categories/$id/edit': typeof AdminCategoriesIdEditRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminIndexRoute
   '/admin/categories/new': typeof AdminCategoriesNewRoute
+  '/admin/products/new': typeof AdminProductsNewRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/products': typeof AdminProductsIndexRoute
   '/admin/categories/$id/edit': typeof AdminCategoriesIdEditRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/admin/categories/new': typeof AdminCategoriesNewRoute
+  '/admin/products/new': typeof AdminProductsNewRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/products/': typeof AdminProductsIndexRoute
   '/admin/categories/$id/edit': typeof AdminCategoriesIdEditRoute
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/admin/'
     | '/admin/categories/new'
+    | '/admin/products/new'
     | '/admin/categories'
     | '/admin/products'
     | '/admin/categories/$id/edit'
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/admin/categories/new'
+    | '/admin/products/new'
     | '/admin/categories'
     | '/admin/products'
     | '/admin/categories/$id/edit'
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/admin/'
     | '/admin/categories/new'
+    | '/admin/products/new'
     | '/admin/categories/'
     | '/admin/products/'
     | '/admin/categories/$id/edit'
@@ -151,6 +163,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCategoriesIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/products/new': {
+      id: '/admin/products/new'
+      path: '/products/new'
+      fullPath: '/admin/products/new'
+      preLoaderRoute: typeof AdminProductsNewRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/categories/new': {
       id: '/admin/categories/new'
       path: '/categories/new'
@@ -171,6 +190,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   AdminCategoriesNewRoute: typeof AdminCategoriesNewRoute
+  AdminProductsNewRoute: typeof AdminProductsNewRoute
   AdminCategoriesIndexRoute: typeof AdminCategoriesIndexRoute
   AdminProductsIndexRoute: typeof AdminProductsIndexRoute
   AdminCategoriesIdEditRoute: typeof AdminCategoriesIdEditRoute
@@ -179,6 +199,7 @@ interface AdminRouteRouteChildren {
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   AdminCategoriesNewRoute: AdminCategoriesNewRoute,
+  AdminProductsNewRoute: AdminProductsNewRoute,
   AdminCategoriesIndexRoute: AdminCategoriesIndexRoute,
   AdminProductsIndexRoute: AdminProductsIndexRoute,
   AdminCategoriesIdEditRoute: AdminCategoriesIdEditRoute,
