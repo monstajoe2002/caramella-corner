@@ -69,7 +69,7 @@ export default function ProductForm({}: ProductFormProps) {
                   autoComplete="off"
                 />
                 <FieldDescription>
-                  Provide a concise title for your bug report.
+                  Provide a name for your product.
                 </FieldDescription>
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
