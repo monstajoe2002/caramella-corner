@@ -13,8 +13,8 @@ export const productFormSchema = z.object({
   images: z.url('Invalid image URL'), // stored as text, could be JSON string or similar
   categoryId: z.uuid('Category ID must be a valid UUID'),
   subcategoryId: z.uuid('Subcategory ID must be a valid UUID'),
-  active: z.boolean().optional().default(true),
-  quantity: z.number().int().nonnegative().default(0),
+  active: z.boolean(),
+  quantity: z.number().int().nonnegative(),
 })
 type ProductFormProps = {}
 
@@ -30,6 +30,9 @@ export default function ProductForm({}: ProductFormProps) {
       subcategoryId: '',
       active: true,
       quantity: 0,
+    },
+    validators: {
+      onSubmit: productFormSchema,
     },
   })
   return <div>ProductForm</div>
