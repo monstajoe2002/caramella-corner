@@ -1,3 +1,4 @@
+import { useForm } from '@tanstack/react-form'
 import { z } from 'zod'
 
 // Product form schema based on drizzle-orm products schema
@@ -18,5 +19,18 @@ export const productFormSchema = z.object({
 type ProductFormProps = {}
 
 export default function ProductForm({}: ProductFormProps) {
+  const form = useForm({
+    defaultValues: {
+      name: '',
+      description: '',
+      priceInPiasters: 0,
+      material: '',
+      images: '',
+      categoryId: '',
+      subcategoryId: '',
+      active: true,
+      quantity: 0,
+    },
+  })
   return <div>ProductForm</div>
 }
