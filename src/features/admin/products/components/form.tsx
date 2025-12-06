@@ -20,7 +20,10 @@ import { Textarea } from '@/components/ui/textarea'
 import { useForm } from '@tanstack/react-form'
 import { useServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
-import { getCategoriesWithSubcategories } from '../../categories/data'
+import {
+  getCategoriesWithSubcategories,
+  getSubcategoriesByCategoryId,
+} from '../../categories/data'
 import { useQuery } from '@tanstack/react-query'
 import { getCategories } from '../../categories/data'
 
@@ -59,9 +62,20 @@ export default function ProductForm({}: ProductFormProps) {
     },
   })
   const getCategoriesFn = useServerFn(getCategories)
+  const getSubcategoriesByCategoryIdFn = useServerFn(
+    getSubcategoriesByCategoryId,
+  )
+
+  const catId = form.getFieldValue('categoryId')
   const { data: categories } = useQuery({
     queryKey: ['categories'],
     queryFn: getCategoriesFn,
+  })
+  const { data: subcategories } = useQuery({
+    queryKey: ['subcategories', catId],
+    queryFn: () =>
+      getSubcategoriesByCategoryIdFn({ data: { categoryId: catId } }),
+    enabled: !!catId,
   })
   return (
     <form
