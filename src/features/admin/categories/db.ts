@@ -4,6 +4,9 @@ import { NewCategoryWithSubcategories } from '@/db/types'
 import { and, eq, notInArray } from 'drizzle-orm'
 import { notFound } from '@tanstack/react-router'
 
+export async function getCategories() {
+  return await db.query.categories.findMany()
+}
 export async function getCategoryById(id: string) {
   const todo = await db.query.categories.findFirst({
     where: eq(categories.id, id),
