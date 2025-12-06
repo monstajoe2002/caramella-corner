@@ -26,6 +26,11 @@ export async function getCategoryBySlug(slug: string) {
   if (todo == null) throw notFound()
   return todo
 }
+export async function getCategoriesWithSubcategories() {
+  return await db.query.categories.findMany({
+    with: { subcategories: true },
+  })
+}
 
 export async function insertCategory(category: NewCategoryWithSubcategories) {
   return db.transaction(async (trx) => {

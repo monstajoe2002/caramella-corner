@@ -1,7 +1,7 @@
-import { db } from '@/db'
 import { createServerFn } from '@tanstack/react-start'
 import z from 'zod'
 import {
+  getCategoriesWithSubcategories as getCategoriesWithSubcategoriesDb,
   deleteCategory as deleteCategoryDb,
   getCategoryById as getCategoryByIdDb,
   insertCategory,
@@ -28,11 +28,7 @@ export const getCategoryById = createServerFn({ method: 'GET' })
   })
 
 export const getCategoriesWithSubcategories = createServerFn().handler(
-  async () => {
-    return await db.query.categories.findMany({
-      with: { subcategories: true },
-    })
-  },
+  async () => await getCategoriesWithSubcategoriesDb(),
 )
 
 export const createCategory = createServerFn({ method: 'POST' })
