@@ -18,7 +18,10 @@ import {
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { useForm } from '@tanstack/react-form'
+import { useServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
+import { getCategories } from '../../categories/data'
+import { useQuery } from '@tanstack/react-query'
 
 // Product form schema based on drizzle-orm products schema
 export const productFormSchema = z.object({
@@ -53,6 +56,11 @@ export default function ProductForm({}: ProductFormProps) {
     validators: {
       onSubmit: productFormSchema,
     },
+  })
+  const getCategoriesFn = useServerFn(getCategories)
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => getCategoriesFn(),
   })
   return (
     <form
@@ -185,8 +193,9 @@ export default function ProductForm({}: ProductFormProps) {
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent position="item-aligned">
-                      <SelectItem value="auto">Auto</SelectItem>
-                      <SelectItem value="en">English</SelectItem>
+                      {categories?.map((c) => {
+                        return <SelectItem value={c.id}>{c.name}</SelectItem>
+                      })}
                     </SelectContent>
                   </Select>
 
@@ -211,15 +220,18 @@ export default function ProductForm({}: ProductFormProps) {
                     autoComplete="off"
                   >
                     <SelectTrigger
-                      id="product-select-category"
+                      id="product-select-subcategory"
                       aria-invalid={isInvalid}
                       className="min-w-[120px]"
                     >
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent position="item-aligned">
-                      <SelectItem value="auto">Auto</SelectItem>
-                      <SelectItem value="en">English</SelectItem>
+                      {categories?.map((c) => {
+                        return c.subcategories.map((s) => {
+                          return <SelectItem value={s.id}>{s.name}</SelectItem>
+                        })
+                      })}
                     </SelectContent>
                   </Select>
 
