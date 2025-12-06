@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import z from 'zod'
 import {
-  // getSubcategoriesByCategoryId as getSubcategoriesByCategoryIdDb,
+  getSubcategoriesByCategoryId as getSubcategoriesByCategoryIdDb,
   getCategoriesWithSubcategories as getCategoriesWithSubcategoriesDb,
   getCategories as getCategoriesDb,
   deleteCategory as deleteCategoryDb,
@@ -25,6 +25,11 @@ const categorySchema = z.object({
 export const getCategories = createServerFn({ method: 'GET' }).handler(
   getCategoriesDb,
 )
+export const getSubcategoriesByCategoryId = createServerFn({ method: 'GET' })
+  .inputValidator((data: { categoryId: string }) => data)
+  .handler(async ({ data: { categoryId } }) => {
+    return await getSubcategoriesByCategoryIdDb(categoryId)
+  })
 export const getCategoryById = createServerFn({ method: 'GET' })
   .inputValidator((data: { id: string }) => data)
   .handler(async ({ data: { id } }) => {
