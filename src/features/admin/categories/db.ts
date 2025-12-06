@@ -99,3 +99,11 @@ export async function updateCategory(
     return newCat
   })
 }
+
+// subcategories
+
+export async function getSubcategoriesByCategoryId(categoryId: string) {
+  return await db.query.subcategories.findMany({
+    where: eq(subcategories.categoryId, categoryId),
+  })
+}
