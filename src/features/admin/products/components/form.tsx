@@ -20,10 +20,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useForm } from '@tanstack/react-form'
 import { useServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
-import {
-  getCategoriesWithSubcategories,
-  getSubcategoriesByCategoryId,
-} from '../../categories/data'
+import { getSubcategoriesByCategoryId } from '../../categories/data'
 import { useQuery } from '@tanstack/react-query'
 import { getCategories } from '../../categories/data'
 
@@ -219,42 +216,55 @@ export default function ProductForm({}: ProductFormProps) {
               )
             }}
           />
-          {/* <form.Field
-            name="subcategoryId"
-            children={(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid
+          <form.Subscribe
+            selector={(state) => state.values.categoryId}
+            children={(categoryId) => {
               return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Subcategory</FieldLabel>
-                  <Select
-                    name={field.name}
-                    value={field.state.value}
-                    onValueChange={field.handleChange}
-                    aria-invalid={isInvalid}
-                    autoComplete="off"
-                  >
-                    <SelectTrigger
-                      id="product-select-subcategory"
-                      aria-invalid={isInvalid}
-                      className="min-w-[120px]"
-                    >
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent position="item-aligned">
-                      {categories?.map((c) => {
-                        return c.subcategories.map((s) => {
-                          return <SelectItem value={s.id}>{s.name}</SelectItem>
-                        })
-                      })}
-                    </SelectContent>
-                  </Select>
+                categoryId && (
+                  <form.Field
+                    name="subcategoryId"
+                    children={(field) => {
+                      const isInvalid =
+                        field.state.meta.isTouched && !field.state.meta.isValid
+                      return (
+                        <Field data-invalid={isInvalid}>
+                          <FieldLabel htmlFor={field.name}>
+                            Subcategory
+                          </FieldLabel>
+                          <Select
+                            name={field.name}
+                            value={field.state.value}
+                            onValueChange={field.handleChange}
+                            aria-invalid={isInvalid}
+                            autoComplete="off"
+                          >
+                            <SelectTrigger
+                              id="product-select-subcategory"
+                              aria-invalid={isInvalid}
+                              className="min-w-[120px]"
+                            >
+                              <SelectValue placeholder="Select" />
+                            </SelectTrigger>
+                            <SelectContent position="item-aligned">
+                              {subcategories?.map((s) => {
+                                return (
+                                  <SelectItem value={s.id}>{s.name}</SelectItem>
+                                )
+                              })}
+                            </SelectContent>
+                          </Select>
 
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
+                          {isInvalid && (
+                            <FieldError errors={field.state.meta.errors} />
+                          )}
+                        </Field>
+                      )
+                    }}
+                  />
+                )
               )
             }}
-          /> */}
+          />
         </FieldSet>
         <FieldSet>
           <form.Field
