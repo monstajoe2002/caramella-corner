@@ -22,6 +22,7 @@ import { useServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
 import { getCategoriesWithSubcategories } from '../../categories/data'
 import { useQuery } from '@tanstack/react-query'
+import { getCategories } from '../../categories/data'
 
 // Product form schema based on drizzle-orm products schema
 export const productFormSchema = z.object({
@@ -57,10 +58,10 @@ export default function ProductForm({}: ProductFormProps) {
       onSubmit: productFormSchema,
     },
   })
-  const getCategoriesFn = useServerFn(getCategoriesWithSubcategories)
+  const getCategoriesFn = useServerFn(getCategories)
   const { data: categories } = useQuery({
     queryKey: ['categories'],
-    queryFn: () => getCategoriesFn(),
+    queryFn: getCategoriesFn,
   })
   return (
     <form
@@ -204,7 +205,7 @@ export default function ProductForm({}: ProductFormProps) {
               )
             }}
           />
-          <form.Field
+          {/* <form.Field
             name="subcategoryId"
             children={(field) => {
               const isInvalid =
@@ -239,7 +240,7 @@ export default function ProductForm({}: ProductFormProps) {
                 </Field>
               )
             }}
-          />
+          /> */}
         </FieldSet>
         <FieldSet>
           <form.Field
