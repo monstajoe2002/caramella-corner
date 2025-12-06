@@ -2,11 +2,11 @@ import { columns as categoryCols } from '@/features/admin/categories/components/
 import { DataTable } from '@/components/admin/data-table'
 import { CategoryWithSubcategories } from '@/db/types'
 import { createFileRoute } from '@tanstack/react-router'
-import { getCategories } from '@/features/admin/categories/data'
+import { getCategoriesWithSubcategories } from '@/features/admin/categories/data'
 
 export const Route = createFileRoute('/admin/categories/')({
   component: RouteComponent,
-  loader: () => getCategories(),
+  loader: () => getCategoriesWithSubcategories(),
 })
 
 function RouteComponent() {

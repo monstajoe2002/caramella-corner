@@ -27,11 +27,13 @@ export const getCategoryById = createServerFn({ method: 'GET' })
     return await getCategoryByIdDb(id)
   })
 
-export const getCategories = createServerFn().handler(async () => {
-  return await db.query.categories.findMany({
-    with: { subcategories: true },
-  })
-})
+export const getCategoriesWithSubcategories = createServerFn().handler(
+  async () => {
+    return await db.query.categories.findMany({
+      with: { subcategories: true },
+    })
+  },
+)
 
 export const createCategory = createServerFn({ method: 'POST' })
   .inputValidator(categorySchema)

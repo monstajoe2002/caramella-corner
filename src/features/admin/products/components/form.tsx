@@ -20,7 +20,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useForm } from '@tanstack/react-form'
 import { useServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
-import { getCategories } from '../../categories/data'
+import { getCategoriesWithSubcategories } from '../../categories/data'
 import { useQuery } from '@tanstack/react-query'
 
 // Product form schema based on drizzle-orm products schema
@@ -57,7 +57,7 @@ export default function ProductForm({}: ProductFormProps) {
       onSubmit: productFormSchema,
     },
   })
-  const getCategoriesFn = useServerFn(getCategories)
+  const getCategoriesFn = useServerFn(getCategoriesWithSubcategories)
   const { data: categories } = useQuery({
     queryKey: ['categories'],
     queryFn: () => getCategoriesFn(),
