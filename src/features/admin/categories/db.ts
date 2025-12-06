@@ -15,6 +15,17 @@ export async function getCategoryById(id: string) {
   if (todo == null) throw notFound()
   return todo
 }
+export async function getCategoryBySlug(slug: string) {
+  const todo = await db.query.categories.findFirst({
+    where: eq(categories.slug, slug),
+    with: {
+      subcategories: true,
+    },
+  })
+
+  if (todo == null) throw notFound()
+  return todo
+}
 
 export async function insertCategory(category: NewCategoryWithSubcategories) {
   return db.transaction(async (trx) => {
