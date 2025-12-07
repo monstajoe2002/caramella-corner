@@ -23,6 +23,12 @@ import { z } from 'zod'
 import { getSubcategoriesByCategoryId } from '../../categories/data'
 import { useQuery } from '@tanstack/react-query'
 import { getCategories } from '../../categories/data'
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+} from '@/components/ui/input-group'
 
 // Product form schema based on drizzle-orm products schema
 export const productFormSchema = z.object({
@@ -164,17 +170,24 @@ export default function ProductForm({}: ProductFormProps) {
             return (
               <Field data-invalid={isInvalid}>
                 <FieldLabel htmlFor={field.name}>Price</FieldLabel>
-                <Input
-                  type="number"
-                  id={field.name}
-                  name={field.name}
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(Number(e.target.value))}
-                  aria-invalid={isInvalid}
-                  autoComplete="off"
-                />
-                <FieldDescription>Your product's price.</FieldDescription>
+                <InputGroup>
+                  <InputGroupInput
+                    type="number"
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(Number(e.target.value))}
+                    aria-invalid={isInvalid}
+                    autoComplete="off"
+                  />
+                  <InputGroupAddon align="inline-end">
+                    <InputGroupText>piasters</InputGroupText>
+                  </InputGroupAddon>
+                </InputGroup>
+                <FieldDescription>
+                  Your product's price (in piasters).
+                </FieldDescription>
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
             )
