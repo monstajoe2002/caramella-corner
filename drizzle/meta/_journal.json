@@ -57,6 +57,13 @@
       "when": 1765106751479,
       "tag": "0007_romantic_payback",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1765107104123,
+      "tag": "0008_broken_nomad",
+      "breakpoints": true
     }
   ]
 }

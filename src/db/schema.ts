@@ -8,7 +8,7 @@ import {
   uuid,
   numeric,
 } from 'drizzle-orm/pg-core'
-import { relations } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import { createdAt, id, updatedAt } from './schema-helpers'
 
 export const orderStatusEnum = pgEnum('order_status', [
@@ -49,7 +49,7 @@ export const products = pgTable('products', {
   id,
   name: varchar('name').notNull(),
   slug: varchar('slug').notNull(),
-  images: text('images'), // Storing as text, could be JSON or array
+  images: text('images').array().notNull(), // Storing as text, could be JSON or array
   price: numeric('price').notNull(),
   description: text('description').notNull(),
   material: varchar('material').notNull(),
