@@ -6,6 +6,7 @@ import {
   text,
   pgEnum,
   uuid,
+  numeric,
 } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
 import { createdAt, id, updatedAt } from './schema-helpers'
@@ -49,7 +50,7 @@ export const products = pgTable('products', {
   name: varchar('name').notNull(),
   slug: varchar('slug').notNull(),
   images: text('images'), // Storing as text, could be JSON or array
-  priceInPiasters: integer('price_in_piasters').notNull(),
+  price: numeric('price').notNull(),
   description: text('description').notNull(),
   material: varchar('material').notNull(),
   categoryId: uuid('category_id').references(() => categories.id),

@@ -1,0 +1,1 @@
+ALTER TABLE "products" RENAME COLUMN "price_in_piasters" TO "price";
