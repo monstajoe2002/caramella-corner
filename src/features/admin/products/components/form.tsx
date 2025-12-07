@@ -157,6 +157,30 @@ export default function ProductForm({}: ProductFormProps) {
           }}
         />
         <form.Field
+          name="priceInPiasters"
+          children={(field) => {
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid
+            return (
+              <Field data-invalid={isInvalid}>
+                <FieldLabel htmlFor={field.name}>Price</FieldLabel>
+                <Input
+                  type="number"
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(Number(e.target.value))}
+                  aria-invalid={isInvalid}
+                  autoComplete="off"
+                />
+                <FieldDescription>Your product's price.</FieldDescription>
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            )
+          }}
+        />
+        <form.Field
           name="images"
           children={(field) => {
             const isInvalid =
