@@ -20,6 +20,7 @@
   "dependencies": {
     "@faker-js/faker": "^10.0.0",
     "@hookform/resolvers": "^5.2.2",
+    "@imagekit/nodejs": "^7.1.1",
     "@imagekit/react": "^5.0.1",
     "@neondatabase/serverless": "^1.0.2",
     "@radix-ui/react-alert-dialog": "^1.1.15",

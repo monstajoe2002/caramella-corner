@@ -14,6 +14,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminProductsIndexRouteImport } from './routes/admin/products/index'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
+import { Route as ApiAdminUploadAuthRouteImport } from './routes/api/admin/upload-auth'
 import { Route as AdminProductsNewRouteImport } from './routes/admin/products/new'
 import { Route as AdminCategoriesNewRouteImport } from './routes/admin/categories/new'
 import { Route as AdminCategoriesIdEditRouteImport } from './routes/admin/categories/$id.edit'
@@ -43,6 +44,11 @@ const AdminCategoriesIndexRoute = AdminCategoriesIndexRouteImport.update({
   path: '/categories/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const ApiAdminUploadAuthRoute = ApiAdminUploadAuthRouteImport.update({
+  id: '/api/admin/upload-auth',
+  path: '/api/admin/upload-auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminProductsNewRoute = AdminProductsNewRouteImport.update({
   id: '/products/new',
   path: '/products/new',
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/admin/categories/new': typeof AdminCategoriesNewRoute
   '/admin/products/new': typeof AdminProductsNewRoute
+  '/api/admin/upload-auth': typeof ApiAdminUploadAuthRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/products': typeof AdminProductsIndexRoute
   '/admin/categories/$id/edit': typeof AdminCategoriesIdEditRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/admin/categories/new': typeof AdminCategoriesNewRoute
   '/admin/products/new': typeof AdminProductsNewRoute
+  '/api/admin/upload-auth': typeof ApiAdminUploadAuthRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/products': typeof AdminProductsIndexRoute
   '/admin/categories/$id/edit': typeof AdminCategoriesIdEditRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/admin/categories/new': typeof AdminCategoriesNewRoute
   '/admin/products/new': typeof AdminProductsNewRoute
+  '/api/admin/upload-auth': typeof ApiAdminUploadAuthRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/products/': typeof AdminProductsIndexRoute
   '/admin/categories/$id/edit': typeof AdminCategoriesIdEditRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/admin/categories/new'
     | '/admin/products/new'
+    | '/api/admin/upload-auth'
     | '/admin/categories'
     | '/admin/products'
     | '/admin/categories/$id/edit'
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/admin/categories/new'
     | '/admin/products/new'
+    | '/api/admin/upload-auth'
     | '/admin/categories'
     | '/admin/products'
     | '/admin/categories/$id/edit'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/admin/categories/new'
     | '/admin/products/new'
+    | '/api/admin/upload-auth'
     | '/admin/categories/'
     | '/admin/products/'
     | '/admin/categories/$id/edit'
@@ -124,6 +136,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  ApiAdminUploadAuthRoute: typeof ApiAdminUploadAuthRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -162,6 +175,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/categories'
       preLoaderRoute: typeof AdminCategoriesIndexRouteImport
       parentRoute: typeof AdminRouteRoute
+    }
+    '/api/admin/upload-auth': {
+      id: '/api/admin/upload-auth'
+      path: '/api/admin/upload-auth'
+      fullPath: '/api/admin/upload-auth'
+      preLoaderRoute: typeof ApiAdminUploadAuthRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/products/new': {
       id: '/admin/products/new'
@@ -212,6 +232,7 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
+  ApiAdminUploadAuthRoute: ApiAdminUploadAuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
