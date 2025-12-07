@@ -37,9 +37,8 @@ import { PlusIcon } from 'lucide-react'
 // Product form schema based on drizzle-orm products schema
 export const productFormSchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  priceInPiasters: z
+  price: z
     .number('Price must be a number')
-    .int()
     .positive('Price must be greater than 0'),
   description: z.string().min(1, 'Proper description is required'),
   material: z.string().min(1, 'Material is required'),
@@ -57,7 +56,7 @@ export default function ProductForm({}: ProductFormProps) {
     defaultValues: {
       name: '',
       description: '',
-      priceInPiasters: 0,
+      price: 0,
       material: '',
       images: '',
       categoryId: '',
@@ -168,7 +167,7 @@ export default function ProductForm({}: ProductFormProps) {
           }}
         />
         <form.Field
-          name="priceInPiasters"
+          name="price"
           children={(field) => {
             const isInvalid =
               field.state.meta.isTouched && !field.state.meta.isValid
