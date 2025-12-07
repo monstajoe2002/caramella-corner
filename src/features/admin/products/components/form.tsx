@@ -29,6 +29,10 @@ import {
   InputGroupInput,
   InputGroupText,
 } from '@/components/ui/input-group'
+import { Button } from '@/components/ui/button'
+import { useState } from 'react'
+import { LoadingSwap } from '@/components/ui/loading-swap'
+import { PlusIcon } from 'lucide-react'
 
 // Product form schema based on drizzle-orm products schema
 export const productFormSchema = z.object({
@@ -48,6 +52,7 @@ export const productFormSchema = z.object({
 type ProductFormProps = {}
 
 export default function ProductForm({}: ProductFormProps) {
+  const [isLoading, setIsLoading] = useState(false)
   const form = useForm({
     defaultValues: {
       name: '',
@@ -357,6 +362,14 @@ export default function ProductForm({}: ProductFormProps) {
             }}
           />
         </FieldSet>
+        <Button type="submit" disabled={isLoading}>
+          <LoadingSwap
+            isLoading={isLoading}
+            className="flex gap-2 items-center"
+          >
+            <PlusIcon /> Create
+          </LoadingSwap>
+        </Button>
       </FieldGroup>
     </form>
   )
