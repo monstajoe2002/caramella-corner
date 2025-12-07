@@ -182,12 +182,10 @@ export default function ProductForm({}: ProductFormProps) {
                     autoComplete="off"
                   />
                   <InputGroupAddon align="inline-end">
-                    <InputGroupText>piasters</InputGroupText>
+                    <InputGroupText>EGP</InputGroupText>
                   </InputGroupAddon>
                 </InputGroup>
-                <FieldDescription>
-                  Your product's price (in piasters).
-                </FieldDescription>
+                <FieldDescription>Your product's price.</FieldDescription>
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
             )

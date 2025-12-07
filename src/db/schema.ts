@@ -8,7 +8,7 @@ import {
   uuid,
   numeric,
 } from 'drizzle-orm/pg-core'
-import { relations, sql } from 'drizzle-orm'
+import { relations } from 'drizzle-orm'
 import { createdAt, id, updatedAt } from './schema-helpers'
 
 export const orderStatusEnum = pgEnum('order_status', [
