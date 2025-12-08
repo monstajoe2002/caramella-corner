@@ -8,10 +8,10 @@ import {
   upload,
   UploadResponse,
 } from '@imagekit/react'
-import { useRef, useState } from 'react'
+import { ComponentProps, useRef, useState } from 'react'
 
 // UploadExample component demonstrates file uploading using ImageKit's React SDK.
-const UploadExample = () => {
+const ImagekitUpload = ({ ...props }: ComponentProps<'input'>) => {
   // State to keep track of the current upload progress (percentage)
   const [progress, setProgress] = useState(0)
 
@@ -125,7 +125,7 @@ const UploadExample = () => {
   return (
     <>
       {/* File input element using React ref */}
-      <Input multiple type="file" ref={fileInputRef} />
+      <Input multiple type="file" ref={fileInputRef} {...props} />
       {/* Button to trigger the upload process */}
       <Button type="button" onClick={handleUpload}>
         Upload file
@@ -137,4 +137,4 @@ const UploadExample = () => {
   )
 }
 
-export default UploadExample
+export default ImagekitUpload
