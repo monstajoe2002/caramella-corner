@@ -6,7 +6,6 @@ import {
   ImageKitServerError,
   ImageKitUploadNetworkError,
   upload,
-  UploadResponse,
 } from '@imagekit/react'
 import { ComponentProps, useRef, useState } from 'react'
 
@@ -71,24 +70,23 @@ const ImagekitUpload = ({ ...props }: ComponentProps<'input'>) => {
       return
     }
 
-    // Extract the first file from the file input
-    const files = fileInput.files
+    // Extract all files from the file input
+    const files = Array.from(fileInput.files)
 
-    // Retrieve authentication parameters for the upload.
-    let authParams
-    try {
-      authParams = await authenticator()
-    } catch (authError) {
-      console.error('Failed to authenticate for upload:', authError)
-      return
-    }
-    const { signature, expire, token } = authParams
+    for (const file of files) {
+      // Retrieve authentication parameters for the upload.
+      let authParams
+      try {
+        authParams = await authenticator()
+      } catch (authError) {
+        console.error('Failed to authenticate for upload:', authError)
+        return
+      }
+      const { signature, expire, token } = authParams
 
-    // Call the ImageKit SDK upload function with the required parameters and callbacks.
-    try {
-      let uploadResponse: UploadResponse | null = null
-      for (const file of files) {
-        uploadResponse = await upload({
+      // Call the ImageKit SDK upload function with the required parameters and callbacks.
+      try {
+        const uploadResponse = await upload({
           // Authentication parameters
           expire,
           token,
@@ -103,21 +101,21 @@ const ImagekitUpload = ({ ...props }: ComponentProps<'input'>) => {
           // Abort signal to allow cancellation of the upload if needed.
           abortSignal: abortController.signal,
         })
-      }
-      if (uploadResponse) console.log('Upload response:', uploadResponse)
-    } catch (error) {
-      // Handle specific error types provided by the ImageKit SDK.
-      if (error instanceof ImageKitAbortError) {
-        console.error('Upload aborted:', error.reason)
-      } else if (error instanceof ImageKitInvalidRequestError) {
-        console.error('Invalid request:', error.message)
-      } else if (error instanceof ImageKitUploadNetworkError) {
-        console.error('Network error:', error.message)
-      } else if (error instanceof ImageKitServerError) {
-        console.error('Server error:', error.message)
-      } else {
-        // Handle any other errors that may occur.
-        console.error('Upload error:', error)
+        setProgress(0)
+      } catch (error) {
+        // Handle specific error types provided by the ImageKit SDK.
+        if (error instanceof ImageKitAbortError) {
+          console.error('Upload aborted:', error.reason)
+        } else if (error instanceof ImageKitInvalidRequestError) {
+          console.error('Invalid request:', error.message)
+        } else if (error instanceof ImageKitUploadNetworkError) {
+          console.error('Network error:', error.message)
+        } else if (error instanceof ImageKitServerError) {
+          console.error('Server error:', error.message)
+        } else {
+          // Handle any other errors that may occur.
+          console.error('Upload error:', error)
+        }
       }
     }
   }
