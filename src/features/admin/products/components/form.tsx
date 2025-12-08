@@ -44,6 +44,7 @@ import {
   upload,
 } from '@imagekit/react'
 import { cn } from '@/lib/utils'
+import { ProductWithVariants } from '@/db/types'
 
 const variantsSchema = z.object({
   sku: z.string().min(1, 'SKU is required').toUpperCase(),
@@ -65,9 +66,11 @@ export const productFormSchema = z.object({
   active: z.boolean(),
   quantity: z.number().int().nonnegative(),
 })
-type ProductFormProps = {}
+type ProductFormProps = {
+  data?: ProductWithVariants
+}
 
-export default function ProductForm({}: ProductFormProps) {
+export default function ProductForm({ data }: ProductFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const form = useForm({
     defaultValues: {
