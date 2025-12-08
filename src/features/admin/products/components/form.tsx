@@ -33,6 +33,7 @@ import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { LoadingSwap } from '@/components/ui/loading-swap'
 import { PlusIcon } from 'lucide-react'
+import ImagekitUpload from './imagekit-upload'
 
 // Product form schema based on drizzle-orm products schema
 export const productFormSchema = z.object({
@@ -203,7 +204,7 @@ export default function ProductForm({}: ProductFormProps) {
             return (
               <Field data-invalid={isInvalid}>
                 <FieldLabel htmlFor={field.name}>Images</FieldLabel>
-                <Input
+                {/* <Input
                   type="file"
                   multiple
                   id={field.name}
@@ -213,8 +214,8 @@ export default function ProductForm({}: ProductFormProps) {
                   onChange={(e) => field.handleChange(e.target.value)}
                   aria-invalid={isInvalid}
                   autoComplete="off"
-                />
-
+                /> */}
+                <ImagekitUpload />
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
             )
