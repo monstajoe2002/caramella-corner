@@ -43,6 +43,7 @@ import {
   ImageKitUploadNetworkError,
   upload,
 } from '@imagekit/react'
+import { cn } from '@/lib/utils'
 
 const variantsSchema = z.object({
   sku: z.string().min(1, 'SKU is required').toUpperCase(),
@@ -291,7 +292,12 @@ export default function ProductForm({}: ProductFormProps) {
                 </FieldDescription>
                 <FieldGroup>
                   {field.state.value.map((_, index) => (
-                    <div className="md:grid grid-cols-4 flex flex-col gap-4">
+                    <div
+                      className={cn(
+                        'md:grid flex flex-col grid-cols-3 gap-4',
+                        field.state.value.length > 1 && 'grid-cols-4',
+                      )}
+                    >
                       {/* SKU subfield */}
                       <form.Field
                         name={`variants[${index}].sku`}
@@ -400,6 +406,7 @@ export default function ProductForm({}: ProductFormProps) {
                       {field.state.value.length > 1 && (
                         <InputGroupAddon align="inline-end">
                           <InputGroupButton
+                            className="self-end"
                             type="button"
                             variant="ghost"
                             size="icon-xs"
