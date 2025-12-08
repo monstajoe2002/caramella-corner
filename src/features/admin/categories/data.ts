@@ -10,9 +10,10 @@ import {
   updateCategory,
 } from './db'
 import { redirect } from '@tanstack/react-router'
+import slugify from 'slugify'
 const categorySchema = z.object({
   name: z.string().min(1),
-  slug: z.string().min(1),
+  // slug: z.string().min(1),
   subcategories: z
     .array(
       z.object({
@@ -43,7 +44,10 @@ export const getCategoriesWithSubcategories = createServerFn().handler(
 export const createCategory = createServerFn({ method: 'POST' })
   .inputValidator(categorySchema)
   .handler(async ({ data }) => {
-    const newCat = await insertCategory(data)
+    const newCat = await insertCategory({
+      ...data,
+      slug: slugify(data.name, { lower: true }),
+    })
     if (!newCat) {
       return {
         error: true,
@@ -76,7 +80,10 @@ export const editCategory = createServerFn({ method: 'POST' })
   )
   .handler(async ({ data: { id, ...data } }) => {
     // TODO: Fix invalidation
-    const newCat = await updateCategory(id, data)
+    const newCat = await updateCategory(id, {
+      ...data,
+      slug: slugify(data.name, { lower: true }),
+    })
     if (!newCat) {
       return {
         error: true,
