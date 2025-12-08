@@ -291,7 +291,7 @@ export default function ProductForm({}: ProductFormProps) {
                 </FieldDescription>
                 <FieldGroup>
                   {field.state.value.map((_, index) => (
-                    <>
+                    <div className="md:grid grid-cols-4 flex flex-col gap-4">
                       {/* SKU subfield */}
                       <form.Field
                         name={`variants[${index}].sku`}
@@ -371,9 +371,7 @@ export default function ProductForm({}: ProductFormProps) {
                             !subField.state.meta.isValid
                           return (
                             <Field data-invalid={isSubFieldInvalid}>
-                              <FieldLabel htmlFor={field.name}>
-                                Color
-                              </FieldLabel>
+                              <FieldLabel htmlFor={field.name}>Size</FieldLabel>
                               <FieldContent>
                                 <InputGroup>
                                   <InputGroupInput
@@ -411,7 +409,7 @@ export default function ProductForm({}: ProductFormProps) {
                           </InputGroupButton>
                         </InputGroupAddon>
                       )}
-                    </>
+                    </div>
                   ))}
                 </FieldGroup>
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
