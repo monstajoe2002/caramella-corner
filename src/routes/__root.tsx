@@ -57,10 +57,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             ]}
           />
           <Scripts />
-          <script
-            src="https://upload-widget.cloudinary.com/latest/global/all.js"
-            type="text/javascript"
-          ></script>
         </RootQueryClient>
       </body>
     </html>
