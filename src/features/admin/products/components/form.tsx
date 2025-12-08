@@ -30,10 +30,17 @@ import {
   InputGroupText,
 } from '@/components/ui/input-group'
 import { Button } from '@/components/ui/button'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { LoadingSwap } from '@/components/ui/loading-swap'
 import { PlusIcon } from 'lucide-react'
-import ImagekitUpload from './imagekit-upload'
+import ImagekitUpload, { authenticator } from './imagekit-upload'
+import {
+  ImageKitAbortError,
+  ImageKitInvalidRequestError,
+  ImageKitServerError,
+  ImageKitUploadNetworkError,
+  upload,
+} from '@imagekit/react'
 
 // Product form schema based on drizzle-orm products schema
 export const productFormSchema = z.object({
@@ -69,6 +76,63 @@ export default function ProductForm({}: ProductFormProps) {
       onSubmit: productFormSchema,
     },
   })
+  // Create an AbortController instance to provide an option to cancel the upload if needed.
+  const abortController = new AbortController()
+
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const handleUpload = async () => {
+    // Access the file input element using the ref
+    const fileInput = fileInputRef.current
+    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+      alert('Please select a file to upload')
+      return
+    }
+
+    // Extract all files from the file input
+    const files = Array.from(fileInput.files)
+
+    for (const file of files) {
+      // Retrieve authentication parameters for the upload.
+      let authParams
+      try {
+        authParams = await authenticator()
+      } catch (authError) {
+        console.error('Failed to authenticate for upload:', authError)
+        return
+      }
+      const { signature, expire, token } = authParams
+
+      // Call the ImageKit SDK upload function with the required parameters and callbacks.
+      try {
+        const uploadResponse = await upload({
+          // Authentication parameters
+          expire,
+          token,
+          signature,
+          publicKey: import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY,
+          file,
+          fileName: file.name, // Optionally set a custom file name
+
+          // Abort signal to allow cancellation of the upload if needed.
+          abortSignal: abortController.signal,
+        })
+      } catch (error) {
+        // Handle specific error types provided by the ImageKit SDK.
+        if (error instanceof ImageKitAbortError) {
+          console.error('Upload aborted:', error.reason)
+        } else if (error instanceof ImageKitInvalidRequestError) {
+          console.error('Invalid request:', error.message)
+        } else if (error instanceof ImageKitUploadNetworkError) {
+          console.error('Network error:', error.message)
+        } else if (error instanceof ImageKitServerError) {
+          console.error('Server error:', error.message)
+        } else {
+          // Handle any other errors that may occur.
+          console.error('Upload error:', error)
+        }
+      }
+    }
+  }
   const getCategoriesFn = useServerFn(getCategories)
   const getSubcategoriesByCategoryIdFn = useServerFn(
     getSubcategoriesByCategoryId,
@@ -204,9 +268,7 @@ export default function ProductForm({}: ProductFormProps) {
             return (
               <Field data-invalid={isInvalid}>
                 <FieldLabel htmlFor={field.name}>Images</FieldLabel>
-                {/* <Input
-                  type="file"
-                  multiple
+                <ImagekitUpload
                   id={field.name}
                   name={field.name}
                   value={field.state.value}
@@ -214,8 +276,9 @@ export default function ProductForm({}: ProductFormProps) {
                   onChange={(e) => field.handleChange(e.target.value)}
                   aria-invalid={isInvalid}
                   autoComplete="off"
-                /> */}
-                <ImagekitUpload />
+                  fileInputRef={fileInputRef}
+                  handleUpload={handleUpload}
+                />
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
             )
