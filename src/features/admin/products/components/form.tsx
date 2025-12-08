@@ -396,6 +396,7 @@ export default function ProductForm({}: ProductFormProps) {
                           )
                         }}
                       />
+                      {/* delete button */}
                       {field.state.value.length > 1 && (
                         <InputGroupAddon align="inline-end">
                           <InputGroupButton
@@ -412,6 +413,18 @@ export default function ProductForm({}: ProductFormProps) {
                     </div>
                   ))}
                 </FieldGroup>
+                {/* add button outside the grid */}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    field.pushValue({ color: '', size: '', sku: '' })
+                  }
+                  disabled={field.state.value.length >= 5}
+                >
+                  Add Variant
+                </Button>
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </FieldSet>
             )
