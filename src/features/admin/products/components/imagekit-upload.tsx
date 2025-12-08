@@ -6,6 +6,7 @@ import {
   ImageKitServerError,
   ImageKitUploadNetworkError,
   upload,
+  UploadResponse,
 } from '@imagekit/react'
 import { useRef, useState } from 'react'
 
@@ -71,7 +72,7 @@ const UploadExample = () => {
     }
 
     // Extract the first file from the file input
-    const file = fileInput.files[0]
+    const files = fileInput.files
 
     // Retrieve authentication parameters for the upload.
     let authParams
@@ -85,22 +86,25 @@ const UploadExample = () => {
 
     // Call the ImageKit SDK upload function with the required parameters and callbacks.
     try {
-      const uploadResponse = await upload({
-        // Authentication parameters
-        expire,
-        token,
-        signature,
-        publicKey: import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY,
-        file,
-        fileName: file.name, // Optionally set a custom file name
-        // Progress callback to update upload progress state
-        onProgress: (event) => {
-          setProgress((event.loaded / event.total) * 100)
-        },
-        // Abort signal to allow cancellation of the upload if needed.
-        abortSignal: abortController.signal,
-      })
-      console.log('Upload response:', uploadResponse)
+      let uploadResponse: UploadResponse | null = null
+      for (const file of files) {
+        uploadResponse = await upload({
+          // Authentication parameters
+          expire,
+          token,
+          signature,
+          publicKey: import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY,
+          file,
+          fileName: file.name, // Optionally set a custom file name
+          // Progress callback to update upload progress state
+          onProgress: (event) => {
+            setProgress((event.loaded / event.total) * 100)
+          },
+          // Abort signal to allow cancellation of the upload if needed.
+          abortSignal: abortController.signal,
+        })
+      }
+      if (uploadResponse) console.log('Upload response:', uploadResponse)
     } catch (error) {
       // Handle specific error types provided by the ImageKit SDK.
       if (error instanceof ImageKitAbortError) {
@@ -121,7 +125,7 @@ const UploadExample = () => {
   return (
     <>
       {/* File input element using React ref */}
-      <Input type="file" ref={fileInputRef} />
+      <Input multiple type="file" ref={fileInputRef} />
       {/* Button to trigger the upload process */}
       <Button type="button" onClick={handleUpload}>
         Upload file
