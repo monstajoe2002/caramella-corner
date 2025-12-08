@@ -5,6 +5,7 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldLegend,
   FieldSet,
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
@@ -26,13 +27,14 @@ import { getCategories } from '../../categories/data'
 import {
   InputGroup,
   InputGroupAddon,
+  InputGroupButton,
   InputGroupInput,
   InputGroupText,
 } from '@/components/ui/input-group'
 import { Button } from '@/components/ui/button'
 import { useRef, useState } from 'react'
 import { LoadingSwap } from '@/components/ui/loading-swap'
-import { PlusIcon } from 'lucide-react'
+import { PlusIcon, XIcon } from 'lucide-react'
 import ImagekitUpload, { authenticator } from './imagekit-upload'
 import {
   ImageKitAbortError,
@@ -43,9 +45,9 @@ import {
 } from '@imagekit/react'
 
 const variantsSchema = z.object({
-  sku: z.string().min(1, 'SKU is required'),
-  color: z.string().optional(),
-  size: z.string().optional(),
+  sku: z.string().min(1, 'SKU is required').toUpperCase(),
+  color: z.string(),
+  size: z.string(),
 })
 // Product form schema based on drizzle-orm products schema
 export const productFormSchema = z.object({
@@ -77,9 +79,17 @@ export default function ProductForm({}: ProductFormProps) {
       subcategoryId: '',
       active: true,
       quantity: 0,
+      variants: [
+        {
+          sku: '',
+          color: '',
+          size: '',
+        },
+      ],
     },
     validators: {
       onSubmit: productFormSchema,
+      onBlur: productFormSchema,
     },
   })
   // Create an AbortController instance to provide an option to cancel the upload if needed.
@@ -263,6 +273,149 @@ export default function ProductForm({}: ProductFormProps) {
                 <FieldDescription>Your product's price.</FieldDescription>
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
+            )
+          }}
+        />
+        {/* variants field goes here */}
+        <form.Field
+          name="variants"
+          mode="array"
+          children={(field) => {
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid
+            return (
+              <FieldSet>
+                <FieldLegend variant="label">Variants</FieldLegend>
+                <FieldDescription>
+                  Add different variants of your product here
+                </FieldDescription>
+                <FieldGroup>
+                  {field.state.value.map((_, index) => (
+                    <>
+                      {/* SKU subfield */}
+                      <form.Field
+                        name={`variants[${index}].sku`}
+                        children={(subField) => {
+                          const isSubFieldInvalid =
+                            subField.state.meta.isTouched &&
+                            !subField.state.meta.isValid
+                          return (
+                            <Field data-invalid={isSubFieldInvalid}>
+                              <FieldLabel htmlFor={field.name}>SKU</FieldLabel>
+                              <FieldContent>
+                                <InputGroup>
+                                  <InputGroupInput
+                                    id={`form-variants-array-sku-${index}`}
+                                    name={subField.name}
+                                    value={subField.state.value}
+                                    onBlur={subField.handleBlur}
+                                    onChange={(e) =>
+                                      subField.handleChange(e.target.value)
+                                    }
+                                    aria-invalid={isSubFieldInvalid}
+                                    placeholder="P001"
+                                  />
+                                </InputGroup>
+                                {isSubFieldInvalid && (
+                                  <FieldError
+                                    errors={subField.state.meta.errors}
+                                  />
+                                )}
+                              </FieldContent>
+                            </Field>
+                          )
+                        }}
+                      />
+                      {/* color subfield */}
+                      <form.Field
+                        name={`variants[${index}].color`}
+                        children={(subField) => {
+                          const isSubFieldInvalid =
+                            subField.state.meta.isTouched &&
+                            !subField.state.meta.isValid
+                          return (
+                            <Field data-invalid={isSubFieldInvalid}>
+                              <FieldLabel htmlFor={field.name}>
+                                Color
+                              </FieldLabel>
+                              <FieldContent>
+                                <InputGroup>
+                                  <InputGroupInput
+                                    id={`form-variants-array-color-${index}`}
+                                    name={subField.name}
+                                    value={subField.state.value}
+                                    onBlur={subField.handleBlur}
+                                    onChange={(e) =>
+                                      subField.handleChange(e.target.value)
+                                    }
+                                    aria-invalid={isSubFieldInvalid}
+                                    placeholder="Red"
+                                  />
+                                </InputGroup>
+                                {isSubFieldInvalid && (
+                                  <FieldError
+                                    errors={subField.state.meta.errors}
+                                  />
+                                )}
+                              </FieldContent>
+                            </Field>
+                          )
+                        }}
+                      />
+                      {/* size subfield */}
+                      <form.Field
+                        name={`variants[${index}].size`}
+                        children={(subField) => {
+                          const isSubFieldInvalid =
+                            subField.state.meta.isTouched &&
+                            !subField.state.meta.isValid
+                          return (
+                            <Field data-invalid={isSubFieldInvalid}>
+                              <FieldLabel htmlFor={field.name}>
+                                Color
+                              </FieldLabel>
+                              <FieldContent>
+                                <InputGroup>
+                                  <InputGroupInput
+                                    id={`form-variants-array-size-${index}`}
+                                    name={subField.name}
+                                    value={subField.state.value}
+                                    onBlur={subField.handleBlur}
+                                    onChange={(e) =>
+                                      subField.handleChange(e.target.value)
+                                    }
+                                    aria-invalid={isSubFieldInvalid}
+                                    placeholder="XL"
+                                  />
+                                </InputGroup>
+                                {isSubFieldInvalid && (
+                                  <FieldError
+                                    errors={subField.state.meta.errors}
+                                  />
+                                )}
+                              </FieldContent>
+                            </Field>
+                          )
+                        }}
+                      />
+                      {field.state.value.length > 1 && (
+                        <InputGroupAddon align="inline-end">
+                          <InputGroupButton
+                            type="button"
+                            variant="ghost"
+                            size="icon-xs"
+                            onClick={() => field.removeValue(index)}
+                            aria-label={`Remove variant ${index + 1}`}
+                          >
+                            <XIcon />
+                          </InputGroupButton>
+                        </InputGroupAddon>
+                      )}
+                    </>
+                  ))}
+                </FieldGroup>
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </FieldSet>
             )
           }}
         />
