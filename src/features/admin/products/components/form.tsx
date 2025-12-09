@@ -119,6 +119,7 @@ export default function ProductForm({ data }: ProductFormProps) {
         })
       } catch (error) {
         // Handle specific error types provided by the ImageKit SDK.
+        // TODO: display errors in a toast
         if (error instanceof ImageKitAbortError) {
           console.error('Upload aborted:', error.reason)
         } else if (error instanceof ImageKitInvalidRequestError) {
