@@ -52,6 +52,7 @@ type ProductFormProps = {
 
 export default function ProductForm({ data }: ProductFormProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const [catId, setCatId] = useState('')
   const form = useForm({
     defaultValues: {
       name: '',
@@ -140,7 +141,6 @@ export default function ProductForm({ data }: ProductFormProps) {
     getSubcategoriesByCategoryId,
   )
 
-  const catId = form.getFieldValue('categoryId')
   const { data: categories } = useQuery({
     queryKey: ['categories'],
     queryFn: getCategoriesFn,
@@ -466,7 +466,10 @@ export default function ProductForm({ data }: ProductFormProps) {
                   <Select
                     name={field.name}
                     value={field.state.value}
-                    onValueChange={field.handleChange}
+                    onValueChange={(val) => {
+                      field.handleChange(val)
+                      setCatId(val)
+                    }}
                     aria-invalid={isInvalid}
                     autoComplete="off"
                   >
