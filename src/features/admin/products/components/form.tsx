@@ -52,6 +52,7 @@ type ProductFormProps = {
 
 export default function ProductForm({ data }: ProductFormProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const [images, setImages] = useState<string[]>([])
   const [catId, setCatId] = useState('')
   const form = useForm({
     defaultValues: {
@@ -75,6 +76,11 @@ export default function ProductForm({ data }: ProductFormProps) {
     validators: {
       onSubmit: productSchema,
       onBlur: productSchema,
+    },
+    onSubmit: ({ value }) => {
+      handleUpload()
+        .then(() => form.setFieldValue('images', images))
+        .then(() => console.log(value))
     },
   })
   // Create an AbortController instance to provide an option to cancel the upload if needed.
@@ -118,6 +124,7 @@ export default function ProductForm({ data }: ProductFormProps) {
           // Abort signal to allow cancellation of the upload if needed.
           abortSignal: abortController.signal,
         })
+        setImages((prev) => [...prev, uploadResponse.url!])
       } catch (error) {
         // Handle specific error types provided by the ImageKit SDK.
         // TODO: display errors in a toast
