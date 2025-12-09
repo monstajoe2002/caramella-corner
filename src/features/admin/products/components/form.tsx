@@ -20,7 +20,6 @@ import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { useForm } from '@tanstack/react-form'
 import { useServerFn } from '@tanstack/react-start'
-import { z } from 'zod'
 import { getSubcategoriesByCategoryId } from '../../categories/data'
 import { useQuery } from '@tanstack/react-query'
 import { getCategories } from '../../categories/data'
@@ -45,27 +44,8 @@ import {
 } from '@imagekit/react'
 import { cn } from '@/lib/utils'
 import { ProductWithVariants } from '@/db/types'
+import { productSchema } from '@/lib/schemas'
 
-const variantsSchema = z.object({
-  sku: z.string().min(1, 'SKU is required').toUpperCase(),
-  color: z.string(),
-  size: z.string(),
-})
-// Product form schema based on drizzle-orm products schema
-export const productFormSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  price: z
-    .number('Price must be a number')
-    .positive('Price must be greater than 0'),
-  description: z.string().min(1, 'Proper description is required'),
-  material: z.string().min(1, 'Material is required'),
-  images: z.url('Invalid image URL'), // stored as text, could be JSON string or similar
-  variants: z.array(variantsSchema),
-  categoryId: z.uuid('Category ID must be a valid UUID'),
-  subcategoryId: z.uuid('Subcategory ID must be a valid UUID'),
-  active: z.boolean(),
-  quantity: z.number().int().nonnegative(),
-})
 type ProductFormProps = {
   data?: ProductWithVariants
 }
@@ -78,7 +58,7 @@ export default function ProductForm({ data }: ProductFormProps) {
       description: '',
       price: 0,
       material: '',
-      images: '',
+      images: [] as string[],
       categoryId: '',
       subcategoryId: '',
       active: true,
@@ -92,8 +72,8 @@ export default function ProductForm({ data }: ProductFormProps) {
       ],
     },
     validators: {
-      onSubmit: productFormSchema,
-      onBlur: productFormSchema,
+      onSubmit: productSchema,
+      onBlur: productSchema,
     },
   })
   // Create an AbortController instance to provide an option to cancel the upload if needed.
@@ -454,7 +434,14 @@ export default function ProductForm({ data }: ProductFormProps) {
                   name={field.name}
                   value={field.state.value}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={(e) => {
+                    const newValue = e.target.value
+                    field.handleChange(
+                      field.state.value && field.state.value.length
+                        ? [...field.state.value, newValue]
+                        : [newValue],
+                    )
+                  }}
                   aria-invalid={isInvalid}
                   autoComplete="off"
                   fileInputRef={fileInputRef}
