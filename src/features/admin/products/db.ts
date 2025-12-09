@@ -8,7 +8,7 @@ export async function insertProduct(product: NewProductWithVariants) {
     if (product.variants?.length) {
       const variantValues = product.variants.map((v) => ({
         ...v,
-        productId: v.productId,
+        productId: newProduct.id,
       }))
       await trx.insert(variants).values(variantValues)
     }
