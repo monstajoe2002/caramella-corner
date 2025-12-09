@@ -12,6 +12,7 @@ export const createCategory = createServerFn({ method: 'POST' })
     const newCat = await insertCategory({
       ...data,
       slug: slugify(data.name, { lower: true }),
+      price: String(data.price),
     })
     if (!newCat) {
       return {

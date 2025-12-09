@@ -11,7 +11,7 @@ export const productSchema = z.object({
     .positive('Price must be greater than 0'),
   description: z.string().min(1, 'Proper description is required'),
   material: z.string().min(1, 'Material is required'),
-  images: z.url('Invalid image URL'), // stored as text, could be JSON string or similar
+  images: z.array(z.url('Invalid image URL')), // stored as text, could be JSON string or similar
   variants: z.array(variantsSchema),
   categoryId: z.uuid('Category ID must be a valid UUID'),
   subcategoryId: z.uuid('Subcategory ID must be a valid UUID'),
