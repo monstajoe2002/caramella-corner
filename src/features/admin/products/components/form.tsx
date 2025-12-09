@@ -45,6 +45,8 @@ import {
 import { cn } from '@/lib/utils'
 import { ProductWithVariants } from '@/db/types'
 import { productSchema } from '@/lib/schemas'
+import { insertProduct } from '../db'
+import slugify from 'slugify'
 
 type ProductFormProps = {
   data?: ProductWithVariants
@@ -54,6 +56,8 @@ export default function ProductForm({ data }: ProductFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [images, setImages] = useState<string[]>([])
   const [catId, setCatId] = useState('')
+  const createProductFn = useServerFn(insertProduct)
+  // const editProductFn = useServerFn(editProduct)
   const form = useForm({
     defaultValues: {
       name: '',
@@ -77,10 +81,36 @@ export default function ProductForm({ data }: ProductFormProps) {
       onSubmit: productSchema,
       onBlur: productSchema,
     },
-    onSubmit: ({ value }) => {
-      handleUpload()
-        .then(() => form.setFieldValue('images', images))
-        .then(() => console.log(value))
+    onSubmit: async ({ value }) => {
+      setIsLoading(true)
+      if (!data) {
+        const res = await createProductFn({
+          ...value,
+          images,
+          categoryId: catId,
+          slug: slugify(value.name, { lower: true }),
+          price: String(value.price),
+        })
+        if (res.error) {
+          alert(res.message)
+        }
+      } else {
+        // const res = await editCategoryFn({
+        //   data: {
+        //     id: data.id,
+        //     name: value.name,
+        //     // slug: slugify(value.name, { lower: true }),
+        //     subcategories: selected.map((sel) => ({
+        //       name: sel,
+        //       slug: slugify(sel, { lower: true }),
+        //     })),
+        //   },
+        // })
+        // if (res.error) {
+        //   alert(res.message)
+        // }
+      }
+      setIsLoading(false)
     },
   })
   // Create an AbortController instance to provide an option to cancel the upload if needed.
