@@ -296,6 +296,7 @@ export default function ProductForm({ data }: ProductFormProps) {
                 <FieldGroup>
                   {field.state.value.map((_, index) => (
                     <div
+                      key={`variants[${index}]`}
                       className={cn(
                         'md:grid flex flex-col grid-cols-3 gap-4',
                         field.state.value.length > 1 && 'grid-cols-4',
@@ -489,7 +490,11 @@ export default function ProductForm({ data }: ProductFormProps) {
                     </SelectTrigger>
                     <SelectContent position="item-aligned">
                       {categories?.map((c) => {
-                        return <SelectItem value={c.id}>{c.name}</SelectItem>
+                        return (
+                          <SelectItem key={c.id} value={c.id}>
+                            {c.name}
+                          </SelectItem>
+                        )
                       })}
                     </SelectContent>
                   </Select>
@@ -531,7 +536,9 @@ export default function ProductForm({ data }: ProductFormProps) {
                             <SelectContent position="item-aligned">
                               {subcategories?.map((s) => {
                                 return (
-                                  <SelectItem value={s.id}>{s.name}</SelectItem>
+                                  <SelectItem key={s.id} value={s.id}>
+                                    {s.name}
+                                  </SelectItem>
                                 )
                               })}
                             </SelectContent>
