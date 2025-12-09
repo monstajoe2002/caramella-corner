@@ -111,7 +111,8 @@ export default function ProductForm({ data }: ProductFormProps) {
           signature,
           publicKey: import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY,
           file,
-          fileName: file.name, // Optionally set a custom file name
+          folder: 'products',
+          fileName: file.name,
 
           // Abort signal to allow cancellation of the upload if needed.
           abortSignal: abortController.signal,
