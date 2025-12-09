@@ -45,8 +45,8 @@ import {
 import { cn } from '@/lib/utils'
 import { ProductWithVariants } from '@/db/types'
 import { productSchema } from '@/lib/schemas'
-import { insertProduct } from '../db'
 import slugify from 'slugify'
+import { createProduct } from '../data'
 
 type ProductFormProps = {
   data?: ProductWithVariants
@@ -56,7 +56,7 @@ export default function ProductForm({ data }: ProductFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [images, setImages] = useState<string[]>([])
   const [catId, setCatId] = useState('')
-  const createProductFn = useServerFn(insertProduct)
+  const createProductFn = useServerFn(createProduct)
   // const editProductFn = useServerFn(editProduct)
   const form = useForm({
     defaultValues: {
@@ -85,11 +85,13 @@ export default function ProductForm({ data }: ProductFormProps) {
       setIsLoading(true)
       if (!data) {
         const res = await createProductFn({
-          ...value,
-          images,
-          categoryId: catId,
-          slug: slugify(value.name, { lower: true }),
-          price: String(value.price),
+          data: {
+            ...value,
+            images,
+            categoryId: catId,
+            slug: slugify(value.name, { lower: true }),
+            price: value.price,
+          },
         })
         if (res.error) {
           alert(res.message)
