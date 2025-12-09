@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ComponentProps, RefObject } from 'react'
 interface ImagekitUploadProps {
@@ -37,10 +36,6 @@ const ImagekitUpload = ({
     <>
       {/* File input element using React ref */}
       <Input multiple type="file" ref={fileInputRef} {...props} />
-      {/* Button to trigger the upload process */}
-      <Button type="button" onClick={handleUpload}>
-        Upload file
-      </Button>
     </>
   )
 }
