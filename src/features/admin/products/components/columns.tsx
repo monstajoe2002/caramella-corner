@@ -1,4 +1,4 @@
-import { CategoryWithSubcategories, ProductWithVariants } from '@/db/types'
+import { ProductWithVariants } from '@/db/types'
 import { ColumnDef } from '@tanstack/react-table'
 import { MoreHorizontal, PencilIcon, Trash2Icon } from 'lucide-react'
 
@@ -22,7 +22,7 @@ import { useServerFn } from '@tanstack/react-start'
 import { deleteProduct } from '../data'
 import { ActionButton } from '@/components/ui/action-button'
 import { useState } from 'react'
-import { useRouter } from '@tanstack/react-router'
+import { Link, useRouter } from '@tanstack/react-router'
 import { Image } from '@imagekit/react'
 export const columns: ColumnDef<ProductWithVariants>[] = [
   {
@@ -77,15 +77,12 @@ export const columns: ColumnDef<ProductWithVariants>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              {/* <DropdownMenuItem asChild>
-                <Link
-                  params={{ id: category.id }}
-                  to="/admin/categories/$id/edit"
-                >
+              <DropdownMenuItem asChild>
+                <Link params={{ id: product.id }} to="/admin/products/$id/edit">
                   <PencilIcon />
                   <span>Edit</span>
                 </Link>
-              </DropdownMenuItem> */}
+              </DropdownMenuItem>
               <DialogTrigger asChild>
                 <DropdownMenuItem variant="destructive">
                   <Trash2Icon />
