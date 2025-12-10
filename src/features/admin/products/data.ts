@@ -1,6 +1,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import z from 'zod'
 import {
+  getProductById as getProductByIdDb,
   getProductsWithVariants as getProductsWithVariantsDb,
   insertProduct,
   deleteProduct as deleteProductDb,
@@ -17,6 +18,13 @@ export const getProductsWithVariants = createServerFn().handler(async () => {
     },
   )
 })
+export const getProductById = createServerFn({ method: 'GET' })
+  .inputValidator((data: { id: string }) => data)
+  .handler(async ({ data: { id } }) => {
+    return await Sentry.startSpan({ name: 'getProductById' }, async () => {
+      return await getProductByIdDb(id)
+    })
+  })
 
 export const createProduct = createServerFn({ method: 'POST' })
   .inputValidator(productSchema.extend({ slug: z.string().min(1).slugify() }))
