@@ -1,7 +1,6 @@
 import { Input } from '@/components/ui/input'
 import { ComponentProps, RefObject } from 'react'
 interface ImagekitUploadProps {
-  handleUpload: () => Promise<void>
   fileInputRef: RefObject<HTMLInputElement | null>
 }
 export const authenticator = async () => {
@@ -28,7 +27,6 @@ export const authenticator = async () => {
 }
 // UploadExample component demonstrates file uploading using ImageKit's React SDK.
 const ImagekitUpload = ({
-  handleUpload,
   fileInputRef,
   ...props
 }: ImagekitUploadProps & ComponentProps<'input'>) => {

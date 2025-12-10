@@ -486,7 +486,6 @@ export default function ProductForm({ data }: ProductFormProps) {
                   aria-invalid={isInvalid}
                   autoComplete="off"
                   fileInputRef={fileInputRef}
-                  handleUpload={handleUpload}
                 />
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
