@@ -22,7 +22,7 @@ import { useServerFn } from '@tanstack/react-start'
 import { deleteProduct } from '../data'
 import { ActionButton } from '@/components/ui/action-button'
 import { useState } from 'react'
-import { Link, useRouter } from '@tanstack/react-router'
+import { useRouter } from '@tanstack/react-router'
 import { Image } from '@imagekit/react'
 export const columns: ColumnDef<ProductWithVariants>[] = [
   {
@@ -59,66 +59,66 @@ export const columns: ColumnDef<ProductWithVariants>[] = [
     },
   },
   // TODO: implement actions column
-  // {
-  //   id: 'actions',
-  //   cell: ({ row }) => {
-  //     const [isDialogOpen, setIsDialogOpen] = useState(false)
-  //     const category = row.original
-  //     const deleteCategoryFn = useServerFn(deleteCategory)
-  //     const router = useRouter()
+  {
+    id: 'actions',
+    cell: ({ row }) => {
+      const [isDialogOpen, setIsDialogOpen] = useState(false)
+      const product = row.original
+      const deleteProductFn = useServerFn(deleteProduct)
+      const router = useRouter()
 
-  //     return (
-  //       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-  //         <DropdownMenu>
-  //           <DropdownMenuTrigger asChild>
-  //             <Button variant="ghost" className="h-8 w-8 p-0">
-  //               <span className="sr-only">Open menu</span>
-  //               <MoreHorizontal className="h-4 w-4" />
-  //             </Button>
-  //           </DropdownMenuTrigger>
-  //           <DropdownMenuContent align="end">
-  //             <DropdownMenuItem asChild>
-  //               <Link
-  //                 params={{ id: category.id }}
-  //                 to="/admin/categories/$id/edit"
-  //               >
-  //                 <PencilIcon />
-  //                 <span>Edit</span>
-  //               </Link>
-  //             </DropdownMenuItem>
-  //             <DialogTrigger asChild>
-  //               <DropdownMenuItem variant="destructive">
-  //                 <Trash2Icon />
-  //                 <span>Delete</span>
-  //               </DropdownMenuItem>
-  //             </DialogTrigger>
-  //           </DropdownMenuContent>
-  //         </DropdownMenu>
-  //         <DialogContent>
-  //           <DialogHeader>
-  //             <DialogTitle>Are you absolutely sure?</DialogTitle>
-  //             <DialogDescription>
-  //               This action cannot be undone. Are you sure you want to
-  //               permanently delete this category?
-  //             </DialogDescription>
-  //           </DialogHeader>
-  //           <DialogFooter>
-  //             <ActionButton
-  //               action={async () => {
-  //                 const res = await deleteCategoryFn({
-  //                   data: { id: category.id },
-  //                 })
-  //                 setIsDialogOpen(false)
-  //                 router.invalidate()
-  //                 return res
-  //               }}
-  //             >
-  //               Confirm
-  //             </ActionButton>
-  //           </DialogFooter>
-  //         </DialogContent>
-  //       </Dialog>
-  //     )
-  //   },
-  // },
+      return (
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {/* <DropdownMenuItem asChild>
+                <Link
+                  params={{ id: category.id }}
+                  to="/admin/categories/$id/edit"
+                >
+                  <PencilIcon />
+                  <span>Edit</span>
+                </Link>
+              </DropdownMenuItem> */}
+              <DialogTrigger asChild>
+                <DropdownMenuItem variant="destructive">
+                  <Trash2Icon />
+                  <span>Delete</span>
+                </DropdownMenuItem>
+              </DialogTrigger>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Are you absolutely sure?</DialogTitle>
+              <DialogDescription>
+                This action cannot be undone. Are you sure you want to
+                permanently delete this product?
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <ActionButton
+                action={async () => {
+                  const res = await deleteProductFn({
+                    data: { id: product.id },
+                  })
+                  setIsDialogOpen(false)
+                  router.invalidate()
+                  return res
+                }}
+              >
+                Confirm
+              </ActionButton>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )
+    },
+  },
 ]
