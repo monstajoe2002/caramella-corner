@@ -1,4 +1,4 @@
-import { CategoryWithSubcategories } from '@/db/types'
+import { CategoryWithSubcategories, ProductWithVariants } from '@/db/types'
 import { ColumnDef } from '@tanstack/react-table'
 import { MoreHorizontal, PencilIcon, Trash2Icon } from 'lucide-react'
 
@@ -23,7 +23,7 @@ import { deleteCategory } from '../data'
 import { ActionButton } from '@/components/ui/action-button'
 import { useState } from 'react'
 import { Link, useRouter } from '@tanstack/react-router'
-export const columns: ColumnDef<CategoryWithSubcategories>[] = [
+export const columns: ColumnDef<ProductWithVariants>[] = [
   {
     accessorKey: 'name',
     header: 'Name',
@@ -32,13 +32,10 @@ export const columns: ColumnDef<CategoryWithSubcategories>[] = [
     },
   },
   {
-    accessorKey: 'subcategories',
-    header: 'Subcategories',
+    accessorKey: 'category',
+    header: 'Category',
     cell({ row }) {
-      const formattedSubcats = row.original.subcategories
-        .map((s) => s.name)
-        .join(', ')
-      return formattedSubcats
+      return row.original.category
     },
   },
   // TODO: implement actions column
