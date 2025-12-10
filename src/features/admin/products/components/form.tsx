@@ -36,7 +36,6 @@ import { LoadingSwap } from '@/components/ui/loading-swap'
 import { PlusIcon, XIcon } from 'lucide-react'
 import ImagekitUpload, { authenticator } from './imagekit-upload'
 import {
-  ImageKitAbortError,
   ImageKitInvalidRequestError,
   ImageKitServerError,
   ImageKitUploadNetworkError,

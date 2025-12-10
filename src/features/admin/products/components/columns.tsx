@@ -23,7 +23,15 @@ import { deleteCategory } from '../data'
 import { ActionButton } from '@/components/ui/action-button'
 import { useState } from 'react'
 import { Link, useRouter } from '@tanstack/react-router'
+import { Image } from '@imagekit/react'
 export const columns: ColumnDef<ProductWithVariants>[] = [
+  {
+    id: 'thumbnail',
+    cell: ({ row }) => {
+      const [image] = row.original.images
+      return <Image src={image} />
+    },
+  },
   {
     accessorKey: 'name',
     header: 'Name',
@@ -35,7 +43,7 @@ export const columns: ColumnDef<ProductWithVariants>[] = [
     accessorKey: 'category',
     header: 'Category',
     cell({ row }) {
-      return row.original.category
+      return row.original.category.name
     },
   },
   // TODO: implement actions column
