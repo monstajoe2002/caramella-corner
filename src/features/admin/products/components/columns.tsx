@@ -50,6 +50,14 @@ export const columns: ColumnDef<ProductWithVariants>[] = [
       return row.original.category.name
     },
   },
+  {
+    accessorKey: 'createdAt',
+    header: 'Created At',
+    cell({ row }) {
+      const [date] = row.original.createdAt.toISOString().split('T')
+      return date
+    },
+  },
   // TODO: implement actions column
   // {
   //   id: 'actions',
