@@ -9,16 +9,14 @@ import slugify from 'slugify'
 import { productSchema } from '@/lib/schemas'
 import { redirect } from '@tanstack/react-router'
 import * as Sentry from '@sentry/tanstackstart-react'
-export const getCategoriesWithSubcategories = createServerFn().handler(
-  async () => {
-    return await Sentry.startSpan(
-      { name: 'getCategoriesWithSubcategories' },
-      async () => {
-        return await getProductsWithVariantsDb()
-      },
-    )
-  },
-)
+export const getProductsWithVariants = createServerFn().handler(async () => {
+  return await Sentry.startSpan(
+    { name: 'getProductsWithVariants' },
+    async () => {
+      return await getProductsWithVariantsDb()
+    },
+  )
+})
 
 export const createProduct = createServerFn({ method: 'POST' })
   .inputValidator(productSchema.extend({ slug: z.string().min(1).slugify() }))
