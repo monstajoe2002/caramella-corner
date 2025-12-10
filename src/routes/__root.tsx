@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import appCss from '../styles.css?url'
 import { PropsWithChildren } from 'react'
 import { Toaster } from '@/components/ui/sonner'
+import { ImageKitProvider } from '@imagekit/react'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -45,20 +46,22 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <RootQueryClient>
-          {children}
-          <Toaster richColors />
-          <TanStackDevtools
-            config={{
-              position: 'bottom-right',
-            }}
-            plugins={[
-              {
-                name: 'Tanstack Router',
-                render: <TanStackRouterDevtoolsPanel />,
-              },
-            ]}
-          />
-          <Scripts />
+          <ImageKitProvider urlEndpoint={import.meta.env.VITE_IMAGEKIT_URL}>
+            {children}
+            <Toaster richColors />
+            <TanStackDevtools
+              config={{
+                position: 'bottom-right',
+              }}
+              plugins={[
+                {
+                  name: 'Tanstack Router',
+                  render: <TanStackRouterDevtoolsPanel />,
+                },
+              ]}
+            />
+            <Scripts />
+          </ImageKitProvider>
         </RootQueryClient>
       </body>
     </html>
