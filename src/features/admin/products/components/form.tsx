@@ -50,7 +50,7 @@ import { createProduct } from '../data'
 import { toast } from 'sonner'
 
 type ProductFormProps = {
-  data?: ProductWithVariants
+  data?: Omit<ProductWithVariants, 'category' | 'subcategory'>
 }
 
 export default function ProductForm({ data }: ProductFormProps) {

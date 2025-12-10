@@ -21,6 +21,8 @@ export type Product = typeof products.$inferSelect
 export type NewProduct = typeof products.$inferInsert
 export type ProductWithVariants = Product & {
   variants: Array<Variant>
+  category: Category
+  subcategory: Subcategory
 }
 export type NewProductWithVariants = NewProduct & {
   variants: Array<NewVariant>
