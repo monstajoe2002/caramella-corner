@@ -54,27 +54,30 @@ type ProductFormProps = {
 
 export default function ProductForm({ data }: ProductFormProps) {
   const [isLoading, setIsLoading] = useState(false)
-  const [catId, setCatId] = useState('')
+  const [catId, setCatId] = useState(data?.categoryId || '')
   const createProductFn = useServerFn(createProduct)
   // const editProductFn = useServerFn(editProduct)
   const form = useForm({
     defaultValues: {
-      name: '',
-      description: '',
-      price: 0,
-      material: '',
+      name: data?.name ?? '',
+      description: data?.description ?? '',
+      price: Number(data?.price) ?? 0,
+      material: data?.material ?? '',
       images: [] as string[],
-      categoryId: '',
-      subcategoryId: '',
-      active: true,
-      quantity: 0,
-      variants: [
-        {
-          sku: '',
-          color: '',
-          size: '',
-        },
-      ],
+      categoryId: data?.categoryId ?? '',
+      subcategoryId: data?.subcategoryId ?? '',
+      active: data?.active ?? true,
+      quantity: data?.quantity ?? 0,
+      variants:
+        data?.variants && data.variants.length > 0
+          ? data.variants
+          : [
+              {
+                sku: '',
+                color: '',
+                size: '',
+              },
+            ],
     },
     validators: {
       onSubmit: productSchema,
@@ -92,6 +95,11 @@ export default function ProductForm({ data }: ProductFormProps) {
             categoryId: catId,
             slug: slugify(value.name, { lower: true }),
             price: value.price,
+            variants: value.variants.map((variant) => ({
+              sku: variant.sku,
+              color: variant.color ?? '',
+              size: variant.size ?? '',
+            })),
           },
         })
         if (res.error) {
@@ -373,7 +381,7 @@ export default function ProductForm({ data }: ProductFormProps) {
                                   <InputGroupInput
                                     id={`form-variants-array-color-${index}`}
                                     name={subField.name}
-                                    value={subField.state.value}
+                                    value={subField.state.value ?? ''}
                                     onBlur={subField.handleBlur}
                                     onChange={(e) =>
                                       subField.handleChange(e.target.value)
@@ -407,7 +415,7 @@ export default function ProductForm({ data }: ProductFormProps) {
                                   <InputGroupInput
                                     id={`form-variants-array-size-${index}`}
                                     name={subField.name}
-                                    value={subField.state.value}
+                                    value={subField.state.value ?? ''}
                                     onBlur={subField.handleBlur}
                                     onChange={(e) =>
                                       subField.handleChange(e.target.value)
