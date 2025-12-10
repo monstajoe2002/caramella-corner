@@ -11,6 +11,7 @@ import {
 } from './db'
 import { redirect } from '@tanstack/react-router'
 import slugify from 'slugify'
+import * as Sentry from '@sentry/tanstackstart-react'
 const categorySchema = z.object({
   name: z.string().min(1),
   // slug: z.string().min(1),
@@ -24,52 +25,74 @@ const categorySchema = z.object({
     .min(1),
 })
 export const getCategories = createServerFn({ method: 'GET' }).handler(
-  getCategoriesDb,
+  async () => {
+    return await Sentry.startSpan({ name: 'getCategories' }, async () => {
+      return await getCategoriesDb()
+    })
+  },
 )
 export const getSubcategoriesByCategoryId = createServerFn({ method: 'GET' })
   .inputValidator((data: { categoryId: string }) => data)
   .handler(async ({ data: { categoryId } }) => {
-    return await getSubcategoriesByCategoryIdDb(categoryId)
+    return await Sentry.startSpan(
+      { name: 'getSubcategoriesByCategoryId' },
+      async () => {
+        return await getSubcategoriesByCategoryIdDb(categoryId)
+      },
+    )
   })
 export const getCategoryById = createServerFn({ method: 'GET' })
   .inputValidator((data: { id: string }) => data)
   .handler(async ({ data: { id } }) => {
-    return await getCategoryByIdDb(id)
+    return await Sentry.startSpan({ name: 'getCategoryById' }, async () => {
+      return await getCategoryByIdDb(id)
+    })
   })
 
 export const getCategoriesWithSubcategories = createServerFn().handler(
-  async () => await getCategoriesWithSubcategoriesDb(),
+  async () => {
+    return await Sentry.startSpan(
+      { name: 'getCategoriesWithSubcategories' },
+      async () => {
+        return await getCategoriesWithSubcategoriesDb()
+      },
+    )
+  },
 )
 
 export const createCategory = createServerFn({ method: 'POST' })
   .inputValidator(categorySchema)
   .handler(async ({ data }) => {
-    const newCat = await insertCategory({
-      ...data,
-      slug: slugify(data.name, { lower: true }),
-    })
-    if (!newCat) {
-      return {
-        error: true,
-        message: 'Error creating category',
+    return await Sentry.startSpan({ name: 'createCategory' }, async () => {
+      const newCat = await insertCategory({
+        ...data,
+        slug: slugify(data.name, { lower: true }),
+      })
+      if (!newCat) {
+        return {
+          error: true,
+          message: 'Error creating category',
+        }
       }
-    }
-    throw redirect({ href: '..', replace: true })
+      throw redirect({ href: '..', replace: true })
+    })
   })
 
 export const deleteCategory = createServerFn({ method: 'POST' })
   .inputValidator(z.object({ id: z.string() }))
   .handler(async ({ data }) => {
-    const deletedCat = await deleteCategoryDb(data.id)
-    if (!deletedCat) {
-      return {
-        error: true,
-        message: 'Error creating category',
+    return await Sentry.startSpan({ name: 'deleteCategory' }, async () => {
+      const deletedCat = await deleteCategoryDb(data.id)
+      if (!deletedCat) {
+        return {
+          error: true,
+          message: 'Error creating category',
+        }
       }
-    }
-    return {
-      error: false,
-    }
+      return {
+        error: false,
+      }
+    })
   })
 
 export const editCategory = createServerFn({ method: 'POST' })
@@ -79,16 +102,18 @@ export const editCategory = createServerFn({ method: 'POST' })
     }),
   )
   .handler(async ({ data: { id, ...data } }) => {
-    // TODO: Fix invalidation
-    const newCat = await updateCategory(id, {
-      ...data,
-      slug: slugify(data.name, { lower: true }),
-    })
-    if (!newCat) {
-      return {
-        error: true,
-        message: 'Error creating category',
+    return await Sentry.startSpan({ name: 'editCategory' }, async () => {
+      // TODO: Fix invalidation
+      const newCat = await updateCategory(id, {
+        ...data,
+        slug: slugify(data.name, { lower: true }),
+      })
+      if (!newCat) {
+        return {
+          error: true,
+          message: 'Error creating category',
+        }
       }
-    }
-    throw redirect({ to: '/admin/categories', replace: true })
+      throw redirect({ to: '/admin/categories', replace: true })
+    })
   })
