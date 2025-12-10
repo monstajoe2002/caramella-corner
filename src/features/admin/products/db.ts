@@ -1,7 +1,11 @@
 import { db } from '@/db'
 import { products, variants } from '@/db/schema'
 import { NewProductWithVariants } from '@/db/types'
-
+export async function getProductsWithVariants() {
+  return await db.query.products.findMany({
+    with: { variants: true, category: true },
+  })
+}
 export async function insertProduct(product: NewProductWithVariants) {
   return db.transaction(async (trx) => {
     const [newProduct] = await db.insert(products).values(product).returning()
