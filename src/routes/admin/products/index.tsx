@@ -15,7 +15,7 @@ function RouteComponent() {
     <div>
       <h1>Products</h1>
       <DataTable
-        newEntryTo={'/admin/categories/new'}
+        newEntryTo={'/admin/products/new'}
         columns={productCols}
         data={data}
       />
