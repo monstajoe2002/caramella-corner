@@ -19,7 +19,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { useServerFn } from '@tanstack/react-start'
-import { deleteCategory } from '../data'
+import { deleteProduct } from '../data'
 import { ActionButton } from '@/components/ui/action-button'
 import { useState } from 'react'
 import { Link, useRouter } from '@tanstack/react-router'

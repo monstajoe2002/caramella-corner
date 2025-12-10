@@ -3,6 +3,7 @@ import z from 'zod'
 import {
   getProductsWithVariants as getProductsWithVariantsDb,
   insertProduct,
+  deleteProduct as deleteProductDb,
 } from './db'
 import slugify from 'slugify'
 import { productSchema } from '@/lib/schemas'
@@ -30,6 +31,17 @@ export const createProduct = createServerFn({ method: 'POST' })
     }
     throw redirect({ href: '..', replace: true })
   })
-export async function deleteProduct(id: string) {
-  return await db.delete(products).where(eq(products.id, id))
-}
+export const deleteProduct = createServerFn({ method: 'POST' })
+  .inputValidator(z.object({ id: z.string() }))
+  .handler(async ({ data }) => {
+    const deletedCat = await deleteProductDb(data.id)
+    if (!deletedCat) {
+      return {
+        error: true,
+        message: 'Error creating product',
+      }
+    }
+    return {
+      error: false,
+    }
+  })
