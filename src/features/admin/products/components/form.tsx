@@ -161,7 +161,6 @@ export default function ProductForm({ data }: ProductFormProps) {
         images.push(uploadResponse.url!)
       } catch (error) {
         // Handle specific error types provided by the ImageKit SDK.
-        // TODO: display errors in a toast
         if (error instanceof ImageKitInvalidRequestError) {
           toast.error(`Invalid request:, ${error.message}`)
         } else if (error instanceof ImageKitUploadNetworkError) {
