@@ -8,9 +8,6 @@ import {
 import slugify from 'slugify'
 import { productSchema } from '@/lib/schemas'
 import { redirect } from '@tanstack/react-router'
-import { products } from '@/db/schema'
-import { db } from '@/db'
-import { eq } from 'drizzle-orm'
 export const getCategoriesWithSubcategories = createServerFn().handler(
   getProductsWithVariantsDb,
 )
