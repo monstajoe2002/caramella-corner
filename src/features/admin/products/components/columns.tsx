@@ -29,7 +29,14 @@ export const columns: ColumnDef<ProductWithVariants>[] = [
     id: 'thumbnail',
     cell: ({ row }) => {
       const [image] = row.original.images
-      return <Image src={image} />
+      return (
+        <div className="object-cover">
+          <Image
+            transformation={[{ width: '100', height: '100' }]}
+            src={image}
+          />
+        </div>
+      )
     },
   },
   {
