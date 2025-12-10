@@ -1,10 +1,15 @@
 import { createServerFn } from '@tanstack/react-start'
 import z from 'zod'
-import { insertProduct } from './db'
+import {
+  getProductsWithVariants as getProductsWithVariantsDb,
+  insertProduct,
+} from './db'
 import slugify from 'slugify'
 import { productSchema } from '@/lib/schemas'
 import { redirect } from '@tanstack/react-router'
-// Product form schema based on drizzle-orm products schema
+export const getCategoriesWithSubcategories = createServerFn().handler(
+  getProductsWithVariantsDb,
+)
 
 export const createProduct = createServerFn({ method: 'POST' })
   .inputValidator(productSchema.extend({ slug: z.string().min(1).slugify() }))
