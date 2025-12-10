@@ -162,17 +162,15 @@ export default function ProductForm({ data }: ProductFormProps) {
       } catch (error) {
         // Handle specific error types provided by the ImageKit SDK.
         // TODO: display errors in a toast
-        if (error instanceof ImageKitAbortError) {
-          console.error('Upload aborted:', error.reason)
-        } else if (error instanceof ImageKitInvalidRequestError) {
-          console.error('Invalid request:', error.message)
+        if (error instanceof ImageKitInvalidRequestError) {
+          toast.error(`Invalid request:, ${error.message}`)
         } else if (error instanceof ImageKitUploadNetworkError) {
-          console.error('Network error:', error.message)
+          toast.error(`Network error: ${error.message}`)
         } else if (error instanceof ImageKitServerError) {
-          console.error('Server error:', error.message)
+          toast.error(`Server error: ${error.message}`)
         } else {
           // Handle any other errors that may occur.
-          console.error('Upload error:', error)
+          toast.error(`Upload error: ${error}`)
         }
       }
     }
