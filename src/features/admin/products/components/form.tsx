@@ -54,7 +54,6 @@ type ProductFormProps = {
 
 export default function ProductForm({ data }: ProductFormProps) {
   const [isLoading, setIsLoading] = useState(false)
-  const [images, setImages] = useState<string[]>([])
   const [catId, setCatId] = useState('')
   const createProductFn = useServerFn(createProduct)
   // const editProductFn = useServerFn(editProduct)
@@ -83,6 +82,8 @@ export default function ProductForm({ data }: ProductFormProps) {
     },
     onSubmit: async ({ value }) => {
       setIsLoading(true)
+      const images = (await handleUpload()) as string[]
+      if (!images) return
       if (!data) {
         const res = await createProductFn({
           data: {
@@ -126,6 +127,7 @@ export default function ProductForm({ data }: ProductFormProps) {
       alert('Please select a file to upload')
       return
     }
+    const images: string[] = []
 
     // Extract all files from the file input
     const files = Array.from(fileInput.files)
@@ -156,7 +158,7 @@ export default function ProductForm({ data }: ProductFormProps) {
           // Abort signal to allow cancellation of the upload if needed.
           abortSignal: abortController.signal,
         })
-        setImages((prev) => [...prev, uploadResponse.url!])
+        images.push(uploadResponse.url!)
       } catch (error) {
         // Handle specific error types provided by the ImageKit SDK.
         // TODO: display errors in a toast
@@ -174,6 +176,7 @@ export default function ProductForm({ data }: ProductFormProps) {
         }
       }
     }
+    return images
   }
   const getCategoriesFn = useServerFn(getCategories)
   const getSubcategoriesByCategoryIdFn = useServerFn(
