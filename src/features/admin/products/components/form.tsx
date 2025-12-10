@@ -47,6 +47,7 @@ import { ProductWithVariants } from '@/db/types'
 import { productSchema } from '@/lib/schemas'
 import slugify from 'slugify'
 import { createProduct } from '../data'
+import { toast } from 'sonner'
 
 type ProductFormProps = {
   data?: ProductWithVariants
@@ -124,7 +125,6 @@ export default function ProductForm({ data }: ProductFormProps) {
     // Access the file input element using the ref
     const fileInput = fileInputRef.current
     if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-      alert('Please select a file to upload')
       return
     }
     const images: string[] = []
