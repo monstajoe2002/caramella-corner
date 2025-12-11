@@ -33,7 +33,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { useRef, useState } from 'react'
 import { LoadingSwap } from '@/components/ui/loading-swap'
-import { PlusIcon, XIcon } from 'lucide-react'
+import { PlusIcon, SaveIcon, XIcon } from 'lucide-react'
 import ImagekitUpload, { authenticator } from './imagekit-upload'
 import {
   Image,
@@ -142,6 +142,7 @@ export default function ProductForm({ data }: ProductFormProps) {
   const abortController = new AbortController()
 
   const fileInputRef = useRef<HTMLInputElement>(null)
+  // TODO: Handle image edit
   const handleUpload = async (slug?: string) => {
     // Access the file input element using the ref
     const fileInput = fileInputRef.current
@@ -680,7 +681,15 @@ export default function ProductForm({ data }: ProductFormProps) {
             isLoading={isLoading}
             className="flex gap-2 items-center"
           >
-            <PlusIcon /> Create
+            {!data ? (
+              <>
+                <PlusIcon /> Create
+              </>
+            ) : (
+              <>
+                <SaveIcon /> Save changes
+              </>
+            )}
           </LoadingSwap>
         </Button>
       </FieldGroup>
