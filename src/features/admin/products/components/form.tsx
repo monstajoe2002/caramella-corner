@@ -46,7 +46,7 @@ import { cn } from '@/lib/utils'
 import { ProductWithVariants } from '@/db/types'
 import { productSchema } from '@/lib/schemas'
 import slugify from 'slugify'
-import { createProduct } from '../data'
+import { createProduct, editProduct } from '../data'
 import { toast } from 'sonner'
 
 type ProductFormProps = {
@@ -57,7 +57,7 @@ export default function ProductForm({ data }: ProductFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [catId, setCatId] = useState(data?.categoryId || '')
   const createProductFn = useServerFn(createProduct)
-  // const editProductFn = useServerFn(editProduct)
+  const editProductFn = useServerFn(editProduct)
   const form = useForm({
     defaultValues: {
       name: data?.name ?? '',
@@ -118,20 +118,22 @@ export default function ProductForm({ data }: ProductFormProps) {
           alert(res.message)
         }
       } else {
-        // const res = await editCategoryFn({
-        //   data: {
-        //     id: data.id,
-        //     name: value.name,
-        //     // slug: slugify(value.name, { lower: true }),
-        //     subcategories: selected.map((sel) => ({
-        //       name: sel,
-        //       slug: slugify(sel, { lower: true }),
-        //     })),
-        //   },
-        // })
-        // if (res.error) {
-        //   alert(res.message)
-        // }
+        const res = await editProductFn({
+          data: {
+            id: data.id,
+            ...value,
+            images: filteredImages,
+            price: Number(value.price),
+            variants: value.variants.map((variant) => ({
+              sku: variant.sku,
+              color: variant.color ?? '',
+              size: variant.size ?? '',
+            })),
+          },
+        })
+        if (res.error) {
+          alert(res.message)
+        }
       }
       setIsLoading(false)
     },
