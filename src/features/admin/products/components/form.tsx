@@ -36,6 +36,7 @@ import { LoadingSwap } from '@/components/ui/loading-swap'
 import { PlusIcon, XIcon } from 'lucide-react'
 import ImagekitUpload, { authenticator } from './imagekit-upload'
 import {
+  Image,
   ImageKitInvalidRequestError,
   ImageKitServerError,
   ImageKitUploadNetworkError,
@@ -85,13 +86,19 @@ export default function ProductForm({ data }: ProductFormProps) {
     },
     onSubmit: async ({ value }) => {
       setIsLoading(true)
-      const images = (await handleUpload()) as string[]
-      if (!images) return
+      const uploadedImages: string[] | undefined = await handleUpload()
+      if (!uploadedImages) {
+        setIsLoading(false)
+        return
+      }
+      // Merge existing images in value.images with newly uploaded images
+      const allImages = [...(value.images ?? []), ...uploadedImages]
+      if (!uploadedImages) return
       if (!data) {
         const res = await createProductFn({
           data: {
             ...value,
-            images,
+            images: allImages,
             categoryId: catId,
             slug: slugify(value.name, { lower: true }),
             price: value.price,
@@ -474,9 +481,21 @@ export default function ProductForm({ data }: ProductFormProps) {
           children={(field) => {
             const isInvalid =
               field.state.meta.isTouched && !field.state.meta.isValid
+            const existingImages = field.state.value ?? []
+
             return (
               <Field data-invalid={isInvalid}>
                 <FieldLabel htmlFor={field.name}>Images</FieldLabel>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {existingImages.map((url, idx) => (
+                    <Image
+                      key={idx}
+                      src={url}
+                      alt={`Product image ${idx + 1}`}
+                      className="w-20 h-20 object-cover rounded"
+                    />
+                  ))}
+                </div>
                 <ImagekitUpload
                   id={field.name}
                   name={field.name}
