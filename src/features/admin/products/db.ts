@@ -63,17 +63,17 @@ export async function updateProduct(
           and(eq(variants.productId, id), notInArray(variants.id, updatedIds)),
         )
 
-      for (const subcat of updatedProduct.variants) {
-        if (subcat.id) {
+      for (const variant of updatedProduct.variants) {
+        if (variant.id) {
           // Update existing variant by id
           await trx
             .update(variants)
-            .set(subcat)
-            .where(eq(variants.id, subcat.id))
+            .set(variant)
+            .where(eq(variants.id, variant.id))
         } else {
           // Insert new variant
           await trx.insert(variants).values({
-            ...subcat,
+            ...variant,
             productId: id,
           })
         }

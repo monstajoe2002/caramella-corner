@@ -5,6 +5,7 @@ import {
   getProductsWithVariants as getProductsWithVariantsDb,
   insertProduct,
   deleteProduct as deleteProductDb,
+  updateProduct,
 } from './db'
 import slugify from 'slugify'
 import { productSchema } from '@/lib/schemas'
@@ -58,5 +59,27 @@ export const deleteProduct = createServerFn({ method: 'POST' })
       return {
         error: false,
       }
+    })
+  })
+export const editProduct = createServerFn({ method: 'POST' })
+  .inputValidator(
+    productSchema.extend({
+      id: z.uuid().min(1),
+    }),
+  )
+  .handler(async ({ data: { id, ...data } }) => {
+    return await Sentry.startSpan({ name: 'editProduct' }, async () => {
+      const newCat = await updateProduct(id, {
+        ...data,
+        slug: slugify(data.name, { lower: true }),
+        price: String(data.price),
+      })
+      if (!newCat) {
+        return {
+          error: true,
+          message: 'Error creating product',
+        }
+      }
+      throw redirect({ to: '/admin/products', replace: true })
     })
   })

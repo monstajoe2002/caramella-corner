@@ -26,6 +26,6 @@ export type ProductWithVariants = Product & {
 }
 export type NewProductWithVariants = NewProduct & {
   variants: Array<NewVariant>
-  category: Category
-  subcategory: Subcategory
+  category?: Category
+  subcategory?: Subcategory
 }
