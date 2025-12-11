@@ -56,6 +56,7 @@ type ProductFormProps = {
 export default function ProductForm({ data }: ProductFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [catId, setCatId] = useState(data?.categoryId || '')
+  const [images, setImages] = useState<string[]>(data?.images ?? [])
   const createProductFn = useServerFn(createProduct)
   const editProductFn = useServerFn(editProduct)
   const form = useForm({
@@ -88,22 +89,25 @@ export default function ProductForm({ data }: ProductFormProps) {
       setIsLoading(true)
       const slug = slugify(value.name, { lower: true })
       const uploadedImages: string[] | undefined = await handleUpload(slug)
-      if (!uploadedImages) {
-        setIsLoading(false)
-        return
-      }
-      // Merge existing images in value.images with newly uploaded images
-      const allImages = [...(value.images ?? []), ...uploadedImages]
-      // Workaround to remove the fakepath from the images array
-      const filteredImages = allImages.filter(
-        (url) => !url.includes('fakepath'),
-      )
+      // Merge images state with newly uploaded images
+      setImages((prevImages) => {
+        // Filter out any with 'fakepath' just in case
+        const filteredExisting = prevImages.filter(
+          (url) => !url.includes('fakepath'),
+        )
+        return [...filteredExisting, ...(uploadedImages ?? [])]
+      })
+      // Use images state merged with new images for submission
+      const finalImages = [
+        ...images.filter((url) => !url.includes('fakepath')),
+        ...(uploadedImages ?? []),
+      ]
       if (!uploadedImages) return
       if (!data) {
         const res = await createProductFn({
           data: {
             ...value,
-            images: filteredImages,
+            images: finalImages,
             categoryId: catId,
             slug,
             price: value.price,
@@ -122,7 +126,7 @@ export default function ProductForm({ data }: ProductFormProps) {
           data: {
             id: data.id,
             ...value,
-            images: filteredImages,
+            images: finalImages,
             price: Number(value.price),
             variants: value.variants.map((variant) => ({
               sku: variant.sku,
@@ -195,7 +199,10 @@ export default function ProductForm({ data }: ProductFormProps) {
         }
       }
     }
-
+    // Clear file input after upload so user can select same files again if needed
+    fileInput.value = ''
+    // Update local images state by adding new uploaded images
+    setImages((prev) => [...prev, ...images])
     return images
   }
   const getCategoriesFn = useServerFn(getCategories)
@@ -213,6 +220,9 @@ export default function ProductForm({ data }: ProductFormProps) {
       getSubcategoriesByCategoryIdFn({ data: { categoryId: catId } }),
     enabled: !!catId,
   })
+  const handleDeleteImage = (url: string) => {
+    setImages((prev) => prev.filter((img) => img !== url))
+  }
   return (
     <form
       onSubmit={(e) => {
@@ -490,15 +500,16 @@ export default function ProductForm({ data }: ProductFormProps) {
           children={(field) => {
             const isInvalid =
               field.state.meta.isTouched && !field.state.meta.isValid
-            const existingImages = data?.images ?? []
             return (
               <Field data-invalid={isInvalid}>
                 <FieldLabel htmlFor={field.name}>Images</FieldLabel>
-                <div className="flex flex-wrap gap-2 mb-2">
-                  {existingImages.map((url, idx) => (
+                <div className="flex flex-wrap gap-4 mb-2">
+                  {images.map((url, idx) => (
                     <div>
                       <Button
                         size={'icon-sm'}
+                        type="button"
+                        onClick={() => handleDeleteImage(url)}
                         variant={'destructive'}
                         className="rounded-full relative translate-x-16 translate-y-5"
                       >
@@ -518,14 +529,7 @@ export default function ProductForm({ data }: ProductFormProps) {
                   name={field.name}
                   value={field.state.value}
                   onBlur={field.handleBlur}
-                  onChange={(e) => {
-                    const newValue = e.target.value
-                    field.handleChange(
-                      field.state.value && field.state.value.length
-                        ? [...field.state.value, newValue]
-                        : [newValue],
-                    )
-                  }}
+                  onChange={() => {}}
                   aria-invalid={isInvalid}
                   autoComplete="off"
                   fileInputRef={fileInputRef}
