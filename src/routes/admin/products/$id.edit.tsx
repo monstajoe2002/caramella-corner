@@ -12,7 +12,7 @@ function RouteComponent() {
   const data: ProductWithVariants = Route.useLoaderData()
   return (
     <div>
-      <h1>Edit Category</h1>
+      <h1>Edit Product</h1>
       <ProductForm data={data} />
     </div>
   )
