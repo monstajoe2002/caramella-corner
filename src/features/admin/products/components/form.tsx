@@ -132,6 +132,7 @@ export default function ProductForm({ data }: ProductFormProps) {
               ...productData,
             },
           })
+          // TODO: fix error handling
           if (res.error) {
             toast.error(res.message)
           } else {
