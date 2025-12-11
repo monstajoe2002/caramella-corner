@@ -496,12 +496,21 @@ export default function ProductForm({ data }: ProductFormProps) {
                 <FieldLabel htmlFor={field.name}>Images</FieldLabel>
                 <div className="flex flex-wrap gap-2 mb-2">
                   {existingImages.map((url, idx) => (
-                    <Image
-                      key={idx}
-                      src={url}
-                      alt={`Product image ${idx + 1}`}
-                      className="w-20 h-20 object-cover rounded"
-                    />
+                    <div>
+                      <Button
+                        size={'icon-sm'}
+                        variant={'destructive'}
+                        className="rounded-full relative translate-x-16 translate-y-5"
+                      >
+                        <XIcon />
+                      </Button>
+                      <Image
+                        key={idx}
+                        src={url}
+                        alt={`Product image ${idx + 1}`}
+                        className="w-20 h-20 object-cover rounded"
+                      />
+                    </div>
                   ))}
                 </div>
                 <ImagekitUpload
