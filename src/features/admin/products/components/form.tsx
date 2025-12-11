@@ -88,58 +88,59 @@ export default function ProductForm({ data }: ProductFormProps) {
     onSubmit: async ({ value }) => {
       setIsLoading(true)
       const slug = slugify(value.name, { lower: true })
-      const uploadedImages: string[] | undefined = await handleUpload(slug)
-      // Merge images state with newly uploaded images
-      setImages((prevImages) => {
-        // Filter out any with 'fakepath' just in case
-        const filteredExisting = prevImages.filter(
-          (url) => !url.includes('fakepath'),
-        )
-        return [...filteredExisting, ...(uploadedImages ?? [])]
-      })
-      // Use images state merged with new images for submission
+
+      // Only upload if there are files selected
+      const uploadedImages: string[] = (await handleUpload(slug)) ?? []
+
+      // Merge existing images with newly uploaded images
       const finalImages = [
         ...images.filter((url) => !url.includes('fakepath')),
-        ...(uploadedImages ?? []),
+        ...uploadedImages,
       ]
-      if (!uploadedImages) return
-      if (!data) {
-        const res = await createProductFn({
-          data: {
-            ...value,
-            images: finalImages,
-            categoryId: catId,
-            slug,
-            price: value.price,
-            variants: value.variants.map((variant) => ({
-              sku: variant.sku,
-              color: variant.color ?? '',
-              size: variant.size ?? '',
-            })),
-          },
-        })
-        if (res.error) {
-          alert(res.message)
-        }
-      } else {
-        const res = await editProductFn({
-          data: {
-            id: data.id,
-            ...value,
-            images: finalImages,
-            price: Number(value.price),
-            variants: value.variants.map((variant) => ({
-              sku: variant.sku,
-              color: variant.color ?? '',
-              size: variant.size ?? '',
-            })),
-          },
-        })
-        if (res.error) {
-          alert(res.message)
-        }
+
+      // Update images state
+      setImages(finalImages)
+
+      // Common data structure for both create and edit
+      const productData = {
+        ...value,
+        images: finalImages,
+        categoryId: catId,
+        slug,
+        price: Number(value.price),
+        variants: value.variants.map((variant) => ({
+          sku: variant.sku,
+          color: variant.color ?? '',
+          size: variant.size ?? '',
+        })),
       }
-      setIsLoading(false)
+
+      try {
+        if (!data) {
+          // Creating new product
+          const res = await createProductFn({ data: productData })
+          if (res.error) {
+            toast.error(res.message)
+          } else {
+            toast.success('Product created successfully!')
+          }
+        } else {
+          // Editing existing product
+          const res = await editProductFn({
+            data: {
+              id: data.id,
+              ...productData,
+            },
+          })
+          if (res.error) {
+            toast.error(res.message)
+          } else {
+            toast.success('Product updated successfully!')
+          }
+        }
+      } finally {
+        setIsLoading(false)
+      }
     },
   })
   // Create an AbortController instance to provide an option to cancel the upload if needed.
@@ -148,31 +149,28 @@ export default function ProductForm({ data }: ProductFormProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   // TODO: Handle image edit
   const handleUpload = async (slug?: string) => {
-    // Access the file input element using the ref
     const fileInput = fileInputRef.current
-    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-      return
-    }
-    const images: string[] = []
 
-    // Extract all files from the file input
+    // Return empty array if no files selected (not undefined)
+    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+      return [] // Changed from `return` to `return []`
+    }
+
+    const images: string[] = []
     const files = Array.from(fileInput.files)
 
     for (const file of files) {
-      // Retrieve authentication parameters for the upload.
       let authParams
       try {
         authParams = await authenticator()
       } catch (authError) {
         console.error('Failed to authenticate for upload:', authError)
-        return
+        continue // Skip this file but continue with others
       }
       const { signature, expire, token } = authParams
 
-      // Call the ImageKit SDK upload function with the required parameters and callbacks.
       try {
         const uploadResponse = await upload({
-          // Authentication parameters
           expire,
           token,
           signature,
@@ -180,28 +178,23 @@ export default function ProductForm({ data }: ProductFormProps) {
           file,
           folder: `products/${data?.slug ?? slug}`,
           fileName: file.name,
-
-          // Abort signal to allow cancellation of the upload if needed.
           abortSignal: abortController.signal,
         })
         images.push(uploadResponse.url!)
       } catch (error) {
-        // Handle specific error types provided by the ImageKit SDK.
         if (error instanceof ImageKitInvalidRequestError) {
-          toast.error(`Invalid request:, ${error.message}`)
+          toast.error(`Invalid request: ${error.message}`)
         } else if (error instanceof ImageKitUploadNetworkError) {
           toast.error(`Network error: ${error.message}`)
         } else if (error instanceof ImageKitServerError) {
           toast.error(`Server error: ${error.message}`)
         } else {
-          // Handle any other errors that may occur.
           toast.error(`Upload error: ${error}`)
         }
       }
     }
-    // Clear file input after upload so user can select same files again if needed
+
     fileInput.value = ''
-    // Update local images state by adding new uploaded images
     setImages((prev) => [...prev, ...images])
     return images
   }
@@ -524,16 +517,19 @@ export default function ProductForm({ data }: ProductFormProps) {
                     </div>
                   ))}
                 </div>
-                <ImagekitUpload
-                  id={field.name}
-                  name={field.name}
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={() => {}}
-                  aria-invalid={isInvalid}
-                  autoComplete="off"
-                  fileInputRef={fileInputRef}
-                />
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    {images.length > 0 ? 'Add more images:' : 'Upload images:'}
+                  </p>
+                  <ImagekitUpload
+                    id={field.name}
+                    name={field.name}
+                    onBlur={field.handleBlur}
+                    aria-invalid={isInvalid}
+                    autoComplete="off"
+                    fileInputRef={fileInputRef}
+                  />
+                </div>
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
             )

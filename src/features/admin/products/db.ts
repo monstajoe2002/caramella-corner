@@ -53,7 +53,7 @@ export async function updateProduct(
     if (updatedProduct.variants) {
       // Extract IDs from updated variants
       const updatedIds = updatedProduct.variants
-        .map((sc) => sc.id)
+        .map((v) => v.id)
         .filter((id) => id != null)
 
       // Delete variants not present in updated list
