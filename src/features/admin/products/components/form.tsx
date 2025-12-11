@@ -86,7 +86,8 @@ export default function ProductForm({ data }: ProductFormProps) {
     },
     onSubmit: async ({ value }) => {
       setIsLoading(true)
-      const uploadedImages: string[] | undefined = await handleUpload()
+      const slug = slugify(value.name, { lower: true })
+      const uploadedImages: string[] | undefined = await handleUpload(slug)
       if (!uploadedImages) {
         setIsLoading(false)
         return
@@ -100,7 +101,7 @@ export default function ProductForm({ data }: ProductFormProps) {
             ...value,
             images: allImages,
             categoryId: catId,
-            slug: slugify(value.name, { lower: true }),
+            slug,
             price: value.price,
             variants: value.variants.map((variant) => ({
               sku: variant.sku,
@@ -135,7 +136,7 @@ export default function ProductForm({ data }: ProductFormProps) {
   const abortController = new AbortController()
 
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const handleUpload = async () => {
+  const handleUpload = async (slug?: string) => {
     // Access the file input element using the ref
     const fileInput = fileInputRef.current
     if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
@@ -166,7 +167,7 @@ export default function ProductForm({ data }: ProductFormProps) {
           signature,
           publicKey: import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY,
           file,
-          folder: 'products',
+          folder: `products/${data?.slug ?? slug}`,
           fileName: file.name,
 
           // Abort signal to allow cancellation of the upload if needed.
