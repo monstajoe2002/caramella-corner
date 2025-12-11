@@ -94,12 +94,16 @@ export default function ProductForm({ data }: ProductFormProps) {
       }
       // Merge existing images in value.images with newly uploaded images
       const allImages = [...(value.images ?? []), ...uploadedImages]
+      // Workaround to remove the fakepath from the images array
+      const filteredImages = allImages.filter(
+        (url) => !url.includes('fakepath'),
+      )
       if (!uploadedImages) return
       if (!data) {
         const res = await createProductFn({
           data: {
             ...value,
-            images: allImages,
+            images: filteredImages,
             categoryId: catId,
             slug,
             price: value.price,
@@ -188,6 +192,7 @@ export default function ProductForm({ data }: ProductFormProps) {
         }
       }
     }
+
     return images
   }
   const getCategoriesFn = useServerFn(getCategories)
