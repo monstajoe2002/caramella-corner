@@ -481,8 +481,7 @@ export default function ProductForm({ data }: ProductFormProps) {
           children={(field) => {
             const isInvalid =
               field.state.meta.isTouched && !field.state.meta.isValid
-            const existingImages = field.state.value ?? []
-
+            const existingImages = data?.images ?? []
             return (
               <Field data-invalid={isInvalid}>
                 <FieldLabel htmlFor={field.name}>Images</FieldLabel>
