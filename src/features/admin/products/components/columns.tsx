@@ -28,12 +28,13 @@ export const columns: ColumnDef<ProductWithVariants>[] = [
   {
     id: 'thumbnail',
     cell: ({ row }) => {
-      const [image] = row.original.images
+      const [image] = row.original.images ?? []
+      if (!image) return null
       return (
         <div className="object-cover">
           <Image
             transformation={[{ width: '100', height: '100' }]}
-            src={image}
+            src={image.ikThumbnailUrl}
           />
         </div>
       )
