@@ -3,6 +3,7 @@ import { images, products, variants } from '@/db/schema'
 import { NewProductWithVariants } from '@/db/types'
 import { and, eq, notInArray } from 'drizzle-orm'
 import { notFound } from '@tanstack/react-router'
+import { imagekit } from '@/lib/imagekit'
 export async function getProductsWithVariants() {
   return await db.query.products.findMany({
     with: { variants: true, category: true },
@@ -92,11 +93,17 @@ export async function updateProduct(
       const updatedIds = updatedProduct.images
         .map((img) => img.id)
         .filter((id) => id != null)
-
+      const updatedFileIds = updatedProduct.images
+        .map((img) => img.ikFileId)
+        .filter((ikFileId) => ikFileId != null)
       // Delete images not present in updated list
+
       await trx
         .delete(images)
         .where(and(eq(images.productId, id), notInArray(images.id, updatedIds)))
+        .then(async () => {
+          await imagekit.bulkDeleteFiles(updatedFileIds)
+        })
 
       for (const image of updatedProduct.images) {
         if (image.id) {
