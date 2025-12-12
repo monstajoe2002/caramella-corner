@@ -64,6 +64,13 @@
       "when": 1765107104123,
       "tag": "0008_broken_nomad",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1765524234661,
+      "tag": "0009_fearless_stick",
+      "breakpoints": true
     }
   ]
 }

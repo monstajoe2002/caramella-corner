@@ -49,7 +49,7 @@ export const products = pgTable('products', {
   id,
   name: varchar('name').notNull(),
   slug: varchar('slug').notNull(),
-  images: text('images').array().notNull(), // Storing as text, could be JSON or array
+  // images: text('images').array().notNull(), // Storing as text, could be JSON or array
   price: numeric('price').notNull(),
   description: text('description').notNull(),
   material: varchar('material').notNull(),
@@ -59,6 +59,16 @@ export const products = pgTable('products', {
   quantity: integer('quantity').default(0),
   createdAt,
   updatedAt,
+})
+// Image Table
+export const images = pgTable('images', {
+  id,
+  productId: uuid('product_id').references(() => products.id, {
+    onDelete: 'cascade',
+  }),
+  ikFileId: varchar('ik_file_id').notNull(),
+  ikUrl: varchar('ik_url').notNull(),
+  ikThumbnailUrl: varchar('ik_thumbnail_url').notNull(),
 })
 
 // Variant table
@@ -152,6 +162,7 @@ export const productsRelations = relations(products, ({ one, many }) => ({
     references: [subcategories.id],
   }),
   variants: many(variants),
+  images: many(images),
 }))
 
 export const variantsRelations = relations(variants, ({ one, many }) => ({
