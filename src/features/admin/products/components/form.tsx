@@ -90,18 +90,15 @@ export default function ProductForm({ data }: ProductFormProps) {
       const slug = slugify(value.name, { lower: true })
 
       // Only upload if there are files selected
-      const uploadedImages: NewImage[] = (await handleUpload(slug)) ?? []
-
+      const uploadedImages = await handleUpload(slug)
+      const allImages = [...images, ...uploadedImages]
       // Update images state
-      setImages(uploadedImages)
+      setImages(allImages)
 
       // Common data structure for both create and edit
       const productData = {
         ...value,
-        images: uploadedImages.map((img) => ({
-          ...img,
-          productId: img.productId!,
-        })),
+        images: allImages,
         categoryId: catId,
         slug,
         price: Number(value.price),
