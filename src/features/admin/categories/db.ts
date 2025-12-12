@@ -8,26 +8,26 @@ export async function getCategories() {
   return await db.query.categories.findMany()
 }
 export async function getCategoryById(id: string) {
-  const todo = await db.query.categories.findFirst({
+  const category = await db.query.categories.findFirst({
     where: eq(categories.id, id),
     with: {
       subcategories: true,
     },
   })
 
-  if (todo == null) throw notFound()
-  return todo
+  if (category == null) throw notFound()
+  return category
 }
 export async function getCategoryBySlug(slug: string) {
-  const todo = await db.query.categories.findFirst({
+  const category = await db.query.categories.findFirst({
     where: eq(categories.slug, slug),
     with: {
       subcategories: true,
     },
   })
 
-  if (todo == null) throw notFound()
-  return todo
+  if (category == null) throw notFound()
+  return category
 }
 export async function getCategoriesWithSubcategories() {
   return await db.query.categories.findMany({

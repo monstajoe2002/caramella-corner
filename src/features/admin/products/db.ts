@@ -9,17 +9,18 @@ export async function getProductsWithVariants() {
   })
 }
 export async function getProductById(id: string) {
-  const todo = await db.query.products.findFirst({
+  const product = await db.query.products.findFirst({
     where: eq(products.id, id),
     with: {
       variants: true,
       category: true,
       subcategory: true,
+      images: true,
     },
   })
 
-  if (todo == null) throw notFound()
-  return todo
+  if (product == null) throw notFound()
+  return product
 }
 export async function insertProduct(product: NewProductWithVariants) {
   return db.transaction(async (trx) => {

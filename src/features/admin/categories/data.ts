@@ -103,7 +103,6 @@ export const editCategory = createServerFn({ method: 'POST' })
   )
   .handler(async ({ data: { id, ...data } }) => {
     return await Sentry.startSpan({ name: 'editCategory' }, async () => {
-      // TODO: Fix invalidation
       const newCat = await updateCategory(id, {
         ...data,
         slug: slugify(data.name, { lower: true }),

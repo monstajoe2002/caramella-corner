@@ -61,7 +61,6 @@ export const columns: ColumnDef<ProductWithVariants>[] = [
       return date
     },
   },
-  // TODO: implement actions column
   {
     id: 'actions',
     cell: ({ row }) => {
