@@ -53,11 +53,11 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
   })
-
+  const filteredRows = table.getFilteredRowModel().rows
   return (
     <>
       <div className="flex items-center py-4">
-        <InputGroup>
+        <InputGroup className="w-fit">
           <InputGroupInput
             placeholder="Search"
             value={
@@ -138,7 +138,7 @@ export function DataTable<TData, TValue>({
               </TableRow>
             )}
 
-            {newEntryTo && data.length > 0 ? (
+            {newEntryTo && data.length > 0 && filteredRows.length > 0 ? (
               <TableRow>
                 <TableCell colSpan={columns.length}>
                   <Button variant={'link'} asChild className="w-full">
