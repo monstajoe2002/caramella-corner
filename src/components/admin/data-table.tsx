@@ -24,10 +24,10 @@ import {
   EmptyTitle,
 } from '@/components/ui/empty'
 import { Button } from '../ui/button'
-import { FileIcon, PlusIcon } from 'lucide-react'
+import { FileIcon, PlusIcon, Search } from 'lucide-react'
 import { Link, type ToOptions } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Input } from '../ui/input'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '../ui/input-group'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -57,16 +57,21 @@ export function DataTable<TData, TValue>({
   return (
     <>
       <div className="flex items-center py-4">
-        <Input
-          placeholder="Search"
-          value={
-            (table.getColumn(filteredCol)?.getFilterValue() as string) ?? ''
-          }
-          onChange={(event) =>
-            table.getColumn(filteredCol)?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        <InputGroup>
+          <InputGroupInput
+            placeholder="Search"
+            value={
+              (table.getColumn(filteredCol)?.getFilterValue() as string) ?? ''
+            }
+            onChange={(event) =>
+              table.getColumn(filteredCol)?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+          <InputGroupAddon>
+            <Search />
+          </InputGroupAddon>
+        </InputGroup>
       </div>
       <div className="overflow-hidden rounded-md border ">
         <Table>
