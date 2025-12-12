@@ -65,7 +65,12 @@ export default function ProductForm({ data }: ProductFormProps) {
       description: data?.description ?? '',
       price: Number(data?.price) ?? 0,
       material: data?.material ?? '',
-      images: [{}],
+      images:
+        data?.images?.map((img) => ({
+          ikFileId: img.ikFileId,
+          ikUrl: img.ikUrl,
+          ikThumbnailUrl: img.ikThumbnailUrl,
+        })) ?? [],
       categoryId: data?.categoryId ?? '',
       subcategoryId: data?.subcategoryId ?? '',
       active: data?.active ?? true,
@@ -92,8 +97,16 @@ export default function ProductForm({ data }: ProductFormProps) {
       // Only upload if there are files selected
       const uploadedImages = await handleUpload(slug)
       const allImages = [...images, ...uploadedImages]
-      // Update images state
+      // Update images state and form field
       setImages(allImages)
+      form.setFieldValue(
+        'images',
+        allImages.map((img) => ({
+          ikFileId: img.ikFileId,
+          ikUrl: img.ikUrl,
+          ikThumbnailUrl: img.ikThumbnailUrl,
+        })),
+      )
 
       // Common data structure for both create and edit
       const productData = {
@@ -193,7 +206,18 @@ export default function ProductForm({ data }: ProductFormProps) {
     }
 
     fileInput.value = ''
-    setImages((prev) => [...prev, ...images])
+    setImages((prev) => {
+      const updatedImages = [...prev, ...images]
+      form.setFieldValue(
+        'images',
+        updatedImages.map((img) => ({
+          ikFileId: img.ikFileId,
+          ikUrl: img.ikUrl,
+          ikThumbnailUrl: img.ikThumbnailUrl,
+        })),
+      )
+      return updatedImages
+    })
     return images
   }
   const getCategoriesFn = useServerFn(getCategories)
@@ -212,7 +236,16 @@ export default function ProductForm({ data }: ProductFormProps) {
     enabled: !!catId,
   })
   const handleDeleteImage = (id: string) => {
-    setImages((prev) => prev.filter((img) => img.id !== id))
+    const updatedImages = images.filter((img) => img.id !== id)
+    setImages(updatedImages)
+    form.setFieldValue(
+      'images',
+      updatedImages.map((img) => ({
+        ikFileId: img.ikFileId,
+        ikUrl: img.ikUrl,
+        ikThumbnailUrl: img.ikThumbnailUrl,
+      })),
+    )
   }
   return (
     <form
