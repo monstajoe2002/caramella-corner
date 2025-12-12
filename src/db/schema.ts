@@ -165,6 +165,13 @@ export const productsRelations = relations(products, ({ one, many }) => ({
   images: many(images),
 }))
 
+export const imagesRelations = relations(images, ({ one }) => ({
+  product: one(products, {
+    fields: [images.productId],
+    references: [products.id],
+  }),
+}))
+
 export const variantsRelations = relations(variants, ({ one, many }) => ({
   product: one(products, {
     fields: [variants.productId],
