@@ -27,10 +27,11 @@ export type ProductWithVariants = Product & {
   variants: Array<Variant>
   category: Category
   subcategory: Subcategory
+  images: Array<Image>
 }
 export type NewProductWithVariants = NewProduct & {
   variants: Array<NewVariant>
   category?: Category
   subcategory?: Subcategory
-  images?: Array<Image>
+  images?: Array<NewImage>
 }
