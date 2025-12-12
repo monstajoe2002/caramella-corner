@@ -43,7 +43,7 @@ import {
   upload,
 } from '@imagekit/react'
 import { cn } from '@/lib/utils'
-import { ProductWithVariants } from '@/db/types'
+import { NewImage, ProductWithVariants } from '@/db/types'
 import { productSchema } from '@/lib/schemas'
 import slugify from 'slugify'
 import { createProduct, editProduct } from '../data'
@@ -56,7 +56,7 @@ type ProductFormProps = {
 export default function ProductForm({ data }: ProductFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [catId, setCatId] = useState(data?.categoryId || '')
-  const [images, setImages] = useState<string[]>(data?.images ?? [])
+  const [images, setImages] = useState<NewImage[]>(data?.images ?? [])
   const createProductFn = useServerFn(createProduct)
   const editProductFn = useServerFn(editProduct)
   const form = useForm({
@@ -65,7 +65,7 @@ export default function ProductForm({ data }: ProductFormProps) {
       description: data?.description ?? '',
       price: Number(data?.price) ?? 0,
       material: data?.material ?? '',
-      images: [] as string[],
+      images: [{}],
       categoryId: data?.categoryId ?? '',
       subcategoryId: data?.subcategoryId ?? '',
       active: data?.active ?? true,
@@ -90,21 +90,18 @@ export default function ProductForm({ data }: ProductFormProps) {
       const slug = slugify(value.name, { lower: true })
 
       // Only upload if there are files selected
-      const uploadedImages: string[] = (await handleUpload(slug)) ?? []
-
-      // Merge existing images with newly uploaded images
-      const finalImages = [
-        ...images.filter((url) => !url.includes('fakepath')),
-        ...uploadedImages,
-      ]
+      const uploadedImages: NewImage[] = (await handleUpload(slug)) ?? []
 
       // Update images state
-      setImages(finalImages)
+      setImages(uploadedImages)
 
       // Common data structure for both create and edit
       const productData = {
         ...value,
-        images: finalImages,
+        images: uploadedImages.map((img) => ({
+          ...img,
+          productId: img.productId!,
+        })),
         categoryId: catId,
         slug,
         price: Number(value.price),
@@ -114,7 +111,6 @@ export default function ProductForm({ data }: ProductFormProps) {
           size: variant.size ?? '',
         })),
       }
-
       try {
         if (!data) {
           // Creating new product
@@ -157,7 +153,7 @@ export default function ProductForm({ data }: ProductFormProps) {
       return [] // Changed from `return` to `return []`
     }
 
-    const images: string[] = []
+    const images: NewImage[] = []
     const files = Array.from(fileInput.files)
 
     for (const file of files) {
@@ -171,7 +167,7 @@ export default function ProductForm({ data }: ProductFormProps) {
       const { signature, expire, token } = authParams
 
       try {
-        const uploadResponse = await upload({
+        const { url, thumbnailUrl, fileId } = await upload({
           expire,
           token,
           signature,
@@ -181,7 +177,11 @@ export default function ProductForm({ data }: ProductFormProps) {
           fileName: file.name,
           abortSignal: abortController.signal,
         })
-        images.push(uploadResponse.url!)
+        images.push({
+          ikUrl: url ?? '',
+          ikThumbnailUrl: thumbnailUrl ?? '',
+          ikFileId: fileId ?? '',
+        })
       } catch (error) {
         if (error instanceof ImageKitInvalidRequestError) {
           toast.error(`Invalid request: ${error.message}`)
@@ -214,8 +214,8 @@ export default function ProductForm({ data }: ProductFormProps) {
       getSubcategoriesByCategoryIdFn({ data: { categoryId: catId } }),
     enabled: !!catId,
   })
-  const handleDeleteImage = (url: string) => {
-    setImages((prev) => prev.filter((img) => img !== url))
+  const handleDeleteImage = (id: string) => {
+    setImages((prev) => prev.filter((img) => img.id !== id))
   }
   return (
     <form
@@ -498,12 +498,12 @@ export default function ProductForm({ data }: ProductFormProps) {
               <Field data-invalid={isInvalid}>
                 <FieldLabel htmlFor={field.name}>Images</FieldLabel>
                 <div className="flex flex-wrap gap-4 mb-2">
-                  {images.map((url, idx) => (
+                  {images.map(({ id, ikThumbnailUrl }, idx) => (
                     <div>
                       <Button
                         size={'icon-sm'}
                         type="button"
-                        onClick={() => handleDeleteImage(url)}
+                        onClick={() => handleDeleteImage(id!)}
                         variant={'destructive'}
                         className="rounded-full relative translate-x-16 translate-y-5"
                       >
@@ -511,7 +511,7 @@ export default function ProductForm({ data }: ProductFormProps) {
                       </Button>
                       <Image
                         key={idx}
-                        src={url}
+                        src={ikThumbnailUrl}
                         alt={`Product image ${idx + 1}`}
                         className="w-20 h-20 object-cover rounded"
                       />
