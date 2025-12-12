@@ -1,5 +1,5 @@
 import { db } from '@/db'
-import { products, variants } from '@/db/schema'
+import { images, products, variants } from '@/db/schema'
 import { NewProductWithVariants } from '@/db/types'
 import { and, eq, notInArray } from 'drizzle-orm'
 import { notFound } from '@tanstack/react-router'
@@ -31,6 +31,13 @@ export async function insertProduct(product: NewProductWithVariants) {
         productId: newProduct.id,
       }))
       await trx.insert(variants).values(variantValues)
+    }
+    if (product.images?.length) {
+      const imageValues = product.images.map((img) => ({
+        ...img,
+        productId: newProduct.id,
+      }))
+      await trx.insert(images).values(imageValues)
     }
 
     return newProduct
@@ -75,6 +82,30 @@ export async function updateProduct(
           // Insert new variant
           await trx.insert(variants).values({
             ...variant,
+            productId: id,
+          })
+        }
+      }
+    }
+    if (updatedProduct.images) {
+      // Extract IDs from updated images
+      const updatedIds = updatedProduct.images
+        .map((img) => img.id)
+        .filter((id) => id != null)
+
+      // Delete images not present in updated list
+      await trx
+        .delete(images)
+        .where(and(eq(images.productId, id), notInArray(images.id, updatedIds)))
+
+      for (const image of updatedProduct.images) {
+        if (image.id) {
+          // Update existing image by id
+          await trx.update(images).set(image).where(eq(images.id, image.id))
+        } else {
+          // Insert new image
+          await trx.insert(images).values({
+            ...image,
             productId: id,
           })
         }
