@@ -1,4 +1,4 @@
-import { categories, products, subcategories, variants } from './schema'
+import { categories, images, products, subcategories, variants } from './schema'
 // category
 export type Category = typeof categories.$inferSelect
 export type NewCategory = typeof categories.$inferInsert
@@ -16,6 +16,10 @@ export type NewCategoryWithSubcategories = NewCategory & {
 export type Variant = typeof variants.$inferSelect
 export type NewVariant = typeof variants.$inferInsert
 
+// images
+export type Image = typeof images.$inferSelect
+export type NewImage = typeof images.$inferInsert
+
 // product
 export type Product = typeof products.$inferSelect
 export type NewProduct = typeof products.$inferInsert
@@ -28,4 +32,5 @@ export type NewProductWithVariants = NewProduct & {
   variants: Array<NewVariant>
   category?: Category
   subcategory?: Subcategory
+  images?: Image[]
 }
