@@ -60,6 +60,7 @@ export type NewOrder = typeof orders.$inferInsert
 export type OrderWithCustomer = Order & {
   customer: Customer
   payment: Payment | null
+  orderItems: OrderItemWithVariant[]
 }
 
 // order item
