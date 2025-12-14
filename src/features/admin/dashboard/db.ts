@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { customers, orders, payments, products } from '@/db/schema'
-import { eq, sql, and, gte } from 'drizzle-orm'
+import { eq, sql, gte } from 'drizzle-orm'
 
 export async function getTotalRevenue() {
   const result = await db

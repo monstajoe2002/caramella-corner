@@ -26,7 +26,7 @@ const items = [
   },
   {
     title: 'Orders',
-    url: '#',
+    url: '/admin/orders',
     icon: Truck,
   },
   {
