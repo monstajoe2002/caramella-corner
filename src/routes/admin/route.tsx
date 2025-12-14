@@ -4,9 +4,13 @@ import {
   SidebarInset,
   SidebarTrigger,
 } from '@/components/ui/sidebar'
+import { adminAuthMiddleware } from '@/features/admin/middleware'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/admin')({
+  server:{
+    middleware: [adminAuthMiddleware],
+  },
   component: RouteComponent,
   head: () => ({
     meta: [
