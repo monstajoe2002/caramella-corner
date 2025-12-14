@@ -15,7 +15,7 @@ function RouteComponent() {
     <div>
       <h1 className="text-start">Order Details</h1>
       <p className="text-start text-muted-foreground">
-        View the details of the order with the ID: {Route.useParams().id}
+        View the details of the order with the number: {order?.orderNumber}
       </p>
       <OrderItems orderItems={order?.orderItems || []} />
     </div>
