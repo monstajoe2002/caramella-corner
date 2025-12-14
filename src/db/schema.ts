@@ -100,7 +100,7 @@ export const orders = pgTable('orders', {
   paymentId: uuid('payment_id'),
   orderNumber: varchar('order_number').notNull().unique(),
   quantity: integer('quantity').notNull(),
-  price: integer('price').notNull(), // Total price
+  price: numeric('price').notNull(), // Total price
   customerId: uuid('customer_id').references(() => customers.id, {
     onDelete: 'cascade',
   }),
@@ -116,7 +116,7 @@ export const orderItems = pgTable('order_items', {
     onDelete: 'cascade',
   }),
   quantity: integer('quantity').notNull(),
-  priceAtOrder: integer('price_at_order').notNull(),
+  priceAtOrder: numeric('price_at_order').notNull(),
   variantId: uuid('variant_id').references(() => variants.id),
   createdAt,
   updatedAt,
@@ -129,7 +129,7 @@ export const payments = pgTable('payments', {
   orderId: uuid('order_id').references(() => orders.id, {
     onDelete: 'cascade',
   }),
-  amount: integer('amount').notNull(),
+  amount: numeric('amount').notNull(),
   paymentMethod: paymentMethodEnum().notNull(), // Fixed from 'payment method'
   createdAt,
   updatedAt,
