@@ -7,6 +7,7 @@ import {
   customers,
   orders,
   payments,
+  orderItems,
 } from './schema'
 // category
 export type Category = typeof categories.$inferSelect
@@ -59,4 +60,11 @@ export type NewOrder = typeof orders.$inferInsert
 export type OrderWithCustomer = Order & {
   customer: Customer
   payment: Payment | null
+}
+
+// order item
+export type OrderItem = typeof orderItems.$inferSelect
+export type NewOrderItem = typeof orderItems.$inferInsert
+export type OrderItemWithVariant = OrderItem & {
+  variant: Variant
 }
