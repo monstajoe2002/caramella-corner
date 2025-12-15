@@ -28,7 +28,7 @@ import { FileIcon, PlusIcon, Search } from 'lucide-react'
 import { Link, type ToOptions } from '@tanstack/react-router'
 import { useState } from 'react'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '../ui/input-group'
-
+import pluralize from 'pluralize'
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
@@ -123,11 +123,11 @@ export function DataTable<TData, TValue>({
                       <EmptyMedia variant="icon">
                         <FileIcon />
                       </EmptyMedia>
-                      <EmptyTitle>No categories</EmptyTitle>
+                      <EmptyTitle>No {pluralize(label!)}</EmptyTitle>
                       <EmptyDescription>
-                        This is where you can add categories to organize your
-                        products. Click <strong>"Create {label}"</strong> below
-                        to get started.
+                        This is where you can add {pluralize(label!)} to
+                        organize your products. Click{' '}
+                        <strong>"Create {label}"</strong> below to get started.
                       </EmptyDescription>
                     </EmptyHeader>
                     <EmptyContent>
