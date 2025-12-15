@@ -154,7 +154,7 @@ export default function ProductForm({ data }: ProductFormProps) {
   const abortController = new AbortController()
 
   const fileInputRef = useRef<HTMLInputElement>(null)
-  // TODO: Handle image edit
+
   const handleUpload = async (slug?: string) => {
     const fileInput = fileInputRef.current
 
@@ -235,6 +235,7 @@ export default function ProductForm({ data }: ProductFormProps) {
       getSubcategoriesByCategoryIdFn({ data: { categoryId: catId } }),
     enabled: !!catId,
   })
+  // TODO: Fix image deletion logic
   const handleDeleteImage = (id: string) => {
     const updatedImages = images.filter((img) => img.id !== id)
     setImages(updatedImages)
