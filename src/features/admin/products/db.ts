@@ -6,7 +6,7 @@ import { notFound } from '@tanstack/react-router'
 import { imagekit } from '@/lib/imagekit'
 export async function getProductsWithVariants() {
   return await db.query.products.findMany({
-    with: { variants: true, category: true },
+    with: { variants: true, category: true, images: true },
   })
 }
 export async function getProductById(id: string) {

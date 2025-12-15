@@ -32,10 +32,7 @@ export const columns: ColumnDef<ProductWithVariants>[] = [
       if (!image) return null
       return (
         <div className="object-cover">
-          <Image
-            transformation={[{ width: '100', height: '100' }]}
-            src={image.ikThumbnailUrl}
-          />
+          <Image width={75} height={75} src={image.ikThumbnailUrl} />
         </div>
       )
     },
