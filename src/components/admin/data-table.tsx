@@ -34,6 +34,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[]
   newEntryTo?: ToOptions['to']
   filteredCol?: string
+  label?: string
 }
 
 export function DataTable<TData, TValue>({
@@ -41,6 +42,7 @@ export function DataTable<TData, TValue>({
   data,
   newEntryTo,
   filteredCol = 'name',
+  label,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const table = useReactTable({
@@ -124,13 +126,13 @@ export function DataTable<TData, TValue>({
                       <EmptyTitle>No categories</EmptyTitle>
                       <EmptyDescription>
                         This is where you can add categories to organize your
-                        products. Click <strong>"Create Category"</strong> below
+                        products. Click <strong>"Create {label}"</strong> below
                         to get started.
                       </EmptyDescription>
                     </EmptyHeader>
                     <EmptyContent>
                       <Button asChild>
-                        <Link to={newEntryTo}>Create Category</Link>
+                        <Link to={newEntryTo}>Create {label}</Link>
                       </Button>
                     </EmptyContent>
                   </Empty>
