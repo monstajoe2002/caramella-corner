@@ -8,6 +8,7 @@ export const Route = createFileRoute('/admin/orders/$id')({
 })
 
 function RouteComponent() {
+  // TODO: replace with real data later
   const order = Route.useLoaderData().find(
     (order) => order.id === Route.useParams().id,
   )
