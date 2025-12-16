@@ -11,6 +11,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 import { Link } from '@tanstack/react-router'
+import { ModeToggle } from '../theme-toggle'
 
 // Menu items.
 const items = [
@@ -41,7 +42,10 @@ export default function AdminSidebar() {
     <Sidebar variant="inset" collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Admin Dashboard</SidebarGroupLabel>
+          <div className="flex justify-between">
+            <SidebarGroupLabel>Admin Dashboard</SidebarGroupLabel>
+            <ModeToggle />
+          </div>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
