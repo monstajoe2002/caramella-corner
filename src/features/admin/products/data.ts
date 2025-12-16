@@ -29,19 +29,23 @@ export const getProductById = createServerFn({ method: 'GET' })
 
 export const createProduct = createServerFn({ method: 'POST' })
   .inputValidator(productSchema.extend({ slug: z.string().min(1).slugify() }))
-  .handler(async ({ data }) => {
+  .handler(async ({ data: unsafeData }) => {
     return await Sentry.startSpan({ name: 'createProduct' }, async () => {
-      const newProduct = await insertProduct({
-        ...data,
-        slug: slugify(data.name, { lower: true }),
-        price: String(data.price),
-      })
-      if (!newProduct) {
+      const { success, data } = productSchema
+        .extend({ slug: z.string().min(1).slugify() })
+        .safeParse(unsafeData)
+      if (!success) {
         return {
           error: true,
           message: 'Error creating product',
         }
       }
+      await insertProduct({
+        ...data,
+        slug: slugify(data.name, { lower: true }),
+        price: String(data.price),
+      })
+
       throw redirect({ href: '..', replace: true })
     })
   })
@@ -50,15 +54,7 @@ export const deleteProduct = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     return await Sentry.startSpan({ name: 'deleteProduct' }, async () => {
       const deletedCat = await deleteProductDb(data.id)
-      if (!deletedCat) {
-        return {
-          error: true,
-          message: 'Error creating product',
-        }
-      }
-      return {
-        error: false,
-      }
+      return deletedCat
     })
   })
 export const editProduct = createServerFn({ method: 'POST' })
@@ -67,19 +63,25 @@ export const editProduct = createServerFn({ method: 'POST' })
       id: z.uuid().min(1),
     }),
   )
-  .handler(async ({ data: { id, ...data } }) => {
+  .handler(async ({ data: { id, ...unsafeData } }) => {
     return await Sentry.startSpan({ name: 'editProduct' }, async () => {
-      const newCat = await updateProduct(id, {
+      const { success, data } = productSchema
+        .extend({
+          id: z.uuid().min(1),
+        })
+        .safeParse(unsafeData)
+      if (!success) {
+        return {
+          error: true,
+          message: 'Invalid product data',
+        }
+      }
+      await updateProduct(id, {
         ...data,
         slug: slugify(data.name, { lower: true }),
         price: String(data.price),
       })
-      if (!newCat) {
-        return {
-          error: true,
-          message: 'Error creating product',
-        }
-      }
+
       throw redirect({ to: '/admin/products', replace: true })
     })
   })

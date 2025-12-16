@@ -62,18 +62,19 @@ export const getCategoriesWithSubcategories = createServerFn().handler(
 
 export const createCategory = createServerFn({ method: 'POST' })
   .inputValidator(categorySchema)
-  .handler(async ({ data }) => {
+  .handler(async ({ data: unsafeData }) => {
     return await Sentry.startSpan({ name: 'createCategory' }, async () => {
-      const newCat = await insertCategory({
+      const { success, data } = categorySchema.safeParse(unsafeData)
+      if (!success) {
+        return {
+          error: true,
+          message: 'Invalid category data',
+        }
+      }
+      await insertCategory({
         ...data,
         slug: slugify(data.name, { lower: true }),
       })
-      if (!newCat) {
-        return {
-          error: true,
-          message: 'Error creating category',
-        }
-      }
       throw redirect({ href: '..', replace: true })
     })
   })
@@ -83,15 +84,7 @@ export const deleteCategory = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     return await Sentry.startSpan({ name: 'deleteCategory' }, async () => {
       const deletedCat = await deleteCategoryDb(data.id)
-      if (!deletedCat) {
-        return {
-          error: true,
-          message: 'Error creating category',
-        }
-      }
-      return {
-        error: false,
-      }
+      return deletedCat
     })
   })
 
@@ -101,18 +94,24 @@ export const editCategory = createServerFn({ method: 'POST' })
       id: z.uuid().min(1),
     }),
   )
-  .handler(async ({ data: { id, ...data } }) => {
+  .handler(async ({ data: { id, ...unsafeData } }) => {
     return await Sentry.startSpan({ name: 'editCategory' }, async () => {
-      const newCat = await updateCategory(id, {
+      const { success, data } = categorySchema
+        .extend({
+          id: z.uuid().min(1),
+        })
+        .safeParse(unsafeData)
+      if (!success) {
+        return {
+          error: true,
+          message: 'Invalid category data',
+        }
+      }
+      await updateCategory(id, {
         ...data,
         slug: slugify(data.name, { lower: true }),
       })
-      if (!newCat) {
-        return {
-          error: true,
-          message: 'Error creating category',
-        }
-      }
+
       throw redirect({ to: '/admin/categories', replace: true })
     })
   })

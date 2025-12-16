@@ -26,6 +26,7 @@ import { useServerFn } from '@tanstack/react-start'
 import { createCategory, editCategory } from '../data'
 import slugify from 'slugify'
 import { LoadingSwap } from '@/components/ui/loading-swap'
+import { toast } from 'sonner'
 const categoryFormSchema = z.object({
   name: z.string().min(1, 'Name is required.'),
   subcategories: z
@@ -95,9 +96,11 @@ export default function CategoryForm({ data }: CategoryFormProps) {
             })),
           },
         })
-        if (res.error) {
-          alert(res.message)
-        }
+       if (res.error) {
+         toast.error(res.message)
+       } else {
+         toast.success('Category created successfully!')
+       }
       } else {
         const res = await editCategoryFn({
           data: {
@@ -111,7 +114,9 @@ export default function CategoryForm({ data }: CategoryFormProps) {
           },
         })
         if (res.error) {
-          alert(res.message)
+          toast.error(res.message)
+        } else {
+          toast.success('Category updated successfully!')
         }
       }
       setIsLoading(false)
