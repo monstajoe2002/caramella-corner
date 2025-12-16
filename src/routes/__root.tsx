@@ -7,6 +7,7 @@ import { PropsWithChildren } from 'react'
 import { Toaster } from '@/components/ui/sonner'
 import { ImageKitProvider } from '@imagekit/react'
 import { getThemeServerFn } from '@/lib/theme'
+import { ThemeProvider } from '@/components/theme-provider'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -50,7 +51,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
         <RootQueryClient>
           <ImageKitProvider urlEndpoint={import.meta.env.VITE_IMAGEKIT_URL}>
-            {children}
+            <ThemeProvider theme={theme}>{children}</ThemeProvider>
             <Toaster richColors />
             <TanStackDevtools
               config={{
