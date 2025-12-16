@@ -25,6 +25,7 @@ import { useState } from 'react'
 import { Link, useRouter } from '@tanstack/react-router'
 import { Image } from '@imagekit/react'
 import { toast } from 'sonner'
+import { Badge } from '@/components/ui/badge'
 export const columns: ColumnDef<ProductWithVariants>[] = [
   {
     id: 'thumbnail',
@@ -58,6 +59,18 @@ export const columns: ColumnDef<ProductWithVariants>[] = [
     cell({ row }) {
       const [date] = row.original.createdAt.toISOString().split('T')
       return date
+    },
+  },
+  {
+    accessorKey: 'active',
+    header: 'Status',
+    cell: ({ row }) => {
+      const isActive = row.original.active
+      return (
+        <Badge variant={isActive ? 'default' : 'outline'}>
+          {isActive ? 'Active' : 'Inactive'}
+        </Badge>
+      )
     },
   },
   {
