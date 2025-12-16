@@ -84,7 +84,16 @@ export const deleteCategory = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     return await Sentry.startSpan({ name: 'deleteCategory' }, async () => {
       const deletedCat = await deleteCategoryDb(data.id)
-      return deletedCat
+      if (!deletedCat) {
+        return {
+          error: true,
+          message: 'Cannot delete category',
+        }
+      }
+      return {
+        error: false,
+        message: 'Category deleted',
+      }
     })
   })
 

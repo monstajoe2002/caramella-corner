@@ -53,8 +53,17 @@ export const deleteProduct = createServerFn({ method: 'POST' })
   .inputValidator(z.object({ id: z.string() }))
   .handler(async ({ data }) => {
     return await Sentry.startSpan({ name: 'deleteProduct' }, async () => {
-      const deletedCat = await deleteProductDb(data.id)
-      return deletedCat
+      const deletedProduct = await deleteProductDb(data.id)
+      if (!deletedProduct) {
+        return {
+          error: true,
+          message: 'Cannot delete product',
+        }
+      }
+      return {
+        error: false,
+        message: 'Product deleted',
+      }
     })
   })
 export const editProduct = createServerFn({ method: 'POST' })

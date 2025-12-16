@@ -24,6 +24,7 @@ import { ActionButton } from '@/components/ui/action-button'
 import { useState } from 'react'
 import { Link, useRouter } from '@tanstack/react-router'
 import { Image } from '@imagekit/react'
+import { toast } from 'sonner'
 export const columns: ColumnDef<ProductWithVariants>[] = [
   {
     id: 'thumbnail',
@@ -107,6 +108,10 @@ export const columns: ColumnDef<ProductWithVariants>[] = [
                   })
                   setIsDialogOpen(false)
                   router.invalidate()
+                  if (res.error) {
+                    toast.error(res.message)
+                  }
+                  toast.success(res.message)
                   return res
                 }}
               >

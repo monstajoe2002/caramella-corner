@@ -23,6 +23,7 @@ import { deleteCategory } from '../data'
 import { ActionButton } from '@/components/ui/action-button'
 import { useState } from 'react'
 import { Link, useRouter } from '@tanstack/react-router'
+import { toast } from 'sonner'
 export const columns: ColumnDef<CategoryWithSubcategories>[] = [
   {
     accessorKey: 'name',
@@ -92,6 +93,10 @@ export const columns: ColumnDef<CategoryWithSubcategories>[] = [
                   })
                   setIsDialogOpen(false)
                   router.invalidate()
+                  if (res.error) {
+                    toast.error(res.message)
+                  }
+                  toast.success(res.message)
                   return res
                 }}
               >
