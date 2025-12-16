@@ -177,7 +177,7 @@ export default function ProductForm({ data }: ProductFormProps) {
       const { signature, expire, token } = authParams
 
       try {
-        const { url, thumbnailUrl, fileId } = await upload({
+        const { url, thumbnailUrl, fileId, name } = await upload({
           expire,
           token,
           signature,
@@ -191,6 +191,7 @@ export default function ProductForm({ data }: ProductFormProps) {
           ikUrl: url ?? '',
           ikThumbnailUrl: thumbnailUrl ?? '',
           ikFileId: fileId ?? '',
+          ikFileName: name ?? '',
         })
       } catch (error) {
         if (error instanceof ImageKitInvalidRequestError) {

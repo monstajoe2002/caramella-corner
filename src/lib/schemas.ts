@@ -1,6 +1,7 @@
 import z from 'zod'
 export const imagesSchema = z.object({
   ikFileId: z.string().nonempty(),
+  ikFileName: z.string().nonempty(),
   ikUrl: z.string().nonempty(),
   ikThumbnailUrl: z.string().nonempty(),
 })
