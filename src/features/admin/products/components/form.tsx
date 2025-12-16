@@ -512,7 +512,7 @@ export default function ProductForm({ data }: ProductFormProps) {
                   onClick={() =>
                     field.pushValue({ color: '', size: '', sku: '' })
                   }
-                  disabled={field.state.value.length >= 5}
+                  disabled={isLoading}
                 >
                   Add Variant
                 </Button>
@@ -558,6 +558,7 @@ export default function ProductForm({ data }: ProductFormProps) {
                     id={field.name}
                     name={field.name}
                     onBlur={field.handleBlur}
+                    disabled={isLoading}
                     aria-invalid={isInvalid}
                     autoComplete="off"
                     fileInputRef={fileInputRef}
