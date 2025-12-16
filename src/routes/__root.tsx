@@ -6,6 +6,7 @@ import appCss from '../styles.css?url'
 import { PropsWithChildren } from 'react'
 import { Toaster } from '@/components/ui/sonner'
 import { ImageKitProvider } from '@imagekit/react'
+import { getThemeServerFn } from '@/lib/theme'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -28,6 +29,7 @@ export const Route = createRootRoute({
       },
     ],
   }),
+  loader: () => getThemeServerFn(),
 
   shellComponent: RootDocument,
 })
@@ -39,8 +41,9 @@ function RootQueryClient({ children }: PropsWithChildren) {
   )
 }
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const theme = Route.useLoaderData()
   return (
-    <html lang="en">
+    <html className={theme} suppressHydrationWarning lang="en">
       <head>
         <HeadContent />
       </head>
