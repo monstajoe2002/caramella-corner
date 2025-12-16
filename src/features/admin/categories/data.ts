@@ -105,11 +105,7 @@ export const editCategory = createServerFn({ method: 'POST' })
   )
   .handler(async ({ data: { id, ...unsafeData } }) => {
     return await Sentry.startSpan({ name: 'editCategory' }, async () => {
-      const { success, data } = categorySchema
-        .extend({
-          id: z.uuid().min(1),
-        })
-        .safeParse(unsafeData)
+      const { success, data } = categorySchema.safeParse(unsafeData)
       if (!success) {
         return {
           error: true,

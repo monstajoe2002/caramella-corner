@@ -74,11 +74,7 @@ export const editProduct = createServerFn({ method: 'POST' })
   )
   .handler(async ({ data: { id, ...unsafeData } }) => {
     return await Sentry.startSpan({ name: 'editProduct' }, async () => {
-      const { success, data } = productSchema
-        .extend({
-          id: z.uuid().min(1),
-        })
-        .safeParse(unsafeData)
+      const { success, data } = productSchema.safeParse(unsafeData)
       if (!success) {
         return {
           error: true,
