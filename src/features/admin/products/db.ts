@@ -1,7 +1,7 @@
 import { db } from '@/db'
 import { images, products, variants } from '@/db/schema'
 import { NewProductWithVariants } from '@/db/types'
-import { eq, notInArray } from 'drizzle-orm'
+import { and, eq, notInArray } from 'drizzle-orm'
 import { notFound } from '@tanstack/react-router'
 import { imagekit } from '@/lib/imagekit'
 
@@ -65,7 +65,33 @@ export async function updateProduct(
       .returning()
 
     if (updatedProduct.variants) {
-      // ... existing variant update code unchanged ...
+      // Extract IDs from updated variants
+      const updatedIds = updatedProduct.variants
+        .map((v) => v.id)
+        .filter((id) => id != null)
+
+      // Delete variants not present in updated list
+      await trx
+        .delete(variants)
+        .where(
+          and(eq(variants.productId, id), notInArray(variants.id, updatedIds)),
+        )
+
+      for (const variant of updatedProduct.variants) {
+        if (variant.id) {
+          // Update existing variant by id
+          await trx
+            .update(variants)
+            .set(variant)
+            .where(eq(variants.id, variant.id))
+        } else {
+          // Insert new variant
+          await trx.insert(variants).values({
+            ...variant,
+            productId: id,
+          })
+        }
+      }
     }
 
     if (updatedProduct.images) {
