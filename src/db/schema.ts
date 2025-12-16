@@ -67,6 +67,7 @@ export const images = pgTable('images', {
     onDelete: 'cascade',
   }),
   ikFileId: varchar('ik_file_id').notNull(),
+  ikFileName: varchar('ik_file_name').notNull(),
   ikUrl: varchar('ik_url').notNull(),
   ikThumbnailUrl: varchar('ik_thumbnail_url').notNull(),
 })
