@@ -103,11 +103,11 @@ export async function updateProduct(
       const existingIds = existingImages.map((img) => String(img.id))
       const updatedIds = updatedProduct.images
         .map((img) => img.id)
-        .filter((id) => !id != null)
+        .filter((id) => id != null)
         .map(String)
 
       // IDs that exist in DB but not in updated list => removed
-      const removedIds = existingIds.filter((eid) => updatedIds.includes(eid))
+      const removedIds = existingIds.filter((eid) => !updatedIds.includes(eid))
 
       console.log('existingIds:', existingIds)
       console.log('updatedIds:', updatedIds)
