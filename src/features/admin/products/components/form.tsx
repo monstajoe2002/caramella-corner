@@ -52,7 +52,13 @@ import { toast } from 'sonner'
 type ProductFormProps = {
   data?: Omit<ProductWithVariants, 'category' | 'subcategory'>
 }
-
+type FormImage = {
+  id?: string // ⭐ Make optional to match schema
+  ikFileName: string
+  ikFileId: string
+  ikUrl: string
+  ikThumbnailUrl: string
+}
 export default function ProductForm({ data }: ProductFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [catId, setCatId] = useState(data?.categoryId || '')
@@ -65,13 +71,13 @@ export default function ProductForm({ data }: ProductFormProps) {
       description: data?.description ?? '',
       price: Number(data?.price) ?? 0,
       material: data?.material ?? '',
-      images:
-        data?.images?.map((img) => ({
-          ikFileName: img.ikFileName,
-          ikFileId: img.ikFileId,
-          ikUrl: img.ikUrl,
-          ikThumbnailUrl: img.ikThumbnailUrl,
-        })) ?? [],
+      images: (data?.images?.map((img) => ({
+        id: img.id,
+        ikFileName: img.ikFileName,
+        ikFileId: img.ikFileId,
+        ikUrl: img.ikUrl,
+        ikThumbnailUrl: img.ikThumbnailUrl,
+      })) ?? []) as FormImage[],
       categoryId: data?.categoryId ?? '',
       subcategoryId: data?.subcategoryId ?? '',
       active: data?.active ?? true,
@@ -100,15 +106,6 @@ export default function ProductForm({ data }: ProductFormProps) {
       const allImages = [...images, ...uploadedImages]
       // Update images state and form field
       setImages(allImages)
-      form.setFieldValue(
-        'images',
-        allImages.map((img) => ({
-          ikFileName: img.ikFileName,
-          ikFileId: img.ikFileId,
-          ikUrl: img.ikUrl,
-          ikThumbnailUrl: img.ikThumbnailUrl,
-        })),
-      )
 
       // Common data structure for both create and edit
       const productData = {
@@ -160,9 +157,8 @@ export default function ProductForm({ data }: ProductFormProps) {
   const handleUpload = async (slug?: string) => {
     const fileInput = fileInputRef.current
 
-    // Return empty array if no files selected (not undefined)
     if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-      return [] // Changed from `return` to `return []`
+      return []
     }
 
     const images: NewImage[] = []
@@ -174,7 +170,7 @@ export default function ProductForm({ data }: ProductFormProps) {
         authParams = await authenticator()
       } catch (authError) {
         console.error('Failed to authenticate for upload:', authError)
-        continue // Skip this file but continue with others
+        continue
       }
       const { signature, expire, token } = authParams
 
@@ -209,20 +205,7 @@ export default function ProductForm({ data }: ProductFormProps) {
     }
 
     fileInput.value = ''
-    setImages((prev) => {
-      const updatedImages = [...prev, ...images]
-      form.setFieldValue(
-        'images',
-        updatedImages.map((img) => ({
-          ikFileName: img.ikFileName,
-          ikFileId: img.ikFileId,
-          ikUrl: img.ikUrl,
-          ikThumbnailUrl: img.ikThumbnailUrl,
-        })),
-      )
-      return updatedImages
-    })
-    return images
+    return images // Just return, don't update state here - let onSubmit handle it
   }
   const getCategoriesFn = useServerFn(getCategories)
   const getSubcategoriesByCategoryIdFn = useServerFn(
@@ -241,17 +224,15 @@ export default function ProductForm({ data }: ProductFormProps) {
   })
   // TODO: Fix image deletion logic
   const handleDeleteImage = (id: string) => {
-    const updatedImages = images.filter((img) => img.id !== id)
-    setImages(updatedImages)
-    form.setFieldValue(
-      'images',
-      updatedImages.map((img) => ({
-        ikFileName: img.ikFileName,
-        ikFileId: img.ikFileId,
-        ikUrl: img.ikUrl,
-        ikThumbnailUrl: img.ikThumbnailUrl,
-      })),
-    )
+    setImages((prev) => {
+      // ⭐ Filter by id OR ikFileId to handle both existing and new images
+      const updatedImages = prev.filter((img) => {
+        const imgKey = img.id || img.ikFileId
+        return imgKey !== id
+      })
+      form.setFieldValue('images', updatedImages as FormImage[])
+      return updatedImages
+    })
   }
   return (
     <form
@@ -534,25 +515,28 @@ export default function ProductForm({ data }: ProductFormProps) {
               <Field data-invalid={isInvalid}>
                 <FieldLabel htmlFor={field.name}>Images</FieldLabel>
                 <div className="flex flex-wrap gap-4 mb-2">
-                  {images.map(({ id, ikThumbnailUrl }, idx) => (
-                    <div>
-                      <Button
-                        size={'icon-sm'}
-                        type="button"
-                        onClick={() => handleDeleteImage(id!)}
-                        variant={'destructive'}
-                        className="rounded-full relative translate-x-16 translate-y-5"
-                      >
-                        <XIcon />
-                      </Button>
-                      <Image
-                        key={idx}
-                        src={ikThumbnailUrl}
-                        alt={`Product image ${idx + 1}`}
-                        className="w-20 h-20 object-cover rounded"
-                      />
-                    </div>
-                  ))}
+                  {images.map(({ id, ikThumbnailUrl, ikFileId }, idx) => {
+                    const uniqueKey = id || ikFileId || `new-${idx}`
+                    return (
+                      <div>
+                        <Button
+                          size={'icon-sm'}
+                          type="button"
+                          onClick={() => handleDeleteImage(uniqueKey)}
+                          variant={'destructive'}
+                          className="rounded-full relative translate-x-16 translate-y-5"
+                        >
+                          <XIcon />
+                        </Button>
+                        <Image
+                          key={idx}
+                          src={ikThumbnailUrl}
+                          alt={`Product image ${idx + 1}`}
+                          className="w-20 h-20 object-cover rounded"
+                        />
+                      </div>
+                    )
+                  })}
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground mb-2">

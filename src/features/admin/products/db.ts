@@ -103,7 +103,7 @@ export async function updateProduct(
       const existingIds = existingImages.map((img) => String(img.id))
       const updatedIds = updatedProduct.images
         .map((img) => img.id)
-        .filter((id) => id != null)
+        .filter((id): id is string => id != null)
         .map(String)
 
       // IDs that exist in DB but not in updated list => removed
@@ -116,7 +116,12 @@ export async function updateProduct(
       if (removedIds.length > 0) {
         console.log(`Deleting images with ids: ${removedIds.join(', ')}`)
         // Delete images with these ids
-        await trx.delete(images).where(notInArray(images.id, removedIds))
+        await trx.delete(images).where(
+          and(
+            eq(images.productId, id),
+            notInArray(images.id, removedIds), // Use updatedIds (keep these), not removedIds
+          ),
+        )
 
         // Also delete files in ImageKit for removed images
         const removedIkFileIds = existingImages
