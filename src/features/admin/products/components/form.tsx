@@ -67,6 +67,7 @@ export default function ProductForm({ data }: ProductFormProps) {
       material: data?.material ?? '',
       images:
         data?.images?.map((img) => ({
+          ikFileName: img.ikFileName,
           ikFileId: img.ikFileId,
           ikUrl: img.ikUrl,
           ikThumbnailUrl: img.ikThumbnailUrl,
@@ -102,6 +103,7 @@ export default function ProductForm({ data }: ProductFormProps) {
       form.setFieldValue(
         'images',
         allImages.map((img) => ({
+          ikFileName: img.ikFileName,
           ikFileId: img.ikFileId,
           ikUrl: img.ikUrl,
           ikThumbnailUrl: img.ikThumbnailUrl,
@@ -212,6 +214,7 @@ export default function ProductForm({ data }: ProductFormProps) {
       form.setFieldValue(
         'images',
         updatedImages.map((img) => ({
+          ikFileName: img.ikFileName,
           ikFileId: img.ikFileId,
           ikUrl: img.ikUrl,
           ikThumbnailUrl: img.ikThumbnailUrl,
@@ -243,6 +246,7 @@ export default function ProductForm({ data }: ProductFormProps) {
     form.setFieldValue(
       'images',
       updatedImages.map((img) => ({
+        ikFileName: img.ikFileName,
         ikFileId: img.ikFileId,
         ikUrl: img.ikUrl,
         ikThumbnailUrl: img.ikThumbnailUrl,
