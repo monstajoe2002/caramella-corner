@@ -82,7 +82,8 @@ export const columns: ColumnDef<CategoryWithSubcategories>[] = [
               <DialogTitle>Are you absolutely sure?</DialogTitle>
               <DialogDescription>
                 This action cannot be undone. Are you sure you want to
-                permanently delete this category?
+                permanently delete this category? This may also delete related
+                products.
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
