@@ -9,15 +9,13 @@ import { useServerFn } from '@tanstack/react-start'
 
 export const Route = createFileRoute('/admin/products/')({
   component: RouteComponent,
-  // loader: () => getProductsWithVariants(),
 })
 
 function RouteComponent() {
-  // const data: ProductWithVariants[] = Route.useLoaderData()
   const getProductsFn = useServerFn(getProductsWithVariants)
   const { data, isLoading } = useQuery({
     queryKey: ['productsWithVariants'],
-    queryFn: getProductsFn as () => Promise<ProductWithVariants[] | undefined>,
+    queryFn: getProductsFn as () => Promise<ProductWithVariants[]>,
   })
   return (
     <div>
