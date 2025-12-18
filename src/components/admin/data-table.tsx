@@ -75,7 +75,7 @@ export function DataTable<TData, TValue>({
           </InputGroupAddon>
         </InputGroup>
       </div>
-      <div className="overflow-hidden rounded-md border ">
+      <div className="overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
