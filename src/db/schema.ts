@@ -53,8 +53,12 @@ export const products = pgTable('products', {
   price: numeric('price').notNull(),
   description: text('description').notNull(),
   material: varchar('material').notNull(),
-  categoryId: uuid('category_id').references(() => categories.id),
-  subcategoryId: uuid('subcategory_id').references(() => subcategories.id),
+  categoryId: uuid('category_id').references(() => categories.id, {
+    onDelete: 'cascade',
+  }),
+  subcategoryId: uuid('subcategory_id').references(() => subcategories.id, {
+    onDelete: 'cascade',
+  }),
   active: boolean('active').default(true),
   quantity: integer('quantity').default(0),
   createdAt,
