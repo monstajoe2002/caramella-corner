@@ -159,9 +159,9 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
                     <NavigationMenuList className="flex-col items-start gap-0">
                       {navigationLinks.map((link, index) => (
                         <NavigationMenuItem key={index}>
-                          <Button variant={'link'} asChild>
+                          <NavigationMenuLink asChild>
                             <Link to={link.href}>{link.label}</Link>
-                          </Button>
+                          </NavigationMenuLink>
                         </NavigationMenuItem>
                       ))}
                       <NavigationMenuItem
