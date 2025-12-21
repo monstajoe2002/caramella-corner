@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
+import { Route as StorefrontRouteRouteImport } from './routes/_storefront/route'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as StorefrontIndexRouteImport } from './routes/_storefront/index'
 import { Route as AdminProductsIndexRouteImport } from './routes/admin/products/index'
@@ -27,15 +28,19 @@ const AdminRouteRoute = AdminRouteRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StorefrontRouteRoute = StorefrontRouteRouteImport.update({
+  id: '/_storefront',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const StorefrontIndexRoute = StorefrontIndexRouteImport.update({
-  id: '/_storefront/',
+  id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => StorefrontRouteRoute,
 } as any)
 const AdminProductsIndexRoute = AdminProductsIndexRouteImport.update({
   id: '/products/',
@@ -112,6 +117,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_storefront': typeof StorefrontRouteRouteWithChildren
   '/admin': typeof AdminRouteRouteWithChildren
   '/_storefront/': typeof StorefrontIndexRoute
   '/admin/': typeof AdminIndexRoute
@@ -155,6 +161,7 @@ export interface FileRouteTypes {
     | '/admin/products/$id/edit'
   id:
     | '__root__'
+    | '/_storefront'
     | '/admin'
     | '/_storefront/'
     | '/admin/'
@@ -170,8 +177,8 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  StorefrontRouteRoute: typeof StorefrontRouteRouteWithChildren
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
-  StorefrontIndexRoute: typeof StorefrontIndexRoute
   ApiAdminUploadAuthRoute: typeof ApiAdminUploadAuthRoute
 }
 
@@ -182,6 +189,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_storefront': {
+      id: '/_storefront'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof StorefrontRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -196,7 +210,7 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof StorefrontIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof StorefrontRouteRoute
     }
     '/admin/products/': {
       id: '/admin/products/'
@@ -264,6 +278,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface StorefrontRouteRouteChildren {
+  StorefrontIndexRoute: typeof StorefrontIndexRoute
+}
+
+const StorefrontRouteRouteChildren: StorefrontRouteRouteChildren = {
+  StorefrontIndexRoute: StorefrontIndexRoute,
+}
+
+const StorefrontRouteRouteWithChildren = StorefrontRouteRoute._addFileChildren(
+  StorefrontRouteRouteChildren,
+)
+
 interface AdminRouteRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   AdminCategoriesNewRoute: typeof AdminCategoriesNewRoute
@@ -293,8 +319,8 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  StorefrontRouteRoute: StorefrontRouteRouteWithChildren,
   AdminRouteRoute: AdminRouteRouteWithChildren,
-  StorefrontIndexRoute: StorefrontIndexRoute,
   ApiAdminUploadAuthRoute: ApiAdminUploadAuthRoute,
 }
 export const routeTree = rootRouteImport
