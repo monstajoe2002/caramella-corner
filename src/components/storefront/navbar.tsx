@@ -15,6 +15,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
+import { Link } from '@tanstack/react-router'
 // Simple logo component for the navbar
 const Logo = (props: React.SVGAttributes<SVGElement>) => {
   return (
@@ -133,7 +134,7 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
       <header
         ref={combinedRef}
         className={cn(
-          'sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 md:px-6 [&_*]:no-underline',
+          'sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 px-4 md:px-6 **:no-underline',
           className,
         )}
         {...(props as any)}
@@ -154,16 +155,13 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent align="start" className="w-64 p-1">
-                  <NavigationMenu className="max-w-none">
+                  <NavigationMenu>
                     <NavigationMenuList className="flex-col items-start gap-0">
                       {navigationLinks.map((link, index) => (
-                        <NavigationMenuItem key={index} className="w-full">
-                          <button
-                            onClick={(e) => e.preventDefault()}
-                            className="flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer no-underline"
-                          >
-                            {link.label}
-                          </button>
+                        <NavigationMenuItem key={index} className="w-fit">
+                          <Button variant={'link'} asChild>
+                            <Link to={link.href}>{link.label}</Link>
+                          </Button>
                         </NavigationMenuItem>
                       ))}
                       <NavigationMenuItem
@@ -207,19 +205,19 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
               >
                 <div className="text-2xl">{logo}</div>
                 <span className="hidden font-bold text-xl sm:inline-block">
-                  shadcn.io
+                  Caramella Corner
                 </span>
               </button>
               {/* Navigation menu */}
               {!isMobile && (
-                <NavigationMenu className="flex">
-                  <NavigationMenuList className="gap-1">
+                <NavigationMenu className="flex w-fit">
+                  <NavigationMenuList className="gap-1 ">
                     {navigationLinks.map((link, index) => (
                       <NavigationMenuItem key={index}>
                         <NavigationMenuLink
                           href={link.href}
                           onClick={(e) => e.preventDefault()}
-                          className="text-muted-foreground hover:text-primary py-1.5 font-medium transition-colors cursor-pointer group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                          className="text-muted-foreground hover:text-primary font-medium transition-colors cursor-pointer group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                         >
                           {link.label}
                         </NavigationMenuLink>
