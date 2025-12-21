@@ -155,7 +155,7 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent align="start" className="w-fit">
-                  <NavigationMenu>
+                  <NavigationMenu viewport={isMobile}>
                     <NavigationMenuList className="flex-col items-start gap-0">
                       {navigationLinks.map((link, index) => (
                         <NavigationMenuItem key={index}>
