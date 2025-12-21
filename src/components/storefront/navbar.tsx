@@ -154,11 +154,11 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
                     <MenuIcon />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent align="start" className="w-64 p-1">
+                <PopoverContent align="start" className="w-fit">
                   <NavigationMenu>
                     <NavigationMenuList className="flex-col items-start gap-0">
                       {navigationLinks.map((link, index) => (
-                        <NavigationMenuItem key={index} className="w-fit">
+                        <NavigationMenuItem key={index}>
                           <Button variant={'link'} asChild>
                             <Link to={link.href}>{link.label}</Link>
                           </Button>
