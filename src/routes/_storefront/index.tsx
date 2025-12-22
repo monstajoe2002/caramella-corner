@@ -48,18 +48,11 @@ function App() {
                   alt={product.name}
                 />
                 <h3>{product.name}</h3>
-                <p>${product.price}</p>
+                <p>EGP {product.price}</p>
               </div>
             )
           })}
         </div>
-      </section>
-      <section>
-        <h2>About Us</h2>
-        <p>
-          We are passionate about bringing you the best products at the best
-          prices. Shop with confidence and enjoy fast shipping.
-        </p>
       </section>
     </div>
   )
