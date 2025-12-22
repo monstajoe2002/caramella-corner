@@ -13,8 +13,8 @@ function App() {
 
   return (
     <div>
-      <header style={{ textAlign: 'center', marginBottom: 40 }}>
-        <h1>Welcome to My E-commerce Store</h1>
+      <header>
+        <h1>Welcome to Caramella Corner</h1>
         <p>Your one-stop shop for all your needs</p>
       </header>
       <section style={{ marginBottom: 40 }}>
