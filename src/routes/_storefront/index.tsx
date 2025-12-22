@@ -13,9 +13,11 @@ function App() {
 
   return (
     <div>
-      <header>
-        <h1>Welcome to Caramella Corner</h1>
-        <p>Your one-stop shop for all your needs</p>
+      <header className="text-center mb-8">
+        <h1 className="mb-4">Welcome to Caramella Corner</h1>
+        <p className="text-muted-foreground">
+          Your one-stop shop for all your needs
+        </p>
       </header>
       <section style={{ marginBottom: 40 }}>
         <h2>Featured Products</h2>
