@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { getProductsWithVariants } from '../../features/admin/products/data'
+import { getProductsWithVariants } from '@/features/admin/products/data'
 import { Image } from '@imagekit/react'
 
 export const Route = createFileRoute('/_storefront/')({
