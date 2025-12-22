@@ -52,6 +52,7 @@
     "cmdk": "^1.1.1",
     "drizzle-kit": "^0.30.0",
     "drizzle-orm": "^0.39.0",
+    "embla-carousel-react": "^8.6.0",
     "emblor": "^1.4.8",
     "imagekit": "^6.0.0",
     "lucide-react": "^0.544.0",
