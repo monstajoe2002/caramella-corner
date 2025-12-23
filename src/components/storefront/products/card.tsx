@@ -16,6 +16,7 @@ const ProductCard = ({
   imageUrl,
   description,
   price,
+  quantity,
 }: ProductCardProps) => {
   return (
     <Card className="max-w-xs shadow-none gap-0 pt-0 mt-8">
@@ -33,7 +34,10 @@ const ProductCard = ({
         />
       </CardContent>
 
-      <CardFooter className="mt-6">
+      <CardFooter className="mt-6 flex flex-col items-start">
+        <p>
+          <b>{quantity}</b> left in stock
+        </p>
         <Button className="/blocks">
           Explore <ArrowRight />
         </Button>
