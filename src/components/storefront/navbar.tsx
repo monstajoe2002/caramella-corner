@@ -58,7 +58,6 @@ export interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
   logo?: React.ReactNode
   logoHref?: string
   navigationLinks?: NavItem[]
-
   cartText?: string
   cartHref?: string
   cartCount?: number
@@ -70,7 +69,6 @@ export interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
 const defaultNavigationLinks: NavItem[] = [
   { href: '#', label: 'Products' },
   { href: '#', label: 'Categories' },
-  { href: '#', label: 'Deals' },
 ]
 export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
   (
