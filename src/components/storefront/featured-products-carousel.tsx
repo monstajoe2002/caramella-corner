@@ -11,6 +11,8 @@ import { ProductWithVariants } from '@/db/types'
 import { cn } from '@/lib/utils'
 import { Image } from '@imagekit/react'
 import { useState, useEffect } from 'react'
+import { Button } from '../ui/button'
+import { ArrowRightIcon, ShoppingCartIcon } from 'lucide-react'
 
 interface FeaturedProductsCarouselProps {
   products: ProductWithVariants[]
@@ -56,8 +58,13 @@ export default function FeaturedProductsCarousel({
                     />
                   </CardContent>
                   {/* Backdrop filter */}
-                  <div className="absolute inset-0 bg-linear-to-t from-black to-white transition-opacity duration-500 opacity-10 group-hover:opacity-50" />
-                  <h3 className="absolute bottom-0">{product.name}</h3>
+                  <div className="absolute inset-0 bg-linear-to-t from-black to-white transition-opacity duration-500 opacity-25 group-hover:opacity-50" />
+                  <div className="absolute inset-0 flex flex-col justify-end items-center gap-2 mb-4">
+                    <h2 className="text-primary-foreground">{product.name}</h2>
+                    <Button size={'lg'}>
+                      Explore <ArrowRightIcon />
+                    </Button>
+                  </div>
                 </Card>
               </CarouselItem>
             )
