@@ -11,9 +11,11 @@ import { ProductWithVariants } from '@/db/types'
 import { cn } from '@/lib/utils'
 import { Image } from '@imagekit/react'
 import { useState, useEffect } from 'react'
+
 interface FeaturedProductsCarouselProps {
   products: ProductWithVariants[]
 }
+
 export default function FeaturedProductsCarousel({
   products,
 }: FeaturedProductsCarouselProps) {
@@ -41,17 +43,20 @@ export default function FeaturedProductsCarousel({
             return (
               <CarouselItem key={product.id} className="basis-3/5">
                 <Card
-                  className={cn({
-                    'opacity-30': index !== current - 1,
-                  })}
+                  className={cn(
+                    { 'opacity-30': index !== current - 1 },
+                    'relative overflow-hidden group',
+                  )}
                 >
-                  <CardContent>
+                  <CardContent className="flex aspect-video items-center justify-center p-0">
                     <Image
                       src={firstImage.ikThumbnailUrl}
                       responsive={true}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
                     />
                   </CardContent>
+                  {/* Backdrop filter */}
+                  <div className="absolute inset-0 bg-linear-to-t from-black to-white transition-opacity duration-500 opacity-10 group-hover:opacity-50"></div>
                 </Card>
               </CarouselItem>
             )
