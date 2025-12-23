@@ -18,7 +18,7 @@ function App() {
           Your one-stop shop for all your needs
         </p>
       </header>
-      <section style={{ marginBottom: 40 }}>
+      <section className="mb-10">
         <h2>Featured Products</h2>
         <FeaturedProductsCarousel products={products} />
       </section>

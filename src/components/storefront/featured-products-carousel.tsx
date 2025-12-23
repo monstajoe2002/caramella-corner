@@ -35,15 +35,12 @@ export default function FeaturedProductsCarousel({
     <div className="mx-auto w-full px-12">
       <Carousel setApi={setApi} opts={{ loop: true }}>
         <CarouselContent>
-          {Array.from({ length: 5 }).map((_, index) => (
-            <CarouselItem key={index} className="basis-3/5">
+          {products.map((product, index) => (
+            <CarouselItem key={product.id} className="basis-3/5">
               <Card
-                className={cn(
-                  'bg-primary text-primary-foreground transition-all duration-500',
-                  {
-                    'opacity-30': index !== current - 1,
-                  },
-                )}
+                className={cn({
+                  'opacity-30': index !== current - 1,
+                })}
               >
                 <CardContent className="flex aspect-video items-center justify-center p-6">
                   <span className="text-4xl font-semibold">{index + 1}</span>
