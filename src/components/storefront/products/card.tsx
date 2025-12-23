@@ -11,11 +11,17 @@ interface ProductCardProps {
   quantity: number
 }
 
-const ProductCard = ({ name, imageUrl, description }: ProductCardProps) => {
+const ProductCard = ({
+  name,
+  imageUrl,
+  description,
+  price,
+}: ProductCardProps) => {
   return (
     <Card className="max-w-xs shadow-none gap-0 pt-0 mt-8">
-      <CardHeader className="py-4 px-5 flex flex-row items-center gap-3 font-semibold">
-        {name}
+      <CardHeader className="py-4 px-5 flex flex-col font-semibold">
+        <h3>{name}</h3>
+        <p className="mt-0 text-primary">EGP {price}</p>
       </CardHeader>
 
       <CardContent className="mt-1 text-[15px] text-muted-foreground px-5">
