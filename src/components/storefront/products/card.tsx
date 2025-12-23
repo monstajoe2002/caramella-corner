@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react'
 interface ProductCardProps {
   name: string
   description: string
-  price: number
+  price: string
   slug: string
   imageUrl: string
 }
@@ -13,7 +13,7 @@ const ProductCard = ({ name, imageUrl }: ProductCardProps) => {
   return (
     <Card className="max-w-xs shadow-none gap-0 pt-0 mt-8">
       <CardHeader className="py-4 px-5 flex flex-row items-center gap-3 font-semibold">
-        Shadcn UI Blocks
+        {name}
       </CardHeader>
 
       <CardContent className="mt-1 text-[15px] text-muted-foreground px-5">

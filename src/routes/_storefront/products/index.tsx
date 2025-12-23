@@ -4,15 +4,27 @@ import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_storefront/products/')({
   component: RouteComponent,
-  loader: () => getProductsWithVariants,
+  loader: () => getProductsWithVariants(),
 })
 
 function RouteComponent() {
+  const products = Route.useLoaderData()
   return (
     <div>
       <h1>Products</h1>
       <p>Browse all our exclusive products</p>
-      <ProductCard />
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center gap-4">
+        {products.map((p) => {
+          const [thumbnail] = p.images
+          return (
+            <ProductCard
+              key={p.id}
+              {...p}
+              imageUrl={thumbnail.ikThumbnailUrl}
+            />
+          )
+        })}
+      </div>
     </div>
   )
 }
