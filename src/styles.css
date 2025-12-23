@@ -225,8 +225,13 @@ code {
   }
 }
 
-@utility container {
+@utility container-admin {
   @apply max-w-4xl;
+  margin-inline: auto;
+  padding: 1rem;
+}
+@utility container-storefront {
+  @apply max-w-7xl;
   margin-inline: auto;
   padding: 1rem;
 }

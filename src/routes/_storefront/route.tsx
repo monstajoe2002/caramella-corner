@@ -9,7 +9,7 @@ function RouteComponent() {
   return (
     <div>
       <Navbar />
-      <main className="container">
+      <main className="container container-storefront">
         <Outlet />
       </main>
     </div>

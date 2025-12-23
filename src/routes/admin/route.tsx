@@ -8,7 +8,7 @@ import { adminAuthMiddleware } from '@/features/admin/middleware'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/admin')({
-  server:{
+  server: {
     middleware: [adminAuthMiddleware],
   },
   component: RouteComponent,
@@ -27,7 +27,7 @@ function RouteComponent() {
       <AdminSidebar />
       <SidebarInset>
         <SidebarTrigger />
-        <main className="container">
+        <main className="container container-admin">
           <Outlet />
         </main>
       </SidebarInset>
