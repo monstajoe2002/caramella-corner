@@ -1,3 +1,4 @@
+import ProductCard from '@/components/storefront/products/card'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_storefront/products/')({
@@ -9,6 +10,7 @@ function RouteComponent() {
     <div>
       <h1>Products</h1>
       <p>Browse all our exclusive products</p>
+      <ProductCard />
     </div>
   )
 }
