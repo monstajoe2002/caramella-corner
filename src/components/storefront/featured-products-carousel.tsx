@@ -56,7 +56,8 @@ export default function FeaturedProductsCarousel({
                     />
                   </CardContent>
                   {/* Backdrop filter */}
-                  <div className="absolute inset-0 bg-linear-to-t from-black to-white transition-opacity duration-500 opacity-10 group-hover:opacity-50"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-black to-white transition-opacity duration-500 opacity-10 group-hover:opacity-50" />
+                  <h3 className="absolute bottom-0">{product.name}</h3>
                 </Card>
               </CarouselItem>
             )
