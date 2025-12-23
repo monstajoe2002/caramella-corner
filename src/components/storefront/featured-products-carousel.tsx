@@ -45,8 +45,12 @@ export default function FeaturedProductsCarousel({
                     'opacity-30': index !== current - 1,
                   })}
                 >
-                  <CardContent className="flex aspect-video items-center justify-center p-6">
-                    <Image src={firstImage.ikThumbnailUrl} />
+                  <CardContent>
+                    <Image
+                      src={firstImage.ikThumbnailUrl}
+                      responsive={true}
+                      className="w-full h-full object-cover"
+                    />
                   </CardContent>
                 </Card>
               </CarouselItem>
