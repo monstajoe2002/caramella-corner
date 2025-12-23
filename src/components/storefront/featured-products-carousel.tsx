@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import {
   Carousel,
@@ -8,13 +7,19 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from '@/components/ui/carousel'
+import { Product } from '@/db/types'
 import { cn } from '@/lib/utils'
+import { useState, useEffect } from 'react'
+interface FeaturedProductsCarouselProps {
+  products: Product[]
+}
+export default function FeaturedProductsCarousel({
+  products,
+}: FeaturedProductsCarouselProps) {
+  const [api, setApi] = useState<CarouselApi>()
+  const [current, setCurrent] = useState(0)
 
-export default function FeaturedProductsCarousel() {
-  const [api, setApi] = React.useState<CarouselApi>()
-  const [current, setCurrent] = React.useState(0)
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (!api) {
       return
     }

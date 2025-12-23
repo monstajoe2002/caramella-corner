@@ -20,7 +20,7 @@ function App() {
       </header>
       <section style={{ marginBottom: 40 }}>
         <h2>Featured Products</h2>
-        <FeaturedProductsCarousel />
+        <FeaturedProductsCarousel products={products} />
       </section>
     </div>
   )
