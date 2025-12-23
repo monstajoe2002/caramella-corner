@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { getProductsWithVariants } from '@/features/admin/products/data'
-import { Image } from '@imagekit/react'
+import FeaturedProductsCarousel from '@/components/storefront/featured-products-carousel'
 
 export const Route = createFileRoute('/_storefront/')({
   component: App,
@@ -20,38 +20,7 @@ function App() {
       </header>
       <section style={{ marginBottom: 40 }}>
         <h2>Featured Products</h2>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-around',
-            flexWrap: 'wrap',
-          }}
-        >
-          {products.slice(0, 3).map((product) => {
-            const [image] = product.images
-            return (
-              <div
-                key={product.id}
-                style={{
-                  border: '1px solid #ddd',
-                  borderRadius: 5,
-                  padding: 10,
-                  width: 180,
-                  textAlign: 'center',
-                }}
-              >
-                <Image
-                  src={
-                    image.ikThumbnailUrl || 'https://via.placeholder.com/150'
-                  }
-                  alt={product.name}
-                />
-                <h3>{product.name}</h3>
-                <p>EGP {product.price}</p>
-              </div>
-            )
-          })}
-        </div>
+        <FeaturedProductsCarousel />
       </section>
     </div>
   )
