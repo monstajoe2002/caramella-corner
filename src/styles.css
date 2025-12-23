@@ -227,7 +227,7 @@ code {
     @apply scroll-m-20 text-2xl font-semibold tracking-tight;
   }
   p {
-    @apply leading-7 [&:not(:first-child)]:mt-6;
+    @apply leading-7 not-first:mt-6 text-muted-foreground;
   }
 }
 
