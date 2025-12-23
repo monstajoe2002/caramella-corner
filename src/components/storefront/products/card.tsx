@@ -1,8 +1,15 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { ArrowRight } from 'lucide-react'
+interface ProductCardProps {
+  name: string
+  description: string
+  price: number
+  slug: string
+  imageUrl: string
+}
 
-const ProductCard = () => {
+const ProductCard = ({ name, imageUrl }: ProductCardProps) => {
   return (
     <Card className="max-w-xs shadow-none gap-0 pt-0 mt-8">
       <CardHeader className="py-4 px-5 flex flex-row items-center gap-3 font-semibold">
