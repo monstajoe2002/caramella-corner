@@ -47,7 +47,7 @@ export default function FeaturedProductsCarousel({
                 <Card
                   className={cn(
                     { 'opacity-30': index !== current - 1 },
-                    'relative overflow-hidden group',
+                    'relative overflow-hidden group transition-opacity duration-500',
                   )}
                 >
                   <CardContent className="flex aspect-video items-center justify-center p-0">
