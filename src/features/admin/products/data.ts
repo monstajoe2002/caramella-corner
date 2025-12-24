@@ -3,6 +3,7 @@ import z from 'zod'
 import {
   getProductById as getProductByIdDb,
   getProductsWithVariants as getProductsWithVariantsDb,
+  getProductsByCategorySlug as getProductsByCategorySlugDb,
   insertProduct,
   deleteProduct as deleteProductDb,
   updateProduct,
@@ -19,6 +20,16 @@ export const getProductsWithVariants = createServerFn().handler(async () => {
     },
   )
 })
+export const getProductsByCategorySlug = createServerFn()
+  .inputValidator((data: { slug: string }) => data)
+  .handler(async ({ data: { slug } }) => {
+    return await Sentry.startSpan(
+      { name: 'getProductsByCategorySlug' },
+      async () => {
+        return await getProductsByCategorySlugDb(slug)
+      },
+    )
+  })
 export const getProductById = createServerFn({ method: 'GET' })
   .inputValidator((data: { id: string }) => data)
   .handler(async ({ data: { id } }) => {
