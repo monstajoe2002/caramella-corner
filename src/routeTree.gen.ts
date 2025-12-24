@@ -17,6 +17,7 @@ import { Route as AdminProductsIndexRouteImport } from './routes/admin/products/
 import { Route as AdminOrdersIndexRouteImport } from './routes/admin/orders/index'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as StorefrontProductsIndexRouteImport } from './routes/_storefront/products/index'
+import { Route as StorefrontCategoriesIndexRouteImport } from './routes/_storefront/categories/index'
 import { Route as ApiAdminUploadAuthRouteImport } from './routes/api/admin/upload-auth'
 import { Route as AdminProductsNewRouteImport } from './routes/admin/products/new'
 import { Route as AdminOrdersIdRouteImport } from './routes/admin/orders/$id'
@@ -63,6 +64,12 @@ const StorefrontProductsIndexRoute = StorefrontProductsIndexRouteImport.update({
   path: '/products/',
   getParentRoute: () => StorefrontRouteRoute,
 } as any)
+const StorefrontCategoriesIndexRoute =
+  StorefrontCategoriesIndexRouteImport.update({
+    id: '/categories/',
+    path: '/categories/',
+    getParentRoute: () => StorefrontRouteRoute,
+  } as any)
 const ApiAdminUploadAuthRoute = ApiAdminUploadAuthRouteImport.update({
   id: '/api/admin/upload-auth',
   path: '/api/admin/upload-auth',
@@ -102,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/admin/orders/$id': typeof AdminOrdersIdRoute
   '/admin/products/new': typeof AdminProductsNewRoute
   '/api/admin/upload-auth': typeof ApiAdminUploadAuthRoute
+  '/categories': typeof StorefrontCategoriesIndexRoute
   '/products': typeof StorefrontProductsIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/orders': typeof AdminOrdersIndexRoute
@@ -116,6 +124,7 @@ export interface FileRoutesByTo {
   '/admin/orders/$id': typeof AdminOrdersIdRoute
   '/admin/products/new': typeof AdminProductsNewRoute
   '/api/admin/upload-auth': typeof ApiAdminUploadAuthRoute
+  '/categories': typeof StorefrontCategoriesIndexRoute
   '/products': typeof StorefrontProductsIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/orders': typeof AdminOrdersIndexRoute
@@ -133,6 +142,7 @@ export interface FileRoutesById {
   '/admin/orders/$id': typeof AdminOrdersIdRoute
   '/admin/products/new': typeof AdminProductsNewRoute
   '/api/admin/upload-auth': typeof ApiAdminUploadAuthRoute
+  '/_storefront/categories/': typeof StorefrontCategoriesIndexRoute
   '/_storefront/products/': typeof StorefrontProductsIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/orders/': typeof AdminOrdersIndexRoute
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
     | '/admin/orders/$id'
     | '/admin/products/new'
     | '/api/admin/upload-auth'
+    | '/categories'
     | '/products'
     | '/admin/categories'
     | '/admin/orders'
@@ -164,6 +175,7 @@ export interface FileRouteTypes {
     | '/admin/orders/$id'
     | '/admin/products/new'
     | '/api/admin/upload-auth'
+    | '/categories'
     | '/products'
     | '/admin/categories'
     | '/admin/orders'
@@ -180,6 +192,7 @@ export interface FileRouteTypes {
     | '/admin/orders/$id'
     | '/admin/products/new'
     | '/api/admin/upload-auth'
+    | '/_storefront/categories/'
     | '/_storefront/products/'
     | '/admin/categories/'
     | '/admin/orders/'
@@ -252,6 +265,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StorefrontProductsIndexRouteImport
       parentRoute: typeof StorefrontRouteRoute
     }
+    '/_storefront/categories/': {
+      id: '/_storefront/categories/'
+      path: '/categories'
+      fullPath: '/categories'
+      preLoaderRoute: typeof StorefrontCategoriesIndexRouteImport
+      parentRoute: typeof StorefrontRouteRoute
+    }
     '/api/admin/upload-auth': {
       id: '/api/admin/upload-auth'
       path: '/api/admin/upload-auth'
@@ -299,11 +319,13 @@ declare module '@tanstack/react-router' {
 
 interface StorefrontRouteRouteChildren {
   StorefrontIndexRoute: typeof StorefrontIndexRoute
+  StorefrontCategoriesIndexRoute: typeof StorefrontCategoriesIndexRoute
   StorefrontProductsIndexRoute: typeof StorefrontProductsIndexRoute
 }
 
 const StorefrontRouteRouteChildren: StorefrontRouteRouteChildren = {
   StorefrontIndexRoute: StorefrontIndexRoute,
+  StorefrontCategoriesIndexRoute: StorefrontCategoriesIndexRoute,
   StorefrontProductsIndexRoute: StorefrontProductsIndexRoute,
 }
 
