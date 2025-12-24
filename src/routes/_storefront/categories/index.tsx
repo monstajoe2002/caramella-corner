@@ -1,5 +1,7 @@
+import { buttonVariants } from '@/components/ui/button'
 import { getCategoriesWithSubcategories } from '@/features/admin/categories/data'
-import { createFileRoute } from '@tanstack/react-router'
+import { cn } from '@/lib/utils'
+import { createFileRoute, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_storefront/categories/')({
   component: RouteComponent,
@@ -12,6 +14,21 @@ function RouteComponent() {
     <div>
       <h1 className="text-start">Categories</h1>
       <p>Browse products by a specific category</p>
+      <div className="flex flex-col items-start gap-2 mt-4">
+        {categories.map((c) => (
+          <Link
+            className={cn(
+              buttonVariants({ variant: 'link' }),
+              'text-primary p-0',
+            )}
+            to={'/categories/$slug'}
+            params={{ slug: c.slug }}
+            key={c.slug}
+          >
+            {c.name}
+          </Link>
+        ))}
+      </div>
     </div>
   )
 }
