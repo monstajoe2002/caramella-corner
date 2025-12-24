@@ -13,7 +13,7 @@ function RouteComponent() {
   return (
     <div>
       <h1 className="text-start">Categories</h1>
-      <p>Browse products by a specific category</p>
+      <p>Select a category to view its subcategories.</p>
       <div className="flex flex-col items-start gap-2 mt-4">
         {categories.map((c) => (
           <Link
