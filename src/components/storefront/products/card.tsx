@@ -2,6 +2,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Image } from '@imagekit/react'
+import { Link } from '@tanstack/react-router'
 import { ArrowRight } from 'lucide-react'
 interface ProductCardProps {
   name: string
@@ -20,6 +21,7 @@ const ProductCard = ({
   price,
   quantity,
   category,
+  slug,
 }: ProductCardProps) => {
   return (
     <Card className="max-w-xs shadow-none gap-0 pt-0 mt-8">
@@ -42,8 +44,11 @@ const ProductCard = ({
         <p>
           <b>{quantity}</b> left in stock
         </p>
-        <Button className="/blocks">
-          Explore <ArrowRight />
+        <Button asChild>
+          <Link to={'/products/$slug'} params={{ slug }}>
+            {' '}
+            Explore <ArrowRight />
+          </Link>
         </Button>
       </CardFooter>
     </Card>
