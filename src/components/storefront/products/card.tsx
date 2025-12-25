@@ -1,3 +1,4 @@
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Image } from '@imagekit/react'
@@ -25,6 +26,7 @@ const ProductCard = ({
       <CardHeader className="py-4 px-5 flex flex-col font-semibold">
         <h3>{name}</h3>
         <p className="mt-0 text-primary">EGP {price}</p>
+        <Badge variant={'secondary'}>{category}</Badge>
       </CardHeader>
 
       <CardContent className="mt-1 text-[15px] text-muted-foreground px-5">
