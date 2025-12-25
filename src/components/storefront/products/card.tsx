@@ -9,6 +9,7 @@ interface ProductCardProps {
   slug: string
   imageUrl: string
   quantity: number
+  category: string
 }
 
 const ProductCard = ({
@@ -17,6 +18,7 @@ const ProductCard = ({
   description,
   price,
   quantity,
+  category,
 }: ProductCardProps) => {
   return (
     <Card className="max-w-xs shadow-none gap-0 pt-0 mt-8">
