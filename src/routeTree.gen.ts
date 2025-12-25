@@ -22,6 +22,7 @@ import { Route as ApiAdminUploadAuthRouteImport } from './routes/api/admin/uploa
 import { Route as AdminProductsNewRouteImport } from './routes/admin/products/new'
 import { Route as AdminOrdersIdRouteImport } from './routes/admin/orders/$id'
 import { Route as AdminCategoriesNewRouteImport } from './routes/admin/categories/new'
+import { Route as StorefrontProductsSlugRouteImport } from './routes/_storefront/products/$slug'
 import { Route as StorefrontCategoriesSlugRouteImport } from './routes/_storefront/categories/$slug'
 import { Route as AdminProductsIdEditRouteImport } from './routes/admin/products/$id.edit'
 import { Route as AdminCategoriesIdEditRouteImport } from './routes/admin/categories/$id.edit'
@@ -91,6 +92,11 @@ const AdminCategoriesNewRoute = AdminCategoriesNewRouteImport.update({
   path: '/categories/new',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const StorefrontProductsSlugRoute = StorefrontProductsSlugRouteImport.update({
+  id: '/products/$slug',
+  path: '/products/$slug',
+  getParentRoute: () => StorefrontRouteRoute,
+} as any)
 const StorefrontCategoriesSlugRoute =
   StorefrontCategoriesSlugRouteImport.update({
     id: '/categories/$slug',
@@ -113,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/': typeof StorefrontIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/categories/$slug': typeof StorefrontCategoriesSlugRoute
+  '/products/$slug': typeof StorefrontProductsSlugRoute
   '/admin/categories/new': typeof AdminCategoriesNewRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
   '/admin/products/new': typeof AdminProductsNewRoute
@@ -129,6 +136,7 @@ export interface FileRoutesByTo {
   '/': typeof StorefrontIndexRoute
   '/admin': typeof AdminIndexRoute
   '/categories/$slug': typeof StorefrontCategoriesSlugRoute
+  '/products/$slug': typeof StorefrontProductsSlugRoute
   '/admin/categories/new': typeof AdminCategoriesNewRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
   '/admin/products/new': typeof AdminProductsNewRoute
@@ -148,6 +156,7 @@ export interface FileRoutesById {
   '/_storefront/': typeof StorefrontIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/_storefront/categories/$slug': typeof StorefrontCategoriesSlugRoute
+  '/_storefront/products/$slug': typeof StorefrontProductsSlugRoute
   '/admin/categories/new': typeof AdminCategoriesNewRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
   '/admin/products/new': typeof AdminProductsNewRoute
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/'
     | '/categories/$slug'
+    | '/products/$slug'
     | '/admin/categories/new'
     | '/admin/orders/$id'
     | '/admin/products/new'
@@ -183,6 +193,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/categories/$slug'
+    | '/products/$slug'
     | '/admin/categories/new'
     | '/admin/orders/$id'
     | '/admin/products/new'
@@ -201,6 +212,7 @@ export interface FileRouteTypes {
     | '/_storefront/'
     | '/admin/'
     | '/_storefront/categories/$slug'
+    | '/_storefront/products/$slug'
     | '/admin/categories/new'
     | '/admin/orders/$id'
     | '/admin/products/new'
@@ -313,6 +325,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCategoriesNewRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/_storefront/products/$slug': {
+      id: '/_storefront/products/$slug'
+      path: '/products/$slug'
+      fullPath: '/products/$slug'
+      preLoaderRoute: typeof StorefrontProductsSlugRouteImport
+      parentRoute: typeof StorefrontRouteRoute
+    }
     '/_storefront/categories/$slug': {
       id: '/_storefront/categories/$slug'
       path: '/categories/$slug'
@@ -340,6 +359,7 @@ declare module '@tanstack/react-router' {
 interface StorefrontRouteRouteChildren {
   StorefrontIndexRoute: typeof StorefrontIndexRoute
   StorefrontCategoriesSlugRoute: typeof StorefrontCategoriesSlugRoute
+  StorefrontProductsSlugRoute: typeof StorefrontProductsSlugRoute
   StorefrontCategoriesIndexRoute: typeof StorefrontCategoriesIndexRoute
   StorefrontProductsIndexRoute: typeof StorefrontProductsIndexRoute
 }
@@ -347,6 +367,7 @@ interface StorefrontRouteRouteChildren {
 const StorefrontRouteRouteChildren: StorefrontRouteRouteChildren = {
   StorefrontIndexRoute: StorefrontIndexRoute,
   StorefrontCategoriesSlugRoute: StorefrontCategoriesSlugRoute,
+  StorefrontProductsSlugRoute: StorefrontProductsSlugRoute,
   StorefrontCategoriesIndexRoute: StorefrontCategoriesIndexRoute,
   StorefrontProductsIndexRoute: StorefrontProductsIndexRoute,
 }
