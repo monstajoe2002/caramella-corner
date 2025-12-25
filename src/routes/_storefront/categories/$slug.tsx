@@ -19,6 +19,7 @@ function RouteComponent() {
             <ProductCard
               key={p.id}
               {...p}
+              category={p.category?.name!}
               quantity={p.quantity || 0}
               imageUrl={thumbnail.ikThumbnailUrl}
             />
