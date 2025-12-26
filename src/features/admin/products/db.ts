@@ -4,10 +4,12 @@ import { NewProductWithVariants } from '@/db/types'
 import { and, eq, notInArray } from 'drizzle-orm'
 import { notFound } from '@tanstack/react-router'
 import { imagekit } from '@/lib/imagekit'
+import { priceAfterDiscount } from '@/db/schema-helpers'
 
 export async function getProductsWithVariants() {
   return await db.query.products.findMany({
     with: { variants: true, category: true, images: true },
+    extras: { priceAfterDiscount },
   })
 }
 export async function getProductsByCategorySlug(slug: string) {
@@ -20,6 +22,7 @@ export async function getProductsByCategorySlug(slug: string) {
   return await db.query.products.findMany({
     where: eq(products.categoryId, category.id),
     with: { variants: true, category: true, images: true },
+    extras: { priceAfterDiscount },
   })
 }
 
@@ -32,6 +35,7 @@ export async function getProductById(id: string) {
       subcategory: true,
       images: true,
     },
+    extras: { priceAfterDiscount },
   })
 
   if (product == null) throw notFound()
