@@ -10,6 +10,6 @@ export const updatedAt = timestamp({ withTimezone: true })
   .defaultNow()
   .$onUpdate(() => new Date())
 export const priceAfterDiscount =
-  sql`${Number(products.price) * (1 - Number(products.discount))}`.as(
+  sql<number>`${Number(products.price) * (1 - Number(products.discount))}`.as(
     'price_after_discount',
   )

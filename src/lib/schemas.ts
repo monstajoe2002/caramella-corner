@@ -18,6 +18,12 @@ export const productSchema = z.object({
     .number('Price must be a number')
     .positive('Price must be greater than 0'),
   description: z.string().min(1, 'Proper description is required'),
+  dicount: z
+    .number()
+    .int()
+    .nonnegative()
+    .min(0)
+    .max(100, 'Invalid discount value'),
   material: z.string().min(1, 'Material is required'),
   images: z.array(imagesSchema),
   variants: z.array(variantsSchema).min(1, 'At least one variant is need'),
