@@ -1,6 +1,7 @@
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
 import { Image } from '@imagekit/react'
 import { Link } from '@tanstack/react-router'
 import { ArrowRight } from 'lucide-react'
@@ -12,6 +13,7 @@ interface ProductCardProps {
   imageUrl: string
   quantity: number
   category: string
+  priceAfterDiscount: number
 }
 
 const ProductCard = ({
@@ -22,12 +24,23 @@ const ProductCard = ({
   quantity,
   category,
   slug,
+  priceAfterDiscount,
 }: ProductCardProps) => {
   return (
     <Card className="max-w-xs shadow-none gap-0 pt-0 mt-8">
       <CardHeader className="py-4 px-5 flex flex-col font-semibold">
         <h3>{name}</h3>
-        <p className="mt-0 text-primary">EGP {price}</p>
+        <p className="mt-0 text-primary">
+          EGP{' '}
+          <span
+            className={cn({
+              'line-through': Number(priceAfterDiscount) !== Number(price),
+            })}
+          >
+            {price}
+          </span>{' '}
+          {Number(priceAfterDiscount)}
+        </p>
         <Badge variant={'secondary'}>{category}</Badge>
       </CardHeader>
 
