@@ -54,6 +54,7 @@ export const createProduct = createServerFn({ method: 'POST' })
       await insertProduct({
         ...data,
         slug: slugify(data.name, { lower: true }),
+        discount: data.discount / 100,
         price: String(data.price),
       })
 
@@ -95,6 +96,7 @@ export const editProduct = createServerFn({ method: 'POST' })
       await updateProduct(id, {
         ...data,
         slug: slugify(data.name, { lower: true }),
+        discount: data.discount / 100,
         price: String(data.price),
       })
 

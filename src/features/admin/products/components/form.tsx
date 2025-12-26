@@ -78,6 +78,7 @@ export default function ProductForm({ data }: ProductFormProps) {
         ikUrl: img.ikUrl,
         ikThumbnailUrl: img.ikThumbnailUrl,
       })) ?? []) as FormImage[],
+      discount: data?.discount ?? 0,
       categoryId: data?.categoryId ?? '',
       subcategoryId: data?.subcategoryId ?? '',
       active: data?.active ?? true,

@@ -18,7 +18,7 @@ export const productSchema = z.object({
     .number('Price must be a number')
     .positive('Price must be greater than 0'),
   description: z.string().min(1, 'Proper description is required'),
-  dicount: z
+  discount: z
     .number()
     .int()
     .nonnegative()
