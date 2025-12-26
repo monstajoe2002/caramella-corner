@@ -7,6 +7,7 @@ import {
   pgEnum,
   uuid,
   numeric,
+  real,
 } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
 import { createdAt, id, updatedAt } from './schema-helpers'
@@ -45,25 +46,29 @@ export const subcategories = pgTable('subcategories', {
 })
 
 // Product table
-export const products = pgTable('products', {
-  id,
-  name: varchar('name').notNull(),
-  slug: varchar('slug').notNull(),
-  // images: text('images').array().notNull(), // Storing as text, could be JSON or array
-  price: numeric('price').notNull(),
-  description: text('description').notNull(),
-  material: varchar('material').notNull(),
-  categoryId: uuid('category_id').references(() => categories.id, {
-    onDelete: 'cascade',
-  }),
-  subcategoryId: uuid('subcategory_id').references(() => subcategories.id, {
-    onDelete: 'cascade',
-  }),
-  active: boolean('active').default(true),
-  quantity: integer('quantity').default(0),
-  createdAt,
-  updatedAt,
-})
+export const products = pgTable(
+  'products',
+  {
+    id,
+    name: varchar('name').notNull(),
+    slug: varchar('slug').notNull(),
+    discount: real('discount').notNull().default(0), // real is a 32 bit floating-point number
+    price: numeric('price').notNull(),
+    description: text('description').notNull(),
+    material: varchar('material').notNull(),
+    categoryId: uuid('category_id').references(() => categories.id, {
+      onDelete: 'cascade',
+    }),
+    subcategoryId: uuid('subcategory_id').references(() => subcategories.id, {
+      onDelete: 'cascade',
+    }),
+    active: boolean('active').default(true),
+    quantity: integer('quantity').default(0),
+    createdAt,
+    updatedAt,
+  },
+  () => [{ checkDiscount: `CHECK (discount >= 0 AND discount <= 1)` }],
+)
 // Image Table
 export const images = pgTable('images', {
   id,

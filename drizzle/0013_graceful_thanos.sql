@@ -1,0 +1,1 @@
+ALTER TABLE "products" ADD COLUMN "discount" real DEFAULT 0 NOT NULL;
