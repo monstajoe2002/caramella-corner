@@ -9,7 +9,7 @@ import { priceAfterDiscount } from '@/db/schema-helpers'
 export async function getProductsWithVariants() {
   return await db.query.products.findMany({
     with: { variants: true, category: true, images: true },
-    extras: { priceAfterDiscount },
+    extras: { priceAfterDiscount: priceAfterDiscount(products) },
   })
 }
 export async function getProductsByCategorySlug(slug: string) {
@@ -22,7 +22,7 @@ export async function getProductsByCategorySlug(slug: string) {
   return await db.query.products.findMany({
     where: eq(products.categoryId, category.id),
     with: { variants: true, category: true, images: true },
-    extras: { priceAfterDiscount },
+    extras: { priceAfterDiscount: priceAfterDiscount(products) },
   })
 }
 
@@ -35,7 +35,7 @@ export async function getProductById(id: string) {
       subcategory: true,
       images: true,
     },
-    extras: { priceAfterDiscount },
+    extras: { priceAfterDiscount: priceAfterDiscount(products) },
   })
 
   if (product == null) throw notFound()
