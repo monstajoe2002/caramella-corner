@@ -48,6 +48,7 @@ import { productSchema } from '@/lib/schemas'
 import slugify from 'slugify'
 import { createProduct, editProduct } from '../data'
 import { toast } from 'sonner'
+import { Label } from '@/components/ui/label'
 
 type ProductFormProps = {
   data?: Omit<ProductWithVariants, 'category' | 'subcategory'>
@@ -375,6 +376,21 @@ export default function ProductForm({ data }: ProductFormProps) {
               </Field>
             )
           }}
+        />
+        <form.Subscribe
+          selector={(state) => state.values.price}
+          children={(price) =>
+            price > 0 && (
+              <form.Field name="discount">
+                {(field) => (
+                  <Label aria-label="Price after discount">
+                    Price after discount:{' '}
+                    {price * (1 - field.state.value / 100)}
+                  </Label>
+                )}
+              </form.Field>
+            )
+          }
         />
         {/* variants field goes here */}
         <form.Field
