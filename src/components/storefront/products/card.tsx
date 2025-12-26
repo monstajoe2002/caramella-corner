@@ -34,12 +34,13 @@ const ProductCard = ({
           EGP{' '}
           <span
             className={cn({
-              'line-through': Number(priceAfterDiscount) !== Number(price),
+              'line-through text-primary-400':
+                priceAfterDiscount < Number(price),
             })}
           >
             {price}
           </span>{' '}
-          {Number(priceAfterDiscount)}
+          {priceAfterDiscount < Number(price) && priceAfterDiscount}
         </p>
         <Badge variant={'secondary'}>{category}</Badge>
       </CardHeader>
