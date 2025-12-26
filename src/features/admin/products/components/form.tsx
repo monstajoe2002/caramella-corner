@@ -33,7 +33,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { useRef, useState } from 'react'
 import { LoadingSwap } from '@/components/ui/loading-swap'
-import { PlusIcon, SaveIcon, XIcon } from 'lucide-react'
+import { PercentIcon, PlusIcon, SaveIcon, XIcon } from 'lucide-react'
 import ImagekitUpload, { authenticator } from './imagekit-upload'
 import {
   Image,
@@ -341,6 +341,36 @@ export default function ProductForm({ data }: ProductFormProps) {
                   </InputGroupAddon>
                 </InputGroup>
                 <FieldDescription>Your product's price.</FieldDescription>
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            )
+          }}
+        />
+        {/* discount field */}
+        <form.Field
+          name="discount"
+          children={(field) => {
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid
+            return (
+              <Field data-invalid={isInvalid}>
+                <FieldLabel htmlFor={field.name}>Discount</FieldLabel>
+                <InputGroup>
+                  <InputGroupInput
+                    type="number"
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(Number(e.target.value))}
+                    aria-invalid={isInvalid}
+                    autoComplete="off"
+                  />
+                  <InputGroupAddon align="inline-end">
+                    <PercentIcon />
+                  </InputGroupAddon>
+                </InputGroup>
+                <FieldDescription>Put your product on sale.</FieldDescription>
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
             )
