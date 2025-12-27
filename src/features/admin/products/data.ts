@@ -32,17 +32,17 @@ export const getProductsByCategorySlug = createServerFn()
     )
   })
 export const getProductById = createServerFn({ method: 'GET' })
-  .inputValidator((data: { slug: string }) => data)
-  .handler(async ({ data: { slug } }) => {
-    return await Sentry.startSpan({ name: 'getProductBySlug' }, async () => {
-      return await getProductBySlugDb(slug)
-    })
-  })
-export const getProductBySlug = createServerFn({ method: 'GET' })
   .inputValidator((data: { id: string }) => data)
   .handler(async ({ data: { id } }) => {
     return await Sentry.startSpan({ name: 'getProductById' }, async () => {
       return await getProductByIdDb(id)
+    })
+  })
+export const getProductBySlug = createServerFn({ method: 'GET' })
+  .inputValidator((data: { slug: string }) => data)
+  .handler(async ({ data: { slug } }) => {
+    return await Sentry.startSpan({ name: 'getProductBySlug' }, async () => {
+      return await getProductBySlugDb(slug)
     })
   })
 
