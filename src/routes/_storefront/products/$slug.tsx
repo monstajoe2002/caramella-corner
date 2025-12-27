@@ -7,5 +7,10 @@ export const Route = createFileRoute('/_storefront/products/$slug')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/_storefront/products/$slug"!</div>
+  const product = Route.useLoaderData()
+  return (
+    <div>
+      <h1 className="text-start">{product.name}</h1>
+    </div>
+  )
 }
