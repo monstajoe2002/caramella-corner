@@ -41,6 +41,21 @@ export async function getProductById(id: string) {
   if (product == null) throw notFound()
   return product
 }
+export async function getProductBySlug(slug: string) {
+  const product = await db.query.products.findFirst({
+    where: eq(products.slug, slug),
+    with: {
+      variants: true,
+      category: true,
+      subcategory: true,
+      images: true,
+    },
+    extras: { priceAfterDiscount: priceAfterDiscount(products) },
+  })
+
+  if (product == null) throw notFound()
+  return product
+}
 
 export async function insertProduct(product: NewProductWithVariants) {
   return db.transaction(async (trx) => {
