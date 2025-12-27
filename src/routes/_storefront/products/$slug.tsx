@@ -26,19 +26,20 @@ function RouteComponent() {
             <CarouselItem key={img.id}>
               <div className="p-1">
                 <Card>
-                  <CardContent className="flex aspect-square ">
-                    <Image
-                      src={img.ikUrl}
-                      className="w-full h-full object-cover"
-                    />
+                  <CardContent className="flex aspect-square">
+                    <Image src={img.ikUrl} className="w-full object-cover" />
                   </CardContent>
                 </Card>
               </div>
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        {product.images.length > 1 && (
+          <>
+            <CarouselPrevious />
+            <CarouselNext />
+          </>
+        )}
       </Carousel>
     </div>
   )
