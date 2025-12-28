@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import { Image } from '@imagekit/react'
 import { Link } from '@tanstack/react-router'
 import { ArrowRight } from 'lucide-react'
+
 interface ProductCardProps {
   name: string
   description: string
@@ -27,7 +28,7 @@ const ProductCard = ({
   priceAfterDiscount,
 }: ProductCardProps) => {
   return (
-    <Card className="max-w-xs shadow-none gap-0 pt-0 mt-8">
+    <Card className="max-w-xs shadow-none gap-0 pt-0 mt-8 h-[440px] flex flex-col justify-between">
       <CardHeader className="py-4 px-5 flex flex-col font-semibold">
         <h3>{name}</h3>
         <p className="mt-0 text-primary">
@@ -45,8 +46,8 @@ const ProductCard = ({
         <Badge variant={'secondary'}>{category}</Badge>
       </CardHeader>
 
-      <CardContent className="mt-1 text-[15px] text-muted-foreground px-5">
-        <p>{description}</p>
+      <CardContent className="mt-1 text-[15px] text-muted-foreground px-5 grow overflow-hidden">
+        <p className="line-clamp-3">{description}</p>
         <Image
           src={imageUrl}
           className="mt-5 aspect-video rounded-xl object-cover object-center"
