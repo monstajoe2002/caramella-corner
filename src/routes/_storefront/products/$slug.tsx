@@ -21,7 +21,7 @@ function RouteComponent() {
     <div>
       <div className="md:grid md:grid-cols-2 flex flex-col p-4">
         <h1 className="text-start order-last mt-8 md:mt-0">{product.name}</h1>
-        <Carousel className="w-full max-w-xs md:order-first">
+        <Carousel className="w-full max-w-xs md:order-first mx-auto">
           <CarouselContent>
             {product.images.map((img) => (
               <CarouselItem key={img.id}>
