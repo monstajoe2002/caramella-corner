@@ -45,6 +45,10 @@ function RouteComponent() {
         </Carousel>
         <div className="mt-8 md:mt-0 space-y-2">
           <h1 className="text-start">{product.name}</h1>
+          <p className="uppercase text-secondary-foreground">
+            {product.category?.name}
+          </p>
+          <Badge>{product.subcategory?.name}</Badge>
           <h2 className="text-primary">EGP {product.priceAfterDiscount}</h2>
           {product.discount > 0 && (
             <h3 className="line-through text-muted-foreground">
@@ -60,10 +64,6 @@ function RouteComponent() {
               </p>
             </div>
           )}
-          <p className="uppercase text-secondary-foreground">
-            {product.category?.name}
-          </p>
-          <Badge>{product.subcategory?.name}</Badge>
           <p>{product.description}</p>
           <b>Material: </b>
           <span className="text-muted-foreground">{product.material}</span>
