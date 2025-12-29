@@ -14,7 +14,9 @@ import { BadgePercentIcon } from 'lucide-react'
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
@@ -79,15 +81,18 @@ function RouteComponent() {
             <SelectValue placeholder="Select a variant..." />
           </SelectTrigger>
           <SelectContent>
-            {product.variants.map((variant) => {
-              const { color, size } = variant
-              const variantItem = [color, size].filter(String)
-              return (
-                <SelectItem value={variant.sku}>
-                  {variantItem.join(' - ')}
-                </SelectItem>
-              )
-            })}
+            <SelectGroup>
+              <SelectLabel>Variants</SelectLabel>
+              {product.variants.map((variant) => {
+                const { color, size } = variant
+                const variantItem = [color, size].filter(String)
+                return (
+                  <SelectItem value={variant.sku}>
+                    {variantItem.join(' - ')}
+                  </SelectItem>
+                )
+              })}
+            </SelectGroup>
           </SelectContent>
         </Select>
       </div>
