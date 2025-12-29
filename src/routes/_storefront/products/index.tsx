@@ -1,10 +1,10 @@
 import ProductCard from '@/components/storefront/products/card'
-import { getProductsWithVariants } from '@/features/admin/products/data'
+import { getActiveProducts } from '@/features/storefront/products/data'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_storefront/products/')({
   component: RouteComponent,
-  loader: () => getProductsWithVariants({ data: { activeOnly: true } }),
+  loader: () => getActiveProducts(),
 })
 
 function RouteComponent() {

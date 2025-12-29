@@ -13,18 +13,14 @@ import slugify from 'slugify'
 import { productSchema } from '@/lib/schemas'
 import { redirect } from '@tanstack/react-router'
 import * as Sentry from '@sentry/tanstackstart-react'
-export const getProductsWithVariants = createServerFn()
-  .inputValidator((data: { activeOnly?: boolean }) => data)
-  .handler(async ({ data }) => {
-    return await Sentry.startSpan(
-      { name: 'getProductsWithVariants' },
-      async () => {
-        const activeOnly = data?.activeOnly ?? false
-        return await getProductsWithVariantsDb(activeOnly)
-      },
-    )
-  })
-
+export const getProductsWithVariants = createServerFn().handler(async () => {
+  return await Sentry.startSpan(
+    { name: 'getProductsWithVariants' },
+    async () => {
+      return await getProductsWithVariantsDb()
+    },
+  )
+})
 export const getProductsByCategorySlug = createServerFn()
   .inputValidator((data: { slug: string }) => data)
   .handler(async ({ data: { slug } }) => {
@@ -35,22 +31,21 @@ export const getProductsByCategorySlug = createServerFn()
       },
     )
   })
-
 export const getProductById = createServerFn({ method: 'GET' })
-  .inputValidator((data: { id: string; activeOnly?: boolean }) => data)
-  .handler(async ({ data: { id, activeOnly } }) => {
+  .inputValidator((data: { id: string }) => data)
+  .handler(async ({ data: { id } }) => {
     return await Sentry.startSpan({ name: 'getProductById' }, async () => {
-      return await getProductByIdDb(id, activeOnly ?? false)
+      return await getProductByIdDb(id)
+    })
+  })
+export const getProductBySlug = createServerFn({ method: 'GET' })
+  .inputValidator((data: { slug: string }) => data)
+  .handler(async ({ data: { slug } }) => {
+    return await Sentry.startSpan({ name: 'getProductBySlug' }, async () => {
+      return await getProductBySlugDb(slug)
     })
   })
 
-export const getProductBySlug = createServerFn({ method: 'GET' })
-  .inputValidator((data: { slug: string; activeOnly?: boolean }) => data)
-  .handler(async ({ data: { slug, activeOnly } }) => {
-    return await Sentry.startSpan({ name: 'getProductBySlug' }, async () => {
-      return await getProductBySlugDb(slug, activeOnly ?? false)
-    })
-  })
 export const createProduct = createServerFn({ method: 'POST' })
   .inputValidator(productSchema.extend({ slug: z.string().min(1).slugify() }))
   .handler(async ({ data: unsafeData }) => {
