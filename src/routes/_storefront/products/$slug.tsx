@@ -6,7 +6,7 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from '@/components/ui/carousel'
-import { getProductBySlug } from '@/features/admin/products/data'
+import { getProductBySlug } from '@/features/storefront/products/data'
 import { Image } from '@imagekit/react'
 import { createFileRoute } from '@tanstack/react-router'
 import { Badge } from '@/components/ui/badge'

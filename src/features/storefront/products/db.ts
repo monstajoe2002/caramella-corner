@@ -23,3 +23,18 @@ export async function getActiveProductsByCategorySlug(slug: string) {
     extras: { priceAfterDiscount: priceAfterDiscount(products) },
   })
 }
+export async function getProductBySlug(slug: string) {
+  const product = await db.query.products.findFirst({
+    where: eq(products.slug, slug),
+    with: {
+      variants: true,
+      category: true,
+      subcategory: true,
+      images: true,
+    },
+    extras: { priceAfterDiscount: priceAfterDiscount(products) },
+  })
+
+  if (product == null) throw notFound()
+  return product
+}
