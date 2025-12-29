@@ -4,7 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_storefront/products/')({
   component: RouteComponent,
-  loader: () => getProductsWithVariants(),
+  loader: () => getProductsWithVariants({ data: { activeOnly: true } }),
 })
 
 function RouteComponent() {
