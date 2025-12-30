@@ -10,7 +10,7 @@ import { getProductBySlug } from '@/features/storefront/products/data'
 import { Image } from '@imagekit/react'
 import { createFileRoute } from '@tanstack/react-router'
 import { Badge } from '@/components/ui/badge'
-import { BadgePercentIcon } from 'lucide-react'
+import { BadgePercentIcon, ShoppingCartIcon } from 'lucide-react'
 import {
   Select,
   SelectContent,
@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button'
 
 export const Route = createFileRoute('/_storefront/products/$slug')({
   component: RouteComponent,
@@ -53,7 +54,7 @@ function RouteComponent() {
           </>
         )}
       </Carousel>
-      <div className="mt-8 md:mt-0 space-y-2">
+      <div className="mt-8 md:mt-0 space-y-2 flex flex-col">
         <h1 className="text-start">{product.name}</h1>
         <p className="uppercase text-secondary-foreground">
           {product.category?.name}
@@ -98,15 +99,21 @@ function RouteComponent() {
           </SelectContent>
         </Select>
         {/* quantity input */}
-        <Label className="mt-4" htmlFor="quantity">
-          Quantity
-        </Label>
-        <Input
-          type="number"
-          defaultValue={1}
-          max={product.quantity!}
-          className="w-full max-w-xs space-y-2"
-        />
+        <div>
+          <Label className="mt-4 mb-2" htmlFor="quantity">
+            Quantity
+          </Label>
+          <Input
+            type="number"
+            defaultValue={1}
+            max={product.quantity!}
+            className="w-full max-w-xs space-y-2"
+          />
+        </div>
+        <Button className="mt-4">
+          <ShoppingCartIcon />
+          Add To Cart
+        </Button>
       </div>
     </div>
   )
