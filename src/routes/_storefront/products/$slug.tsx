@@ -20,6 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 export const Route = createFileRoute('/_storefront/products/$slug')({
   component: RouteComponent,
@@ -95,6 +97,16 @@ function RouteComponent() {
             </SelectGroup>
           </SelectContent>
         </Select>
+        {/* quantity input */}
+        <Label className="mt-4" htmlFor="quantity">
+          Quantity
+        </Label>
+        <Input
+          type="number"
+          defaultValue={1}
+          max={product.quantity!}
+          className="w-full max-w-xs space-y-2"
+        />
       </div>
     </div>
   )
