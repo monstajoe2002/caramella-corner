@@ -28,7 +28,7 @@ const ProductCard = ({
   priceAfterDiscount,
 }: ProductCardProps) => {
   return (
-    <Card className="max-w-xs shadow-none gap-0 pt-0 mt-8 h-[440px] flex flex-col justify-between">
+    <Card className="max-w-xs shadow-none gap-0 pt-0 mt-8 flex flex-col justify-between">
       <CardHeader className="py-4 px-5 flex flex-col font-semibold">
         <h3>{name}</h3>
         <p className="mt-0 text-primary">
@@ -50,7 +50,7 @@ const ProductCard = ({
         <p className="line-clamp-3">{description}</p>
         <Image
           src={imageUrl}
-          className="mt-5 aspect-video rounded-xl object-cover object-center"
+          className="border border-border h-full w-full rounded-md object-cover aspect-video"
           alt={name}
         />
       </CardContent>
