@@ -23,6 +23,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
+import { useCartStore } from '@/lib/cart-store'
 
 export const Route = createFileRoute('/_storefront/products/$slug')({
   component: RouteComponent,
@@ -31,6 +32,7 @@ export const Route = createFileRoute('/_storefront/products/$slug')({
 
 function RouteComponent() {
   const product = Route.useLoaderData()
+  const addToCart = useCartStore((c) => c.addToCart)
   return (
     <div className="md:grid md:grid-cols-2 flex flex-col p-4">
       <Carousel className="w-full max-w-xs mx-auto">
@@ -90,7 +92,7 @@ function RouteComponent() {
                 const { color, size } = variant
                 const variantItem = [color, size].filter(String)
                 return (
-                  <SelectItem value={variant.sku}>
+                  <SelectItem key={variant.id} value={variant.sku}>
                     {variantItem.join(' - ')}
                   </SelectItem>
                 )
@@ -110,7 +112,16 @@ function RouteComponent() {
             className="w-full max-w-xs space-y-2"
           />
         </div>
-        <Button className="mt-4">
+        <Button
+          onClick={() =>
+            addToCart({
+              ...product,
+              subcategory: product.subcategory!,
+              category: product.category!,
+            })
+          }
+          className="mt-4"
+        >
           <ShoppingCartIcon />
           Add To Cart
         </Button>
