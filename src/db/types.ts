@@ -69,3 +69,9 @@ export type NewOrderItem = typeof orderItems.$inferInsert
 export type OrderItemWithVariant = OrderItem & {
   variant: Variant
 }
+
+// cart item
+export type CartItem = Product & {
+  variant: Variant
+  image: Image
+}
