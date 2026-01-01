@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import { Link } from '@tanstack/react-router'
+import CartItems from './cart-items'
 // Simple logo component for the navbar
 const Logo = (props: React.SVGAttributes<SVGElement>) => {
   return (
@@ -58,9 +59,7 @@ export interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
   logo?: React.ReactNode
   logoHref?: string
   navigationLinks?: NavItem[]
-  cartText?: string
-  cartHref?: string
-  cartCount?: number
+
   searchPlaceholder?: string
   onCartClick?: () => void
   onSearchSubmit?: (query: string) => void
@@ -78,9 +77,6 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
       logoHref = '#',
       navigationLinks = defaultNavigationLinks,
 
-      cartText = 'Cart',
-      cartHref = '#cart',
-      cartCount = 2,
       searchPlaceholder = 'Search...',
 
       onCartClick,
@@ -174,21 +170,7 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
                         />
                       </NavigationMenuItem>
                       <NavigationMenuItem className="w-full">
-                        <Button
-                          size="sm"
-                          className="mt-0.5 w-full text-left text-sm"
-                          onClick={(e) => {
-                            e.preventDefault()
-                            if (onCartClick) onCartClick()
-                          }}
-                        >
-                          <span className="flex items-baseline gap-2">
-                            {cartText}
-                            <span className="text-primary-foreground/60 text-xs">
-                              {cartCount}
-                            </span>
-                          </span>
-                        </Button>
+                        <CartItems />
                       </NavigationMenuItem>
                     </NavigationMenuList>
                   </NavigationMenu>
@@ -243,21 +225,7 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
           {/* Right side */}
           {!isMobile && (
             <div className="flex items-center gap-3">
-              <Button
-                size="sm"
-                className="text-sm font-medium px-4 h-9 rounded-md shadow-sm"
-                onClick={(e) => {
-                  e.preventDefault()
-                  if (onCartClick) onCartClick()
-                }}
-              >
-                <span className="flex items-baseline gap-2">
-                  {cartText}
-                  <span className="text-primary-foreground/60 text-xs">
-                    {cartCount}
-                  </span>
-                </span>
-              </Button>
+              <CartItems />
             </div>
           )}
         </div>
