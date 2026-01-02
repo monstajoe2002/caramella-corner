@@ -42,21 +42,8 @@ export const useCartStore = create<CartState>()(
     removeFromCart: (id) =>
       set((state) => {
         const existingItem = state.items.find((item) => item.id === id)
-        if (existingItem && existingItem.quantity! > 1) {
-          return {
-            totalQuantity: state.totalQuantity - existingItem.quantity!,
-            items: state.items.map((cartItem) =>
-              cartItem.id === id
-                ? {
-                    ...cartItem,
-                    quantity: cartItem.quantity! - existingItem.quantity!,
-                  }
-                : cartItem,
-            ),
-          }
-        }
         return {
-          totalQuantity: state.totalQuantity - 1,
+          totalQuantity: state.totalQuantity - existingItem?.quantity!,
           items: state.items.filter((item) => item.id !== id),
         }
       }),
