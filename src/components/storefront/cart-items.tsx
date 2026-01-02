@@ -21,7 +21,7 @@ export default function CartItems() {
           <span className="flex items-baseline gap-2">
             Cart
             <span className="text-primary-foreground/60 text-xs">
-              {cartQuantity}
+              {cartItems.length}
             </span>
           </span>
         </Button>
@@ -30,7 +30,7 @@ export default function CartItems() {
         <SheetHeader>
           <SheetTitle>Cart</SheetTitle>
           <SheetDescription>
-            {cartQuantity} item(s) in your shopping cart
+            {cartItems.length} item(s) in your shopping cart
           </SheetDescription>
         </SheetHeader>
         <div className="flex-1 space-y-4 overflow-y-auto p-4">
