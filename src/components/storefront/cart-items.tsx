@@ -10,6 +10,7 @@ import {
 import { Button } from '../ui/button'
 import { Trash2 } from 'lucide-react'
 import { Image } from '@imagekit/react'
+import { formatVariant } from '@/lib/utils'
 
 export default function CartItems() {
   const cartItems = useCartStore((c) => c.items)
@@ -48,8 +49,11 @@ export default function CartItems() {
                     {item.name} (x{item.quantity})
                   </h4>
                   <p className="text-muted-foreground text-xs">
-                    <b>{item.variant.sku}</b>: {item.variant.color} -{' '}
-                    {item.variant.size}
+                    <b>{item.variant.sku}</b>:{' '}
+                    {formatVariant(
+                      item.variant.color ?? '',
+                      item.variant.size ?? '',
+                    )}
                   </p>
                   <div className="flex items-center justify-between">
                     <span className="font-medium text-sm">

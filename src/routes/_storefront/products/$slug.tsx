@@ -27,6 +27,7 @@ import { useCartStore } from '@/lib/cart-store'
 import { useState, useEffect } from 'react'
 import { Variant } from '@/db/types'
 import { toast } from 'sonner'
+import { formatVariant } from '@/lib/utils'
 
 export const Route = createFileRoute('/_storefront/products/$slug')({
   component: RouteComponent,
@@ -108,10 +109,10 @@ function RouteComponent() {
               <SelectLabel>Variants</SelectLabel>
               {product.variants.map((variant) => {
                 const { color, size } = variant
-                const variantItem = [color, size].filter(String)
+
                 return (
                   <SelectItem key={variant.id} value={variant.sku}>
-                    {variantItem.join(' - ')}
+                    {formatVariant(color ?? '', size ?? '')}
                   </SelectItem>
                 )
               })}
