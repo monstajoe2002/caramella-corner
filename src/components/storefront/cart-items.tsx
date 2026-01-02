@@ -15,6 +15,7 @@ import { formatVariant } from '@/lib/utils'
 export default function CartItems() {
   const cartItems = useCartStore((c) => c.items)
   const cartQuantity = useCartStore((c) => c.totalQuantity)
+  const removeFromCart = useCartStore((c) => c.removeFromCart)
   const totalPrice = cartItems
     .reduce((sum, item) => sum + Number(item.price) * item.quantity!, 0)
     .toFixed(2)
@@ -59,7 +60,12 @@ export default function CartItems() {
                     <span className="font-medium text-sm">
                       EGP {Number(item.price) * item.quantity!}
                     </span>
-                    <Button className="h-6 w-6" size="icon" variant="ghost">
+                    <Button
+                      onClick={() => removeFromCart(item.id)}
+                      className="h-6 w-6"
+                      size="icon"
+                      variant="ghost"
+                    >
                       <Trash2 className="h-3 w-3" />
                     </Button>
                   </div>

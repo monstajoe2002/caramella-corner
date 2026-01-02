@@ -109,7 +109,6 @@ function RouteComponent() {
               <SelectLabel>Variants</SelectLabel>
               {product.variants.map((variant) => {
                 const { color, size } = variant
-
                 return (
                   <SelectItem key={variant.id} value={variant.sku}>
                     {formatVariant(color ?? '', size ?? '')}
