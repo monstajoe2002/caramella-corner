@@ -39,18 +39,21 @@ export default function CartItems() {
         <div className="flex-1 space-y-4 overflow-y-auto p-4">
           {cartItems.map((item) => (
             <div className="space-y-4">
-              <div className="flex gap-4 border-b pb-4">
+              <div className="flex gap-4">
                 <div className="h-20 w-20 rounded-md">
                   <Image src={item.image.ikThumbnailUrl} />
                 </div>
                 <div className="flex-1 space-y-1">
-                  <h4 className="font-medium text-sm">{item.name}</h4>
+                  <h4 className="font-medium text-sm">
+                    {item.name} (x{item.quantity})
+                  </h4>
                   <p className="text-muted-foreground text-xs">
-                    Black, Standard
+                    <b>{item.variant.sku}</b>: {item.variant.color} -{' '}
+                    {item.variant.size}
                   </p>
                   <div className="flex items-center justify-between">
                     <span className="font-medium text-sm">
-                      EGP {item.price}
+                      EGP {Number(item.price) * item.quantity!}
                     </span>
                     <Button className="h-6 w-6" size="icon" variant="ghost">
                       <Trash2 className="h-3 w-3" />
@@ -61,11 +64,11 @@ export default function CartItems() {
             </div>
           ))}
           <div className="space-y-2 pt-4">
-            <div className="flex justify-between text-sm">
+            {/* <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Subtotal</span>
               <span>$147.00</span>
             </div>
-            {/* <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Shipping</span>
               <span>$10.00</span>
             </div> */}
