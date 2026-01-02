@@ -27,7 +27,7 @@ export const useCartStore = create<CartState>()(
           if (existingItem) {
             return {
               totalQuantity: state.totalQuantity + item.quantity!,
-              cart: state.items.map((cartItem) =>
+              items: state.items.map((cartItem) =>
                 cartItem.id === item.id
                   ? {
                       ...cartItem,
@@ -41,7 +41,7 @@ export const useCartStore = create<CartState>()(
           return {
             totalQuantity: state.totalQuantity + item.quantity!,
             totalPrice: state.totalPrice + Number(item.price),
-            cart: [...state.items, { ...item, quantity: item.quantity! }],
+            items: [...state.items, { ...item, quantity: item.quantity! }],
           }
         }),
       removeFromCart: (id) =>
@@ -50,7 +50,7 @@ export const useCartStore = create<CartState>()(
           if (existingItem && existingItem.quantity! > 1) {
             return {
               totalQuantity: state.totalQuantity - existingItem.quantity!,
-              cart: state.items.map((cartItem) =>
+              items: state.items.map((cartItem) =>
                 cartItem.id === id
                   ? {
                       ...cartItem,
@@ -63,7 +63,7 @@ export const useCartStore = create<CartState>()(
           return {
             totalPrice: state.totalPrice - Number(existingItem?.price),
             totalQuantity: state.totalQuantity - 1,
-            cart: state.items.filter((item) => item.id !== id),
+            items: state.items.filter((item) => item.id !== id),
           }
         }),
     }),
