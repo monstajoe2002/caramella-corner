@@ -1,21 +1,21 @@
 // store.ts
-import { ProductWithVariants } from '@/db/types'
 import { create } from 'zustand'
 import { combine } from 'zustand/middleware'
+import { CartItem } from './types'
 
 // Define types for state & actions
 interface CartState {
-  items: ProductWithVariants[]
+  items: CartItem[]
   totalQuantity: number
   totalPrice: number
-  addToCart: (product: ProductWithVariants) => void
+  addToCart: (product: CartItem) => void
   removeFromCart: (productId: string) => void
 }
 
 // Create store using the curried form of `create`
 export const useCartStore = create<CartState>()(
   combine(
-    { items: [] as ProductWithVariants[], totalQuantity: 0, totalPrice: 0 },
+    { items: [] as CartItem[], totalQuantity: 0, totalPrice: 0 },
     (set) => ({
       addToCart: (item) =>
         set((state) => {
