@@ -150,6 +150,10 @@ function RouteComponent() {
               ...product,
               variant: variantDetails,
               quantity,
+              price:
+                product.discount > 0
+                  ? product.priceAfterDiscount
+                  : Number(product.price),
               image: product.images[0],
             })
           }}
