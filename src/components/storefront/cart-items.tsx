@@ -9,6 +9,7 @@ import {
 } from '../ui/sheet'
 import { Button } from '../ui/button'
 import { Trash2 } from 'lucide-react'
+import { Image } from '@imagekit/react'
 
 export default function CartItems() {
   const cartItems = useCartStore((c) => c.items)
@@ -36,7 +37,9 @@ export default function CartItems() {
           {cartItems.map((item) => (
             <div className="space-y-4">
               <div className="flex gap-4 border-b pb-4">
-                <div className="h-20 w-20 rounded-md bg-muted" />
+                <div className="h-20 w-20 rounded-md">
+                  <Image src={item.image.ikThumbnailUrl} />
+                </div>
                 <div className="flex-1 space-y-1">
                   <h4 className="font-medium text-sm">{item.name}</h4>
                   <p className="text-muted-foreground text-xs">

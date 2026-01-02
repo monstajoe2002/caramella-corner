@@ -24,6 +24,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { useCartStore } from '@/lib/cart-store'
+import { useState, useEffect } from 'react'
+import { Variant } from '@/db/types'
+import { toast } from 'sonner'
 
 export const Route = createFileRoute('/_storefront/products/$slug')({
   component: RouteComponent,
@@ -33,6 +36,17 @@ export const Route = createFileRoute('/_storefront/products/$slug')({
 function RouteComponent() {
   const product = Route.useLoaderData()
   const addToCart = useCartStore((c) => c.addToCart)
+  const [selectedVariant, setSelectedVariant] = useState<string | undefined>(
+    undefined,
+  )
+  const [quantity, setQuantity] = useState<number>(1)
+
+  useEffect(() => {
+    if (product.variants.length > 0) {
+      setSelectedVariant(product.variants[0].sku)
+    }
+  }, [product.variants])
+
   return (
     <div className="md:grid md:grid-cols-2 flex flex-col p-4">
       <Carousel className="w-full max-w-xs mx-auto">
@@ -80,8 +94,12 @@ function RouteComponent() {
         <p>{product.description}</p>
         <b>Material: </b>
         <span className="text-muted-foreground">{product.material}</span>
+
         {/* variant select */}
-        <Select>
+        <Select
+          value={selectedVariant}
+          onValueChange={(value) => setSelectedVariant(value)}
+        >
           <SelectTrigger className="w-[300px] mt-4">
             <SelectValue placeholder="Select a variant..." />
           </SelectTrigger>
@@ -100,26 +118,41 @@ function RouteComponent() {
             </SelectGroup>
           </SelectContent>
         </Select>
+
         {/* quantity input */}
         <div>
           <Label className="mt-4 mb-2" htmlFor="quantity">
             Quantity
           </Label>
           <Input
+            id="quantity"
             type="number"
-            defaultValue={1}
+            value={quantity}
+            min={1}
             max={product.quantity!}
             className="w-full max-w-xs space-y-2"
+            onChange={(e) => setQuantity(Number(e.target.value))}
           />
         </div>
+
         <Button
-          onClick={() =>
+          onClick={() => {
+            const variantDetails = product.variants.find(
+              (v) => v.sku === selectedVariant,
+            )
+
+            if (!variantDetails) {
+              toast.error('Selected variant not found')
+              return
+            }
+
             addToCart({
               ...product,
-              subcategory: product.subcategory!,
-              category: product.category!,
+              variant: variantDetails,
+              quantity,
+              image: product.images[0],
             })
-          }
+          }}
           className="mt-4"
         >
           <ShoppingCartIcon />
