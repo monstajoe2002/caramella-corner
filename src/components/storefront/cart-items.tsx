@@ -72,6 +72,11 @@ export default function CartItems() {
               <span className="text-muted-foreground">Shipping</span>
               <span>$10.00</span>
             </div> */}
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Quantity</span>
+              <span>x{cartQuantity}</span>
+            </div>
+
             <div className="flex justify-between border-t pt-2 font-medium">
               <span>Total</span>
               <span>EGP {totalPrice}</span>
