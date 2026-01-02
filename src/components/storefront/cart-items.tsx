@@ -14,6 +14,9 @@ import { Image } from '@imagekit/react'
 export default function CartItems() {
   const cartItems = useCartStore((c) => c.items)
   const cartQuantity = useCartStore((c) => c.totalQuantity)
+  const totalPrice = cartItems
+    .reduce((sum, item) => sum + Number(item.price) * item.quantity!, 0)
+    .toFixed(2)
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -62,13 +65,13 @@ export default function CartItems() {
               <span className="text-muted-foreground">Subtotal</span>
               <span>$147.00</span>
             </div>
-            <div className="flex justify-between text-sm">
+            {/* <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Shipping</span>
               <span>$10.00</span>
-            </div>
+            </div> */}
             <div className="flex justify-between border-t pt-2 font-medium">
               <span>Total</span>
-              <span>$157.00</span>
+              <span>EGP {totalPrice}</span>
             </div>
           </div>
         </div>
