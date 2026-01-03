@@ -45,20 +45,9 @@ const SignUp = () => {
 
         <div className="relative isolate flex flex-col items-center">
           <ShoppingBagIcon />
-          <p className="mt-4 text-xl font-semibold tracking-tight">
-            Sign up for Shadcn UI Blocks
+          <p className="mt-4 text-xl font-semibold tracking-tight mb-8">
+            Sign up for Caramella Corner
           </p>
-
-          <Button className="mt-8 w-full gap-3">
-            <GoogleLogo />
-            Continue with Google
-          </Button>
-
-          <div className="my-7 w-full flex items-center justify-center overflow-hidden">
-            <Separator />
-            <span className="text-sm px-2">OR</span>
-            <Separator />
-          </div>
 
           <form
             className="w-full space-y-4"
