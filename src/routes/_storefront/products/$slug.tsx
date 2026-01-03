@@ -25,7 +25,6 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { useCartStore } from '@/lib/cart-store'
 import { useState, useEffect } from 'react'
-import { Variant } from '@/db/types'
 import { toast } from 'sonner'
 import { formatVariant } from '@/lib/utils'
 
