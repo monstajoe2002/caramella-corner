@@ -8,7 +8,7 @@ import {
   SheetTrigger,
 } from '../ui/sheet'
 import { Button } from '../ui/button'
-import { Trash2 } from 'lucide-react'
+import { ScanBarcode, Trash2 } from 'lucide-react'
 import { Image } from '@imagekit/react'
 import { formatVariant } from '@/lib/utils'
 
@@ -93,6 +93,11 @@ export default function CartItems() {
             </div>
           </div>
         </div>
+        <Button className="m-4">
+          <span className="sr-only">Proceed to checkout</span>
+          <ScanBarcode />
+          Proceed to checkout
+        </Button>
       </SheetContent>
     </Sheet>
   )
