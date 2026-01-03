@@ -1,40 +1,42 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { customerFormSchema } from '@/lib/schemas'
 import { Link } from '@tanstack/react-router'
 import { ShoppingBagIcon } from 'lucide-react'
 
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-
-const formSchema = z.object({
-  email: z.email(),
-  password: z.string().min(8, 'Password must be at least 8 characters long'),
-})
+import { useForm } from '@tanstack/react-form'
+import { toast } from 'sonner'
+import { Field, FieldLabel, FieldError } from './ui/field'
 
 const SignUp = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm({
     defaultValues: {
+      name: '',
       email: '',
-      password: '',
     },
-    resolver: zodResolver(formSchema),
+    validators: {
+      onSubmit: customerFormSchema,
+    },
+    onSubmit: async ({ value }) => {
+      toast('You submitted the following values:', {
+        description: (
+          <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
+            <code>{JSON.stringify(value, null, 2)}</code>
+          </pre>
+        ),
+        position: 'bottom-right',
+        classNames: {
+          content: 'flex flex-col gap-2',
+        },
+        style: {
+          '--border-radius': 'calc(var(--radius)  + 4px)',
+        } as React.CSSProperties,
+      })
+    },
   })
-
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data)
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -60,46 +62,64 @@ const SignUp = () => {
 
           <form
             className="w-full space-y-4"
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={(e) => {
+              e.preventDefault()
+              form.handleSubmit()
+            }}
           >
-            <FormField
-              control={form.control}
+            <form.Field
+              name="name"
+              children={(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      aria-invalid={isInvalid}
+                      placeholder="Jane Doe"
+                      autoComplete="off"
+                    />
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                )
+              }}
+            />
+            <form.Field
               name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
+              children={(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>Email</FieldLabel>
                     <Input
-                      type="email"
-                      placeholder="Email"
-                      className="w-full"
-                      {...field}
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      aria-invalid={isInvalid}
+                      placeholder="janedoe@example.com"
+                      autoComplete="off"
                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                )
+              }}
             />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="Password"
-                      className="w-full"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+
             <Button type="submit" className="mt-4 w-full">
-              Continue with Email
+              Continue
             </Button>
           </form>
 
