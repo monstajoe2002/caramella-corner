@@ -11,8 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as StorefrontRouteRouteImport } from './routes/_storefront/route'
+import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as StorefrontIndexRouteImport } from './routes/_storefront/index'
+import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AdminProductsIndexRouteImport } from './routes/admin/products/index'
 import { Route as AdminOrdersIndexRouteImport } from './routes/admin/orders/index'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
@@ -37,6 +39,10 @@ const StorefrontRouteRoute = StorefrontRouteRouteImport.update({
   id: '/_storefront',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRouteRoute = AuthRouteRouteImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -46,6 +52,11 @@ const StorefrontIndexRoute = StorefrontIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => StorefrontRouteRoute,
+} as any)
+const AuthSignupRoute = AuthSignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 const AdminProductsIndexRoute = AdminProductsIndexRouteImport.update({
   id: '/products/',
@@ -122,6 +133,7 @@ const AdminCategoriesIdEditRoute = AdminCategoriesIdEditRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
+  '/signup': typeof AuthSignupRoute
   '/': typeof StorefrontIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/categories/$slug': typeof StorefrontCategoriesSlugRoute
@@ -140,6 +152,7 @@ export interface FileRoutesByFullPath {
   '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
 }
 export interface FileRoutesByTo {
+  '/signup': typeof AuthSignupRoute
   '/': typeof StorefrontIndexRoute
   '/admin': typeof AdminIndexRoute
   '/categories/$slug': typeof StorefrontCategoriesSlugRoute
@@ -159,8 +172,10 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_auth': typeof AuthRouteRouteWithChildren
   '/_storefront': typeof StorefrontRouteRouteWithChildren
   '/admin': typeof AdminRouteRouteWithChildren
+  '/_auth/signup': typeof AuthSignupRoute
   '/_storefront/': typeof StorefrontIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/_storefront/categories/$slug': typeof StorefrontCategoriesSlugRoute
@@ -182,6 +197,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/admin'
+    | '/signup'
     | '/'
     | '/admin/'
     | '/categories/$slug'
@@ -200,6 +216,7 @@ export interface FileRouteTypes {
     | '/admin/products/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/signup'
     | '/'
     | '/admin'
     | '/categories/$slug'
@@ -218,8 +235,10 @@ export interface FileRouteTypes {
     | '/admin/products/$id/edit'
   id:
     | '__root__'
+    | '/_auth'
     | '/_storefront'
     | '/admin'
+    | '/_auth/signup'
     | '/_storefront/'
     | '/admin/'
     | '/_storefront/categories/$slug'
@@ -239,6 +258,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
   StorefrontRouteRoute: typeof StorefrontRouteRouteWithChildren
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   ApiAdminUploadAuthRoute: typeof ApiAdminUploadAuthRoute
@@ -261,6 +281,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StorefrontRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
@@ -274,6 +301,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof StorefrontIndexRouteImport
       parentRoute: typeof StorefrontRouteRoute
+    }
+    '/_auth/signup': {
+      id: '/_auth/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof AuthSignupRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
     '/admin/products/': {
       id: '/admin/products/'
@@ -376,6 +410,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthRouteRouteChildren {
+  AuthSignupRoute: typeof AuthSignupRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthSignupRoute: AuthSignupRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
 interface StorefrontRouteRouteChildren {
   StorefrontIndexRoute: typeof StorefrontIndexRoute
   StorefrontCategoriesSlugRoute: typeof StorefrontCategoriesSlugRoute
@@ -425,6 +471,7 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  AuthRouteRoute: AuthRouteRouteWithChildren,
   StorefrontRouteRoute: StorefrontRouteRouteWithChildren,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   ApiAdminUploadAuthRoute: ApiAdminUploadAuthRoute,
