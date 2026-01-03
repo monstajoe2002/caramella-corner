@@ -32,3 +32,8 @@ export const productSchema = z.object({
   active: z.boolean(),
   quantity: z.number().int().nonnegative(),
 })
+
+export const customerFormSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  email: z.email('Invalid email address'),
+})
