@@ -18,6 +18,7 @@ import { Route as AdminOrdersIndexRouteImport } from './routes/admin/orders/inde
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as StorefrontProductsIndexRouteImport } from './routes/_storefront/products/index'
 import { Route as StorefrontCategoriesIndexRouteImport } from './routes/_storefront/categories/index'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiAdminUploadAuthRouteImport } from './routes/api/admin/upload-auth'
 import { Route as AdminProductsNewRouteImport } from './routes/admin/products/new'
 import { Route as AdminOrdersIdRouteImport } from './routes/admin/orders/$id'
@@ -72,6 +73,11 @@ const StorefrontCategoriesIndexRoute =
     path: '/categories/',
     getParentRoute: () => StorefrontRouteRoute,
   } as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAdminUploadAuthRoute = ApiAdminUploadAuthRouteImport.update({
   id: '/api/admin/upload-auth',
   path: '/api/admin/upload-auth',
@@ -124,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/admin/orders/$id': typeof AdminOrdersIdRoute
   '/admin/products/new': typeof AdminProductsNewRoute
   '/api/admin/upload-auth': typeof ApiAdminUploadAuthRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/categories': typeof StorefrontCategoriesIndexRoute
   '/products': typeof StorefrontProductsIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
@@ -141,6 +148,7 @@ export interface FileRoutesByTo {
   '/admin/orders/$id': typeof AdminOrdersIdRoute
   '/admin/products/new': typeof AdminProductsNewRoute
   '/api/admin/upload-auth': typeof ApiAdminUploadAuthRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/categories': typeof StorefrontCategoriesIndexRoute
   '/products': typeof StorefrontProductsIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
@@ -161,6 +169,7 @@ export interface FileRoutesById {
   '/admin/orders/$id': typeof AdminOrdersIdRoute
   '/admin/products/new': typeof AdminProductsNewRoute
   '/api/admin/upload-auth': typeof ApiAdminUploadAuthRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/_storefront/categories/': typeof StorefrontCategoriesIndexRoute
   '/_storefront/products/': typeof StorefrontProductsIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
@@ -181,6 +190,7 @@ export interface FileRouteTypes {
     | '/admin/orders/$id'
     | '/admin/products/new'
     | '/api/admin/upload-auth'
+    | '/api/auth/$'
     | '/categories'
     | '/products'
     | '/admin/categories'
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
     | '/admin/orders/$id'
     | '/admin/products/new'
     | '/api/admin/upload-auth'
+    | '/api/auth/$'
     | '/categories'
     | '/products'
     | '/admin/categories'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/admin/orders/$id'
     | '/admin/products/new'
     | '/api/admin/upload-auth'
+    | '/api/auth/$'
     | '/_storefront/categories/'
     | '/_storefront/products/'
     | '/admin/categories/'
@@ -230,6 +242,7 @@ export interface RootRouteChildren {
   StorefrontRouteRoute: typeof StorefrontRouteRouteWithChildren
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   ApiAdminUploadAuthRoute: typeof ApiAdminUploadAuthRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -296,6 +309,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/categories'
       preLoaderRoute: typeof StorefrontCategoriesIndexRouteImport
       parentRoute: typeof StorefrontRouteRoute
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/admin/upload-auth': {
       id: '/api/admin/upload-auth'
@@ -408,6 +428,7 @@ const rootRouteChildren: RootRouteChildren = {
   StorefrontRouteRoute: StorefrontRouteRouteWithChildren,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   ApiAdminUploadAuthRoute: ApiAdminUploadAuthRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
