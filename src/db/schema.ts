@@ -109,29 +109,27 @@ export const customers = pgTable('customers', {
 export const sessions = pgTable(
   'sessions',
   {
-    id: text('id').primaryKey(),
+    id,
     expiresAt: timestamp('expires_at').notNull(),
     token: text('token').notNull().unique(),
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at')
-      .$onUpdate(() => /* @__PURE__ */ new Date())
-      .notNull(),
+    createdAt,
+    updatedAt,
     ipAddress: text('ip_address'),
     userAgent: text('user_agent'),
-    userId: text('user_id')
+    customerId: uuid('customer_id')
       .notNull()
       .references(() => customers.id, { onDelete: 'cascade' }),
   },
-  (table) => [index('sessions_customerId_idx').on(table.userId)],
+  (table) => [index('sessions_customerId_idx').on(table.customerId)],
 )
 
 export const accounts = pgTable(
   'accounts',
   {
-    id: text('id').primaryKey(),
+    id,
     accountId: text('account_id').notNull(),
     providerId: text('provider_id').notNull(),
-    customerId: text('user_id')
+    customerId: uuid('customer_id')
       .notNull()
       .references(() => customers.id, { onDelete: 'cascade' }),
     accessToken: text('access_token'),
@@ -240,13 +238,13 @@ export const customersRelations = relations(customers, ({ many }) => ({
 }))
 export const sessionsRelations = relations(sessions, ({ one }) => ({
   customers: one(customers, {
-    fields: [sessions.userId],
+    fields: [sessions.customerId],
     references: [customers.id],
   }),
 }))
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
-  customers: one(customers, {
+  customer: one(customers, {
     fields: [accounts.customerId],
     references: [customers.id],
   }),
