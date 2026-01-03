@@ -8,6 +8,8 @@ import {
   uuid,
   numeric,
   real,
+  timestamp,
+  index,
 } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
 import { createdAt, id, updatedAt } from './schema-helpers'
@@ -100,9 +102,50 @@ export const customers = pgTable('customers', {
   name: varchar('name').notNull(),
   email: varchar('email').notNull().unique(),
   address: text('address'),
+  emailVerified: boolean('email_verified').default(false).notNull(),
   createdAt,
   updatedAt,
 })
+export const sessions = pgTable(
+  'sessions',
+  {
+    id: text('id').primaryKey(),
+    expiresAt: timestamp('expires_at').notNull(),
+    token: text('token').notNull().unique(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at')
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+    ipAddress: text('ip_address'),
+    userAgent: text('user_agent'),
+    userId: text('user_id')
+      .notNull()
+      .references(() => customers.id, { onDelete: 'cascade' }),
+  },
+  (table) => [index('sessions_customerId_idx').on(table.userId)],
+)
+
+export const accounts = pgTable(
+  'accounts',
+  {
+    id: text('id').primaryKey(),
+    accountId: text('account_id').notNull(),
+    providerId: text('provider_id').notNull(),
+    customerId: text('user_id')
+      .notNull()
+      .references(() => customers.id, { onDelete: 'cascade' }),
+    accessToken: text('access_token'),
+    refreshToken: text('refresh_token'),
+    idToken: text('id_token'),
+    accessTokenExpiresAt: timestamp('access_token_expires_at'),
+    refreshTokenExpiresAt: timestamp('refresh_token_expires_at'),
+    scope: text('scope'),
+    // password: text('password'),
+    createdAt,
+    updatedAt,
+  },
+  (table) => [index('accounts_customerId_idx').on(table.customerId)],
+)
 
 // Order table (main orders table)
 export const orders = pgTable('orders', {
@@ -192,8 +235,22 @@ export const variantsRelations = relations(variants, ({ one, many }) => ({
 
 export const customersRelations = relations(customers, ({ many }) => ({
   orders: many(orders),
+  sessions: many(sessions),
+  accounts: many(accounts),
+}))
+export const sessionsRelations = relations(sessions, ({ one }) => ({
+  customers: one(customers, {
+    fields: [sessions.userId],
+    references: [customers.id],
+  }),
 }))
 
+export const accountsRelations = relations(accounts, ({ one }) => ({
+  customers: one(customers, {
+    fields: [accounts.customerId],
+    references: [customers.id],
+  }),
+}))
 export const ordersRelations = relations(orders, ({ one, many }) => ({
   customer: one(customers, {
     fields: [orders.customerId],
