@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import { Link } from '@tanstack/react-router'
-import CartItems from './cart-items'
+import CartItems from './cart/cart-items'
 // Simple logo component for the navbar
 const Logo = (props: React.SVGAttributes<SVGElement>) => {
   return (

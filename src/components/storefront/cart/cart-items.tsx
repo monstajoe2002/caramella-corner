@@ -6,8 +6,8 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '../ui/sheet'
-import { Button } from '../ui/button'
+} from '@/components/ui/sheet'
+import { Button } from '@/components/ui/button'
 import { ScanBarcode, Trash2 } from 'lucide-react'
 import { Image } from '@imagekit/react'
 import { formatVariant } from '@/lib/utils'
