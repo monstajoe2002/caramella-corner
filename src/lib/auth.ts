@@ -4,6 +4,7 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { magicLink } from 'better-auth/plugins'
 import * as schema from '@/db/schema'
 import { tanstackStartCookies } from 'better-auth/tanstack-start'
+import { sendVerificationEmail } from './email'
 export const auth = betterAuth({
   emailAndPassword: { enabled: false },
   database: drizzleAdapter(db, {
@@ -13,8 +14,9 @@ export const auth = betterAuth({
   }),
   plugins: [
     magicLink({
-      sendMagicLink: async ({ email, token, url }, ctx) => {
+      sendMagicLink: async ({ email, token }) => {
         // send email to user
+        await sendVerificationEmail(email, token)
       },
     }),
     tanstackStartCookies(),
