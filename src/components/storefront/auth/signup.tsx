@@ -23,11 +23,15 @@ const SignUp = () => {
     onSubmit: async ({ value }) => {
       const { data, error } = await authClient.signIn.magicLink({
         email: value.email,
-        name: value.email,
+        name: value.name,
         callbackURL: '/',
         newUserCallbackURL: '/login',
       })
       if (error) toast.error(error.statusText)
+      if (data)
+        toast.success(
+          'Success! Please check your inbox for a link to verify your email.',
+        )
     },
   })
 

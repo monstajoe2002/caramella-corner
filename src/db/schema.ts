@@ -97,8 +97,9 @@ export const variants = pgTable('variants', {
 })
 
 // Customer table
+// For Better Auth tables, use text IDs instead of uuid
 export const customers = pgTable('customers', {
-  id,
+  id: text('id').primaryKey(), // Changed from uuid to text
   name: varchar('name').notNull(),
   email: varchar('email').notNull().unique(),
   address: text('address'),
@@ -106,17 +107,18 @@ export const customers = pgTable('customers', {
   createdAt,
   updatedAt,
 })
+
 export const sessions = pgTable(
   'sessions',
   {
-    id,
+    id: text('id').primaryKey(), // Changed from uuid to text
     expiresAt: timestamp('expires_at').notNull(),
     token: text('token').notNull().unique(),
     createdAt,
     updatedAt,
     ipAddress: text('ip_address'),
     userAgent: text('user_agent'),
-    customerId: uuid('customer_id')
+    customerId: text('customer_id') // Changed from uuid to text
       .notNull()
       .references(() => customers.id, { onDelete: 'cascade' }),
   },
@@ -126,10 +128,10 @@ export const sessions = pgTable(
 export const accounts = pgTable(
   'accounts',
   {
-    id,
+    id: text('id').primaryKey(), // Changed from uuid to text
     accountId: text('account_id').notNull(),
     providerId: text('provider_id').notNull(),
-    customerId: uuid('customer_id')
+    customerId: text('customer_id') // Changed from uuid to text
       .notNull()
       .references(() => customers.id, { onDelete: 'cascade' }),
     accessToken: text('access_token'),
@@ -138,16 +140,16 @@ export const accounts = pgTable(
     accessTokenExpiresAt: timestamp('access_token_expires_at'),
     refreshTokenExpiresAt: timestamp('refresh_token_expires_at'),
     scope: text('scope'),
-    // password: text('password'),
     createdAt,
     updatedAt,
   },
   (table) => [index('accounts_customerId_idx').on(table.customerId)],
 )
+
 export const verifications = pgTable(
   'verifications',
   {
-    id,
+    id: text('id').primaryKey(), // Changed from uuid to text
     identifier: text('identifier').notNull(),
     value: text('value').notNull(),
     expiresAt: timestamp('expires_at').notNull(),
@@ -163,11 +165,12 @@ export const orders = pgTable('orders', {
   paymentId: uuid('payment_id'),
   orderNumber: varchar('order_number').notNull().unique(),
   quantity: integer('quantity').notNull(),
-  price: numeric('price').notNull(), // Total price
-  customerId: uuid('customer_id').references(() => customers.id, {
+  price: numeric('price').notNull(),
+  customerId: text('customer_id').references(() => customers.id, {
+    // Changed to text
     onDelete: 'cascade',
   }),
-  status: orderStatusEnum().notNull(), // e.g., 'pending', 'completed', 'cancelled'
+  status: orderStatusEnum().notNull(),
   createdAt,
   updatedAt,
 })
