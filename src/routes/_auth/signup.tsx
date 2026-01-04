@@ -1,4 +1,4 @@
-import SignUp from '@/components/signup'
+import SignUp from '@/components/storefront/auth/signup'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_auth/signup')({

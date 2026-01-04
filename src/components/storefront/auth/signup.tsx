@@ -8,7 +8,8 @@ import { ShoppingBagIcon } from 'lucide-react'
 
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
-import { Field, FieldLabel, FieldError } from './ui/field'
+import { Field, FieldLabel, FieldError } from '../../ui/field'
+import { authClient } from '@/lib/auth-client'
 
 const SignUp = () => {
   const form = useForm({
@@ -20,20 +21,13 @@ const SignUp = () => {
       onSubmit: customerFormSchema,
     },
     onSubmit: async ({ value }) => {
-      toast('You submitted the following values:', {
-        description: (
-          <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-            <code>{JSON.stringify(value, null, 2)}</code>
-          </pre>
-        ),
-        position: 'bottom-right',
-        classNames: {
-          content: 'flex flex-col gap-2',
-        },
-        style: {
-          '--border-radius': 'calc(var(--radius)  + 4px)',
-        } as React.CSSProperties,
+      const { data, error } = await authClient.signIn.magicLink({
+        email: value.email,
+        name: value.email,
+        callbackURL: '/',
+        newUserCallbackURL: '/login',
       })
+      if (error) toast.error('Something went wrong!')
     },
   })
 
