@@ -14,6 +14,7 @@ import { Route as StorefrontRouteRouteImport } from './routes/_storefront/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as StorefrontIndexRouteImport } from './routes/_storefront/index'
+import { Route as AuthVerifyRouteImport } from './routes/_auth/verify'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as AdminProductsIndexRouteImport } from './routes/admin/products/index'
 import { Route as AdminOrdersIndexRouteImport } from './routes/admin/orders/index'
@@ -52,6 +53,11 @@ const StorefrontIndexRoute = StorefrontIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => StorefrontRouteRoute,
+} as any)
+const AuthVerifyRoute = AuthVerifyRouteImport.update({
+  id: '/verify',
+  path: '/verify',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 const AuthSignupRoute = AuthSignupRouteImport.update({
   id: '/signup',
@@ -134,6 +140,7 @@ const AdminCategoriesIdEditRoute = AdminCategoriesIdEditRouteImport.update({
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/signup': typeof AuthSignupRoute
+  '/verify': typeof AuthVerifyRoute
   '/': typeof StorefrontIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/categories/$slug': typeof StorefrontCategoriesSlugRoute
@@ -153,6 +160,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/signup': typeof AuthSignupRoute
+  '/verify': typeof AuthVerifyRoute
   '/': typeof StorefrontIndexRoute
   '/admin': typeof AdminIndexRoute
   '/categories/$slug': typeof StorefrontCategoriesSlugRoute
@@ -176,6 +184,7 @@ export interface FileRoutesById {
   '/_storefront': typeof StorefrontRouteRouteWithChildren
   '/admin': typeof AdminRouteRouteWithChildren
   '/_auth/signup': typeof AuthSignupRoute
+  '/_auth/verify': typeof AuthVerifyRoute
   '/_storefront/': typeof StorefrontIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/_storefront/categories/$slug': typeof StorefrontCategoriesSlugRoute
@@ -198,6 +207,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/admin'
     | '/signup'
+    | '/verify'
     | '/'
     | '/admin/'
     | '/categories/$slug'
@@ -217,6 +227,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/signup'
+    | '/verify'
     | '/'
     | '/admin'
     | '/categories/$slug'
@@ -239,6 +250,7 @@ export interface FileRouteTypes {
     | '/_storefront'
     | '/admin'
     | '/_auth/signup'
+    | '/_auth/verify'
     | '/_storefront/'
     | '/admin/'
     | '/_storefront/categories/$slug'
@@ -301,6 +313,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof StorefrontIndexRouteImport
       parentRoute: typeof StorefrontRouteRoute
+    }
+    '/_auth/verify': {
+      id: '/_auth/verify'
+      path: '/verify'
+      fullPath: '/verify'
+      preLoaderRoute: typeof AuthVerifyRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
     '/_auth/signup': {
       id: '/_auth/signup'
@@ -412,10 +431,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthRouteRouteChildren {
   AuthSignupRoute: typeof AuthSignupRoute
+  AuthVerifyRoute: typeof AuthVerifyRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthSignupRoute: AuthSignupRoute,
+  AuthVerifyRoute: AuthVerifyRoute,
 }
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
