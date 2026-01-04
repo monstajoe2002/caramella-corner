@@ -2,7 +2,7 @@ import { Resend } from 'resend'
 const resend = new Resend(process.env.RESEND_API_KEY)
 const domain = process.env.VITE_PUBLIC_APP_URL
 export const sendVerificationEmail = async (email: string, token: string) => {
-  const confirmLink = `${domain}/api/auth/verify?token=${token}`
+  const confirmLink = `${domain}/auth/verify?token=${token}`
 
   await resend.emails.send({
     from: 'onboarding@resend.dev',
