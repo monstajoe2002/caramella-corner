@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { LoadingSwap } from '@/components/ui/loading-swap'
 import { authClient } from '@/lib/auth-client'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useState } from 'react'
 import z from 'zod'
 const searchSchema = z.object({
@@ -14,6 +14,7 @@ export const Route = createFileRoute('/_auth/verify')({
 
 function RouteComponent() {
   const { token } = Route.useSearch()
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   return (
     <div>
@@ -27,6 +28,7 @@ function RouteComponent() {
             },
           })
           if (data || error) setIsLoading(false)
+          router.navigate({ href: '/', replace: true })
         }}
         disabled={isLoading}
       >
