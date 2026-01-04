@@ -144,6 +144,18 @@ export const accounts = pgTable(
   },
   (table) => [index('accounts_customerId_idx').on(table.customerId)],
 )
+export const verifications = pgTable(
+  'verifications',
+  {
+    id,
+    identifier: text('identifier').notNull(),
+    value: text('value').notNull(),
+    expiresAt: timestamp('expires_at').notNull(),
+    createdAt,
+    updatedAt,
+  },
+  (table) => [index('verifications_identifier_idx').on(table.identifier)],
+)
 
 // Order table (main orders table)
 export const orders = pgTable('orders', {
