@@ -27,7 +27,7 @@ const SignUp = () => {
         callbackURL: '/',
         newUserCallbackURL: '/login',
       })
-      if (error) toast.error('Something went wrong!')
+      if (error) toast.error(error.statusText)
     },
   })
 
