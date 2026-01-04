@@ -111,27 +111,28 @@ export const customers = pgTable('customers', {
 export const sessions = pgTable(
   'sessions',
   {
-    id: text('id').primaryKey(), // Changed from uuid to text
+    id: text('id').primaryKey(),
     expiresAt: timestamp('expires_at').notNull(),
     token: text('token').notNull().unique(),
     createdAt,
     updatedAt,
     ipAddress: text('ip_address'),
     userAgent: text('user_agent'),
-    customerId: text('customer_id') // Changed from uuid to text
+    userId: text('user_id')
       .notNull()
       .references(() => customers.id, { onDelete: 'cascade' }),
   },
-  (table) => [index('sessions_customerId_idx').on(table.customerId)],
+  (table) => [index('sessions_userId_idx').on(table.userId)], // Update index name
 )
 
+// Accounts table - rename customerId to userId
 export const accounts = pgTable(
   'accounts',
   {
-    id: text('id').primaryKey(), // Changed from uuid to text
+    id: text('id').primaryKey(),
     accountId: text('account_id').notNull(),
     providerId: text('provider_id').notNull(),
-    customerId: text('customer_id') // Changed from uuid to text
+    userId: text('user_id')
       .notNull()
       .references(() => customers.id, { onDelete: 'cascade' }),
     accessToken: text('access_token'),
@@ -143,7 +144,7 @@ export const accounts = pgTable(
     createdAt,
     updatedAt,
   },
-  (table) => [index('accounts_customerId_idx').on(table.customerId)],
+  (table) => [index('accounts_userId_idx').on(table.userId)], // Update index name
 )
 
 export const verifications = pgTable(
@@ -252,15 +253,17 @@ export const customersRelations = relations(customers, ({ many }) => ({
   accounts: many(accounts),
 }))
 export const sessionsRelations = relations(sessions, ({ one }) => ({
-  customers: one(customers, {
-    fields: [sessions.customerId],
+  user: one(customers, {
+    // Renamed from 'customers' to 'user'
+    fields: [sessions.userId], // Changed from customerId
     references: [customers.id],
   }),
 }))
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
-  customer: one(customers, {
-    fields: [accounts.customerId],
+  user: one(customers, {
+    // Renamed from 'customer' to 'user'
+    fields: [accounts.userId], // Changed from customerId
     references: [customers.id],
   }),
 }))

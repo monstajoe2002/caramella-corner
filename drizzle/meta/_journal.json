@@ -120,6 +120,13 @@
       "when": 1767538632475,
       "tag": "0016_milky_stryfe",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1767551340535,
+      "tag": "0017_wise_tigra",
+      "breakpoints": true
     }
   ]
 }
