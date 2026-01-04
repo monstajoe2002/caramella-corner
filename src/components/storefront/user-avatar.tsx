@@ -6,7 +6,7 @@ export default function UserAvatar() {
   const { data: session } = useSession()
   return (
     <Avatar>
-      <AvatarFallback className="bg-indigo-500/25 text-indigo-500">
+      <AvatarFallback className="bg-primary/50 text-primary-foreground">
         {session?.user.name[0]}
       </AvatarFallback>
     </Avatar>
