@@ -17,6 +17,8 @@ import {
 import { cn } from '@/lib/utils'
 import { Link } from '@tanstack/react-router'
 import CartItems from './cart/cart-items'
+import { authClient } from '@/lib/auth-client'
+import { Separator } from '../ui/separator'
 // Simple logo component for the navbar
 const Logo = (props: React.SVGAttributes<SVGElement>) => {
   return (
@@ -55,6 +57,7 @@ export interface NavItem {
   href?: string
   label: string
 }
+const { data } = await authClient.getSession()
 export interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
   logo?: React.ReactNode
   logoHref?: string
@@ -151,6 +154,10 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
                 <PopoverContent align="start" className="w-fit">
                   <NavigationMenu viewport={isMobile}>
                     <NavigationMenuList className="flex-col items-start gap-0">
+                      <NavigationMenuItem>
+                        <p className="text-sm font-medium">{data?.user.name}</p>
+                      </NavigationMenuItem>
+                      <Separator />
                       {navigationLinks.map((link, index) => (
                         <NavigationMenuItem key={index}>
                           <NavigationMenuLink asChild>
