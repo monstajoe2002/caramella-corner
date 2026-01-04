@@ -10,8 +10,11 @@ import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
 import { Field, FieldLabel, FieldError } from '../../ui/field'
 import { authClient } from '@/lib/auth-client'
+import { LoadingSwap } from '@/components/ui/loading-swap'
+import { useState } from 'react'
 
 const SignUp = () => {
+  const [isLoading, setIsLoading] = useState(false)
   const form = useForm({
     defaultValues: {
       name: '',
@@ -21,6 +24,7 @@ const SignUp = () => {
       onSubmit: customerFormSchema,
     },
     onSubmit: async ({ value }) => {
+      setIsLoading(true)
       const { data, error } = await authClient.signIn.magicLink({
         email: value.email,
         name: value.name,
@@ -32,6 +36,7 @@ const SignUp = () => {
         toast.success(
           'Success! Please check your inbox for a link to verify your email.',
         )
+      setIsLoading(false)
     },
   })
 
@@ -104,8 +109,13 @@ const SignUp = () => {
               }}
             />
 
-            <Button type="submit" className="mt-4 w-full">
-              Continue
+            <Button type="submit" className="mt-4 w-full" disabled={isLoading}>
+              <LoadingSwap
+                isLoading={isLoading}
+                className="flex gap-2 items-center"
+              >
+                Continue
+              </LoadingSwap>
             </Button>
           </form>
 
