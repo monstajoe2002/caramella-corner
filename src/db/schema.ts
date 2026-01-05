@@ -125,28 +125,6 @@ export const sessions = pgTable(
   (table) => [index('sessions_userId_idx').on(table.userId)], // Update index name
 )
 
-// Accounts table - rename customerId to userId
-export const accounts = pgTable(
-  'accounts',
-  {
-    id: text('id').primaryKey(),
-    accountId: text('account_id').notNull(),
-    providerId: text('provider_id').notNull(),
-    userId: text('user_id')
-      .notNull()
-      .references(() => customers.id, { onDelete: 'cascade' }),
-    accessToken: text('access_token'),
-    refreshToken: text('refresh_token'),
-    idToken: text('id_token'),
-    accessTokenExpiresAt: timestamp('access_token_expires_at'),
-    refreshTokenExpiresAt: timestamp('refresh_token_expires_at'),
-    scope: text('scope'),
-    createdAt,
-    updatedAt,
-  },
-  (table) => [index('accounts_userId_idx').on(table.userId)], // Update index name
-)
-
 export const verifications = pgTable(
   'verifications',
   {
@@ -250,7 +228,6 @@ export const variantsRelations = relations(variants, ({ one, many }) => ({
 export const customersRelations = relations(customers, ({ many }) => ({
   orders: many(orders),
   sessions: many(sessions),
-  accounts: many(accounts),
 }))
 export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(customers, {
@@ -260,13 +237,6 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
   }),
 }))
 
-export const accountsRelations = relations(accounts, ({ one }) => ({
-  user: one(customers, {
-    // Renamed from 'customer' to 'user'
-    fields: [accounts.userId], // Changed from customerId
-    references: [customers.id],
-  }),
-}))
 export const ordersRelations = relations(orders, ({ one, many }) => ({
   customer: one(customers, {
     fields: [orders.customerId],
