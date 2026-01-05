@@ -21,18 +21,20 @@ export default function UserAvatar() {
         <Link to="/login">Login</Link>
       </Button>
     )
+  const email = session?.user.email
+  const username = session?.user.name
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
           <AvatarFallback className="bg-primary/50 text-primary-foreground">
-            {session?.user.name[0]}
+            {username?.[0] ?? email[0]}
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>
-          Hello, {session?.user.name.split(' ').shift()}
+          {username?.split(' ').shift() ?? email}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={async () => await signOut()}>
