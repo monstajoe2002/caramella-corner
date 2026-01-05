@@ -9,11 +9,18 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { LogOut } from 'lucide-react'
+import { Button } from '../ui/button'
+import { Link } from '@tanstack/react-router'
 
 export default function UserAvatar() {
   const { useSession, signOut } = authClient
   const { data: session, isPending } = useSession()
-  if (isPending || session == null) return null
+  if (isPending || session == null)
+    return (
+      <Button asChild>
+        <Link to="/signup">Sign Up</Link>
+      </Button>
+    )
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>

@@ -158,7 +158,6 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
                       <NavigationMenuItem>
                         <p className="text-sm font-medium">{data?.user.name}</p>
                       </NavigationMenuItem>
-                      <Separator />
                       {navigationLinks.map((link, index) => (
                         <NavigationMenuItem key={index}>
                           <NavigationMenuLink asChild>
