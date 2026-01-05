@@ -3,7 +3,6 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { customerFormSchema } from '@/lib/schemas'
-import { Link } from '@tanstack/react-router'
 import { ShoppingBagIcon } from 'lucide-react'
 
 import { useForm } from '@tanstack/react-form'
@@ -13,7 +12,7 @@ import { authClient } from '@/lib/auth-client'
 import { LoadingSwap } from '@/components/ui/loading-swap'
 import { useState } from 'react'
 
-const SignUp = () => {
+const Login = () => {
   const [isLoading, setIsLoading] = useState(false)
   const form = useForm({
     defaultValues: {
@@ -118,17 +117,10 @@ const SignUp = () => {
               </LoadingSwap>
             </Button>
           </form>
-
-          <p className="mt-5 text-sm text-center">
-            Already have an account?
-            <Link to="." className="ml-1 underline text-muted-foreground">
-              Log in
-            </Link>
-          </p>
         </div>
       </div>
     </div>
   )
 }
 
-export default SignUp
+export default Login

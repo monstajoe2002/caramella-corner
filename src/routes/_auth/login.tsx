@@ -1,14 +1,14 @@
-import SignUp from '@/components/storefront/auth/signup'
+import Login from '@/components/storefront/auth/login'
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/_auth/signup')({
+export const Route = createFileRoute('/_auth/login')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
   return (
     <div>
-      <SignUp />
+      <Login />
     </div>
   )
 }

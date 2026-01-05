@@ -18,7 +18,7 @@ export default function UserAvatar() {
   if (isPending || session == null)
     return (
       <Button asChild>
-        <Link to="/signup">Sign Up</Link>
+        <Link to="/login">Login</Link>
       </Button>
     )
   return (

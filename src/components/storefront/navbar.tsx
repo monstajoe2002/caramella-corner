@@ -18,7 +18,6 @@ import { cn } from '@/lib/utils'
 import { Link } from '@tanstack/react-router'
 import CartItems from './cart/cart-items'
 import { authClient } from '@/lib/auth-client'
-import { Separator } from '../ui/separator'
 import UserAvatar from './user-avatar'
 // Simple logo component for the navbar
 const Logo = (props: React.SVGAttributes<SVGElement>) => {
