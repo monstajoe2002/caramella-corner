@@ -47,7 +47,7 @@ const Login = () => {
         <div className="relative isolate flex flex-col items-center">
           <ShoppingBagIcon />
           <p className="mt-4 text-xl font-semibold tracking-tight mb-8">
-            Sign up for Caramella Corner
+            Log in to Caramella Corner
           </p>
 
           <form

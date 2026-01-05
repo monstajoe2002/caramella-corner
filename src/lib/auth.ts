@@ -18,6 +18,7 @@ export const auth = betterAuth({
         // send email to user
         await sendVerificationEmail(email, token)
       },
+      storeToken: 'plain',
     }),
     tanstackStartCookies(),
   ],
