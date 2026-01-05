@@ -44,7 +44,7 @@ import {
 } from '@imagekit/react'
 import { cn } from '@/lib/utils'
 import { NewImage, ProductWithVariants } from '@/db/types'
-import { productSchema } from '@/lib/schemas'
+import { productSchema } from '@/lib/zod-schemas'
 import slugify from 'slugify'
 import { createProduct, editProduct } from '../data'
 import { toast } from 'sonner'

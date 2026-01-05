@@ -9,7 +9,7 @@ import {
   updateProduct,
 } from './db'
 import slugify from 'slugify'
-import { productSchema } from '@/lib/schemas'
+import { productSchema } from '@/lib/zod-schemas'
 import { redirect } from '@tanstack/react-router'
 import * as Sentry from '@sentry/tanstackstart-react'
 export const getProductsWithVariants = createServerFn().handler(async () => {

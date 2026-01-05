@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { customerFormSchema } from '@/lib/schemas'
+import { customerFormSchema } from '@/lib/zod-schemas'
 import { ShoppingBagIcon } from 'lucide-react'
 
 import { useForm } from '@tanstack/react-form'
