@@ -16,7 +16,6 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false)
   const form = useForm({
     defaultValues: {
-      name: '',
       email: '',
     },
     validators: {
@@ -26,7 +25,6 @@ const Login = () => {
       setIsLoading(true)
       const { data, error } = await authClient.signIn.magicLink({
         email: value.email,
-        name: value.name,
         callbackURL: '/',
         newUserCallbackURL: '/login',
       })
@@ -57,31 +55,6 @@ const Login = () => {
               form.handleSubmit()
             }}
           >
-            <form.Field
-              name="name"
-              children={(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Name</FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      aria-invalid={isInvalid}
-                      placeholder="Jane Doe"
-                      autoComplete="off"
-                    />
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                )
-              }}
-            />
             <form.Field
               name="email"
               children={(field) => {
