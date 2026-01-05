@@ -12,7 +12,8 @@ import { LogOut } from 'lucide-react'
 
 export default function UserAvatar() {
   const { useSession, signOut } = authClient
-  const { data: session } = useSession()
+  const { data: session, isPending } = useSession()
+  if (isPending || session == null) return null
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
