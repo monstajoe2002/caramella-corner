@@ -134,6 +134,13 @@
       "when": 1767618442626,
       "tag": "0018_stiff_mister_fear",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1767646162847,
+      "tag": "0019_stiff_millenium_guard",
+      "breakpoints": true
     }
   ]
 }

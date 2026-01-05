@@ -100,7 +100,7 @@ export const variants = pgTable('variants', {
 // For Better Auth tables, use text IDs instead of uuid
 export const customers = pgTable('customers', {
   id: text('id').primaryKey(), // Changed from uuid to text
-  name: varchar('name').notNull(),
+  name: varchar('name'),
   email: varchar('email').notNull().unique(),
   address: text('address'),
   emailVerified: boolean('email_verified').default(false).notNull(),
