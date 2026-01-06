@@ -12,7 +12,7 @@ import { ScanBarcode, Trash2 } from 'lucide-react'
 import { Image } from '@imagekit/react'
 import { formatVariant } from '@/lib/utils'
 
-export default function CartItems() {
+export default function CartSheet() {
   const cartItems = useCartStore((c) => c.items)
   const cartQuantity = useCartStore((c) => c.totalQuantity)
   const removeFromCart = useCartStore((c) => c.removeFromCart)

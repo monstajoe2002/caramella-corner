@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import { Link } from '@tanstack/react-router'
-import CartItems from './cart/cart-items'
+import CartSheet from './cart/cart-sheet'
 import { authClient } from '@/lib/auth-client'
 import UserAvatar from './user-avatar'
 // Simple logo component for the navbar
@@ -176,7 +176,7 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
                         />
                       </NavigationMenuItem>
                       <NavigationMenuItem className="w-full">
-                        <CartItems />
+                        <CartSheet />
                       </NavigationMenuItem>
                     </NavigationMenuList>
                   </NavigationMenu>
@@ -231,7 +231,7 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
           {/* Right side */}
           {!isMobile && (
             <div className="flex items-center gap-3">
-              <CartItems />
+              <CartSheet />
             </div>
           )}
           <UserAvatar />
