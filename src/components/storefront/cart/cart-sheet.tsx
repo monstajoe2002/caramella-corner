@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { ScanBarcode, Trash2 } from 'lucide-react'
 import { Image } from '@imagekit/react'
 import { formatVariant } from '@/lib/utils'
+import CartItems from './cart-items'
 
 export default function CartSheet() {
   const cartItems = useCartStore((c) => c.items)
@@ -39,40 +40,7 @@ export default function CartSheet() {
           </SheetDescription>
         </SheetHeader>
         <div className="flex-1 space-y-4 overflow-y-auto p-4">
-          {cartItems.map((item) => (
-            <div className="space-y-4">
-              <div className="flex gap-4">
-                <div className="h-20 w-20 rounded-md">
-                  <Image src={item.image.ikThumbnailUrl} />
-                </div>
-                <div className="flex-1 space-y-1">
-                  <h4 className="font-medium text-sm">
-                    {item.name} (x{item.quantity})
-                  </h4>
-                  <p className="text-muted-foreground text-xs">
-                    <b>{item.variant.sku}</b>:{' '}
-                    {formatVariant(
-                      item.variant.color ?? '',
-                      item.variant.size ?? '',
-                    )}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium text-sm">
-                      EGP {Number(item.price) * item.quantity!}
-                    </span>
-                    <Button
-                      onClick={() => removeFromCart(item.id)}
-                      className="h-6 w-6"
-                      size="icon"
-                      variant="ghost"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
+          <CartItems cartItems={cartItems} removeFromCart={removeFromCart} />
           <div className="space-y-2 pt-4">
             {/* <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Subtotal</span>
