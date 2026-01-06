@@ -11,8 +11,10 @@ import { Button } from '@/components/ui/button'
 import { ScanBarcode } from 'lucide-react'
 import CartItems from './cart-items'
 import { Link } from '@tanstack/react-router'
+import { useState } from 'react'
 
 export default function CartSheet() {
+  const [isOpen, setIsOpen] = useState(false)
   const cartItems = useCartStore((c) => c.items)
   const cartQuantity = useCartStore((c) => c.totalQuantity)
   const removeFromCart = useCartStore((c) => c.removeFromCart)
@@ -21,7 +23,7 @@ export default function CartSheet() {
     .reduce((sum, item) => sum + Number(item.price) * item.quantity!, 0)
     .toFixed(2)
   return (
-    <Sheet>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
         <Button>
           <span className="flex items-baseline gap-2">
@@ -61,7 +63,7 @@ export default function CartSheet() {
             </div>
           </div>
         </div>
-        <Button asChild className="m-4">
+        <Button onClick={() => setIsOpen(!isOpen)} asChild className="m-4">
           <Link search={{ c: cartId }} to="/checkout">
             <span className="sr-only">Proceed to checkout</span>
             <ScanBarcode />
