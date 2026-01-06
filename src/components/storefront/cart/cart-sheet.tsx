@@ -10,11 +10,13 @@ import {
 import { Button } from '@/components/ui/button'
 import { ScanBarcode } from 'lucide-react'
 import CartItems from './cart-items'
+import { Link } from '@tanstack/react-router'
 
 export default function CartSheet() {
   const cartItems = useCartStore((c) => c.items)
   const cartQuantity = useCartStore((c) => c.totalQuantity)
   const removeFromCart = useCartStore((c) => c.removeFromCart)
+  const cartId = useCartStore((c) => c.id)
   const totalPrice = cartItems
     .reduce((sum, item) => sum + Number(item.price) * item.quantity!, 0)
     .toFixed(2)
@@ -59,10 +61,12 @@ export default function CartSheet() {
             </div>
           </div>
         </div>
-        <Button className="m-4">
-          <span className="sr-only">Proceed to checkout</span>
-          <ScanBarcode />
-          Proceed to checkout
+        <Button asChild className="m-4">
+          <Link search={{ c: cartId }} to="/checkout">
+            <span className="sr-only">Proceed to checkout</span>
+            <ScanBarcode />
+            Proceed to checkout
+          </Link>
         </Button>
       </SheetContent>
     </Sheet>

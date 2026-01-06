@@ -7,7 +7,11 @@ import { toast } from 'sonner'
 export const useCartStore = create<CartState>()(
   persist(
     combine(
-      { id: crypto.randomUUID(), items: [] as CartItem[], totalQuantity: 0 },
+      {
+        id: crypto.randomUUID() as string,
+        items: [] as CartItem[],
+        totalQuantity: 0,
+      },
       (set) => ({
         addToCart: (item) =>
           set((state) => {
