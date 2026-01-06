@@ -1,16 +1,8 @@
 // store.ts
 import { create } from 'zustand'
 import { combine, persist } from 'zustand/middleware'
-import { CartItem } from './types'
+import { CartItem, CartState } from './types'
 import { toast } from 'sonner'
-
-// Define types for state & actions
-interface CartState {
-  items: CartItem[]
-  totalQuantity: number
-  addToCart: (product: CartItem) => void
-  removeFromCart: (productId: string, variantId?: string) => void
-}
 
 export const useCartStore = create<CartState>()(
   persist(

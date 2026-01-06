@@ -8,3 +8,10 @@ export interface CartItem extends Omit<Product, 'price'> {
   price: number
 }
 export type ClientSession = typeof authClient.$Infer.Session
+// Define types for state & actions
+export interface CartState {
+  items: CartItem[]
+  totalQuantity: number
+  addToCart: (product: CartItem) => void
+  removeFromCart: (productId: string, variantId?: string) => void
+}
