@@ -12,8 +12,6 @@ export const storefrontAuthMiddleware = createMiddleware().server(
 
     const session = await auth.api.getSession({ headers })
 
-    console.log('Middleware path:', path, 'Session:', !!session)
-
     if (!session && path.startsWith('/checkout')) {
       throw redirect({ to: '/login' })
     }
