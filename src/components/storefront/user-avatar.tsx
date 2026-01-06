@@ -34,7 +34,7 @@ export default function UserAvatar() {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>
-          {username?.split(' ').shift() ?? email}
+          {username ? username.split(' ').shift() : email}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={async () => await signOut()}>

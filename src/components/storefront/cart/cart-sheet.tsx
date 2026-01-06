@@ -8,9 +8,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
-import { ScanBarcode, Trash2 } from 'lucide-react'
-import { Image } from '@imagekit/react'
-import { formatVariant } from '@/lib/utils'
+import { ScanBarcode } from 'lucide-react'
 import CartItems from './cart-items'
 
 export default function CartSheet() {
