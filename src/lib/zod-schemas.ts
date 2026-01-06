@@ -1,3 +1,4 @@
+import { paymentMethodEnum } from '@/db/schema'
 import z from 'zod'
 export const imagesSchema = z.object({
   id: z.string().optional(),
@@ -35,4 +36,10 @@ export const productSchema = z.object({
 
 export const customerFormSchema = z.object({
   email: z.email('Invalid email address').nonempty(),
+})
+
+export const addressFormSchema = z.object({
+  name: z.string().nonempty('PLease enter your name'),
+  address: z.string().nonempty('Please enter a valid address'),
+  paymentMethod: z.enum(paymentMethodEnum.enumValues),
 })
