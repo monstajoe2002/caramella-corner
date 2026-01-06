@@ -10,6 +10,7 @@ export interface CartItem extends Omit<Product, 'price'> {
 export type ClientSession = typeof authClient.$Infer.Session
 // Define types for state & actions
 export interface CartState {
+  id: ReturnType<typeof crypto.randomUUID>
   items: CartItem[]
   totalQuantity: number
   addToCart: (product: CartItem) => void
