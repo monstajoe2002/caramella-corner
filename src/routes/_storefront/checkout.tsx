@@ -1,3 +1,5 @@
+import CartItems from '@/components/storefront/cart/cart-items'
+import { useCartStore } from '@/lib/cart-store'
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import z from 'zod'
 const searchSchema = z.object({
@@ -18,5 +20,10 @@ export const Route = createFileRoute('/_storefront/checkout')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/_storefront/checkout"!</div>
+  const cartItems = useCartStore((c) => c.items)
+  return (
+    <div>
+      <CartItems cartItems={cartItems} />
+    </div>
+  )
 }
