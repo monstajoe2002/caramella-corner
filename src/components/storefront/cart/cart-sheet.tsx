@@ -16,12 +16,10 @@ import { useState } from 'react'
 export default function CartSheet() {
   const [isOpen, setIsOpen] = useState(false)
   const cartItems = useCartStore((c) => c.items)
-  const cartQuantity = useCartStore((c) => c.totalQuantity)
+
   const removeFromCart = useCartStore((c) => c.removeFromCart)
   const cartId = useCartStore((c) => c.id)
-  const totalPrice = cartItems
-    .reduce((sum, item) => sum + Number(item.price) * item.quantity!, 0)
-    .toFixed(2)
+
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
@@ -52,15 +50,6 @@ export default function CartSheet() {
               <span className="text-muted-foreground">Shipping</span>
               <span>$10.00</span>
             </div> */}
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Quantity</span>
-              <span>x{cartQuantity}</span>
-            </div>
-
-            <div className="flex justify-between border-t pt-2 font-medium">
-              <span>Total</span>
-              <span>EGP {totalPrice}</span>
-            </div>
           </div>
         </div>
         <Button onClick={() => setIsOpen(!isOpen)} asChild className="m-4">
