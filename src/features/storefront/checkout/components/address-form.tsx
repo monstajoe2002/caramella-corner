@@ -13,12 +13,16 @@ import { Banknote, CheckIcon, CircleCheck, CreditCard } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
-export function AddressForm() {
+import { Customer } from '@/db/types'
+interface AddressFormProps {
+  data: Pick<Customer, 'address' | 'name'>
+}
+export function AddressForm({ data: { address, name } }: AddressFormProps) {
   const [isLoading, setIsLoading] = useState()
   const form = useForm({
     defaultValues: {
-      name: '',
-      address: '',
+      name: name || '',
+      address: address || '',
       paymentMethod: 'cash',
     },
     validators: {
