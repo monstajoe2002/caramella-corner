@@ -1,9 +1,13 @@
 import { db } from '@/db'
-import { orderItems, orders } from '@/db/schema'
-import { NewOrderWithItems } from '@/db/types'
+import { customers, orderItems, orders } from '@/db/schema'
+import { Customer, NewOrderWithItems } from '@/db/types'
 import { generateOrderNumber } from '@/lib/utils'
+import { eq } from 'drizzle-orm'
 
-export async function insertOrder(order: NewOrderWithItems) {
+export async function insertOrder(
+  order: NewOrderWithItems,
+  customerInfo: Pick<Customer, 'name' | 'email' | 'address'>,
+) {
   return db.transaction(async (trx) => {
     const [newOrder] = await db
       .insert(orders)
@@ -17,7 +21,12 @@ export async function insertOrder(order: NewOrderWithItems) {
       const orderItemsValues = order.orderItems
       await trx.insert(orderItems).values(orderItemsValues)
     }
-
+    if (newOrder) {
+      await trx
+        .update(customers)
+        .set({ name: customerInfo.name, address: customerInfo.address })
+        .where(eq(customers.email, customerInfo.email))
+    }
     return newOrder
   })
 }
