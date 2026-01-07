@@ -20,7 +20,6 @@ function App() {
       </header>
       <section className="mb-10">
         <h2>Featured Products</h2>
-        {/* @ts-ignore */}
         <FeaturedProductsCarousel products={products} />
       </section>
     </div>

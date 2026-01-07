@@ -12,10 +12,10 @@ import { cn } from '@/lib/utils'
 import { Image } from '@imagekit/react'
 import { useState, useEffect } from 'react'
 import { Button } from '../ui/button'
-import { ArrowRightIcon, ShoppingCartIcon } from 'lucide-react'
+import { ArrowRightIcon } from 'lucide-react'
 
 interface FeaturedProductsCarouselProps {
-  products: ProductWithVariants[]
+  products: Array<Omit<ProductWithVariants, 'category' | 'subcategory'>>
 }
 
 export default function FeaturedProductsCarousel({
