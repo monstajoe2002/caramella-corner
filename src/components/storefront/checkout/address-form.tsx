@@ -9,9 +9,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import z from 'zod'
-import { paymentMethodEnum } from '@/db/schema'
-import { Banknote, BanknoteIcon, CircleCheck } from 'lucide-react'
+import { Banknote, CircleCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 export function AddressForm() {
   const form = useForm({
@@ -90,7 +88,7 @@ export function AddressForm() {
             return (
               <Field data-invalid={isInvalid}>
                 <FieldLabel htmlFor={field.name}>Address</FieldLabel>
-                <RadioGroupPrimitive.Root className="max-w-md w-full grid grid-cols-3 gap-4">
+                <RadioGroupPrimitive.Root className="max-w-lg w-full grid grid-cols-3 gap-4">
                   <RadioGroupPrimitive.Item
                     value={'cash'}
                     className={cn(
@@ -98,7 +96,7 @@ export function AddressForm() {
                       'data-[state=checked]:ring-2 data-[state=checked]:ring-primary',
                     )}
                   >
-                    <CircleCheck className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-6 w-6 text-primary fill-blue-500 stroke-white group-data-[state=unchecked]:hidden" />
+                    <CircleCheck className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-6 w-6 text-primary fill-primary stroke-white group-data-[state=unchecked]:hidden" />
 
                     <Banknote className="mb-2.5 text-muted-foreground" />
                     <span className="font-semibold tracking-tight">
