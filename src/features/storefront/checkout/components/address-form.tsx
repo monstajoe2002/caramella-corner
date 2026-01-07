@@ -148,7 +148,7 @@ export function AddressForm() {
           }}
         />
       </FieldGroup>
-      <Button type="submit" className="mt-4">
+      <Button type="submit" className="mt-8">
         <CheckIcon />
         Checkout
       </Button>
