@@ -12,7 +12,9 @@ import { Input } from '@/components/ui/input'
 import { Banknote, CheckIcon, CircleCheck, CreditCard } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { useState } from 'react'
 export function AddressForm() {
+  const [isLoading, setIsLoading] = useState()
   const form = useForm({
     defaultValues: {
       name: '',
