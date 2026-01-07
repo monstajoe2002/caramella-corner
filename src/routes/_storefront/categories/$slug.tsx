@@ -1,4 +1,4 @@
-import ProductCard from '@/components/storefront/products/card'
+import ProductCard from '@/features/storefront/products/components/card'
 import { getProductsByCategorySlug } from '@/features/admin/products/data'
 import { createFileRoute } from '@tanstack/react-router'
 

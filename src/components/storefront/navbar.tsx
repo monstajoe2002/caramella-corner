@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import { Link } from '@tanstack/react-router'
-import CartSheet from './cart/cart-sheet'
+import CartSheet from '../../features/storefront/cart/components/cart-sheet'
 import { authClient } from '@/lib/auth-client'
 import UserAvatar from './user-avatar'
 // Simple logo component for the navbar

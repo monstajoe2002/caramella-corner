@@ -1,5 +1,5 @@
-import CartItems from '@/components/storefront/cart/cart-items'
-import { AddressForm } from '@/components/storefront/checkout/address-form'
+import CartItems from '@/features/storefront/cart/components/cart-items'
+import { AddressForm } from '@/features/storefront/checkout/components/address-form'
 import { useCartStore } from '@/lib/cart-store'
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import z from 'zod'
