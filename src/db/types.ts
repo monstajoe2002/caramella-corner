@@ -57,6 +57,9 @@ export type NewPayment = typeof payments.$inferInsert
 // order
 export type Order = typeof orders.$inferSelect
 export type NewOrder = typeof orders.$inferInsert
+export type NewOrderWithItems = NewOrder & {
+  orderItems: NewOrderItem[]
+}
 export type OrderWithCustomer = Order & {
   customer: Customer
   payment: Payment | null
