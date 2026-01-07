@@ -18,7 +18,10 @@ export async function insertOrder(
       })
       .returning()
     if (order.orderItems?.length) {
-      const orderItemsValues = order.orderItems
+      const orderItemsValues = order.orderItems.map((item) => ({
+        ...item,
+        orderId: newOrder.id,
+      }))
       await trx.insert(orderItems).values(orderItemsValues)
     }
     if (newOrder) {
