@@ -22,11 +22,7 @@ export const createOrder = createServerFn({ method: 'POST' })
             priceAtOrder: String(item.priceAtOrder),
           })),
         },
-        {
-          name: data.addressInfo.name,
-          address: data.addressInfo.address,
-          email: data.customerInfo.email,
-        },
+        { ...data.addressInfo, email: data.customerInfo.email },
       )
 
       // throw redirect({ href: '..', replace: true })

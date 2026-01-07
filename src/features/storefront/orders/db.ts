@@ -1,9 +1,10 @@
 import { db } from '@/db'
-import { customers, orderItems, orders } from '@/db/schema'
+import { customers, orderItems, orders, payments } from '@/db/schema'
 import { Customer, NewOrderWithItems } from '@/db/types'
 import { generateOrderNumber } from '@/lib/utils'
 import { eq } from 'drizzle-orm'
 
+// TODO: Refactor this function to accept a payment method as an argument
 export async function insertOrder(
   order: Omit<NewOrderWithItems, 'orderNumber' | 'status'>,
   customerInfo: Pick<Customer, 'name' | 'email' | 'address'>,
@@ -22,7 +23,17 @@ export async function insertOrder(
         ...item,
         orderId: newOrder.id,
       }))
-      await trx.insert(orderItems).values(orderItemsValues)
+      await trx
+        .insert(orderItems)
+        .values(orderItemsValues)
+        .then(async () => {
+          await trx.insert(payments).values({
+            amount: order.price,
+            paymentMethod: 'cash',
+            status: 'pending',
+          })
+        })
+        .catch(() => trx.rollback())
     }
     if (newOrder) {
       await trx
