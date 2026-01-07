@@ -9,7 +9,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { Banknote, CircleCheck } from 'lucide-react'
+import { Banknote, CircleCheck, CreditCard } from 'lucide-react'
 import { cn } from '@/lib/utils'
 export function AddressForm() {
   const form = useForm({
@@ -87,8 +87,8 @@ export function AddressForm() {
               field.state.meta.isTouched && !field.state.meta.isValid
             return (
               <Field data-invalid={isInvalid}>
-                <FieldLabel htmlFor={field.name}>Address</FieldLabel>
-                <RadioGroupPrimitive.Root className="max-w-lg w-full grid grid-cols-3 gap-4">
+                <FieldLabel htmlFor={field.name}>Payment Method</FieldLabel>
+                <RadioGroupPrimitive.Root className="max-w-lg w-full grid grid-cols-2 gap-4">
                   <RadioGroupPrimitive.Item
                     value={'cash'}
                     className={cn(
@@ -103,8 +103,23 @@ export function AddressForm() {
                       Cash on delivery
                     </span>
                     <p className="text-xs">
-                      Pay the full amount in cash once your order is shipped.
+                      Pay the full amount in cash when the item is delivered.
                     </p>
+                  </RadioGroupPrimitive.Item>
+                  <RadioGroupPrimitive.Item
+                    value={'credit'}
+                    className={cn(
+                      'relative group ring-[1px] ring-border rounded py-2 px-3 text-start',
+                      'data-[state=checked]:ring-2 data-[state=checked]:ring-primary',
+                    )}
+                  >
+                    <CircleCheck className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-6 w-6 text-primary fill-primary stroke-white group-data-[state=unchecked]:hidden" />
+
+                    <CreditCard className="mb-2.5 text-muted-foreground" />
+                    <span className="font-semibold tracking-tight">
+                      Credit Card
+                    </span>
+                    <p className="text-xs">Pay the full amount online.</p>
                   </RadioGroupPrimitive.Item>
                 </RadioGroupPrimitive.Root>
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
