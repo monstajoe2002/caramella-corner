@@ -9,8 +9,9 @@ import {
   FieldLabel,
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { Banknote, CircleCheck, CreditCard } from 'lucide-react'
+import { Banknote, CheckIcon, CircleCheck, CreditCard } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 export function AddressForm() {
   const form = useForm({
     defaultValues: {
@@ -33,6 +34,7 @@ export function AddressForm() {
         e.preventDefault()
         form.handleSubmit()
       }}
+      className="flex flex-col"
     >
       <FieldGroup>
         <form.Field
@@ -128,6 +130,10 @@ export function AddressForm() {
           }}
         />
       </FieldGroup>
+      <Button type="submit" className="mt-4">
+        <CheckIcon />
+        Checkout
+      </Button>
     </form>
   )
 }
