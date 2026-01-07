@@ -5,7 +5,7 @@ import { generateOrderNumber } from '@/lib/utils'
 import { eq } from 'drizzle-orm'
 
 export async function insertOrder(
-  order: NewOrderWithItems,
+  order: Omit<NewOrderWithItems, 'orderNumber' | 'status'>,
   customerInfo: Pick<Customer, 'name' | 'email' | 'address'>,
 ) {
   return db.transaction(async (trx) => {
