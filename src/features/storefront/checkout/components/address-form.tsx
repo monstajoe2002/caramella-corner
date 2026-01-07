@@ -131,13 +131,15 @@ export function AddressForm() {
                     className={cn(
                       'relative group ring-[1px] ring-border rounded py-2 px-3 text-start',
                       'data-[state=checked]:ring-2 data-[state=checked]:ring-primary',
+                      'disabled:opacity-60',
                     )}
+                    disabled
                   >
                     <CircleCheck className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 h-6 w-6 text-primary fill-primary stroke-white group-data-[state=unchecked]:hidden" />
 
                     <CreditCard className="mb-2.5 text-muted-foreground" />
                     <span className="font-semibold tracking-tight">
-                      Credit Card
+                      Credit Card (Coming Soon)
                     </span>
                     <p className="text-xs">Pay the full amount online.</p>
                   </RadioGroupPrimitive.Item>
