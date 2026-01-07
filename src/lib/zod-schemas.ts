@@ -44,11 +44,15 @@ export const addressFormSchema = z.object({
   paymentMethod: z.enum(paymentMethodEnum.enumValues),
 })
 
-// const orderItemSchema={}
+const orderItemSchema = z.object({
+  quantity: z.number().int().nonnegative(),
+  priceAtOrder: z.number('Price must be a number').positive(),
+  variantId: z.uuid(),
+})
 export const orderSchema = z.object({
   ...addressFormSchema.shape,
   ...customerFormSchema.extend({ id: z.uuid().nonempty() }),
   price: z.number('Price must be a number').positive(),
   quantity: z.number().int().nonnegative(),
-  orderItems: z.array(z.object()),
+  orderItems: z.array(orderItemSchema),
 })
