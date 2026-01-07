@@ -43,3 +43,12 @@ export const addressFormSchema = z.object({
   address: z.string().nonempty('Please enter a valid address'),
   paymentMethod: z.enum(paymentMethodEnum.enumValues),
 })
+
+// const orderItemSchema={}
+export const orderSchema = z.object({
+  ...addressFormSchema.shape,
+  ...customerFormSchema.extend({ id: z.uuid().nonempty() }),
+  price: z.number('Price must be a number').positive(),
+  quantity: z.number().int().nonnegative(),
+  orderItems: z.array(z.object()),
+})
