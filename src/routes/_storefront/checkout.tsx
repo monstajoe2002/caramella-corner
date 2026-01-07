@@ -23,9 +23,12 @@ export const Route = createFileRoute('/_storefront/checkout')({
 function RouteComponent() {
   const cartItems = useCartStore((c) => c.items)
   return (
-    <div className="flex flex-col justify-around min-h-[calc(100vh-100px)]">
-      <CartItems cartItems={cartItems} />
-      <AddressForm />
+    <div>
+      <h1 className="text-start">Confirm Checkout</h1>
+      <div className="flex flex-col justify-around min-h-[calc(100vh-100px)]">
+        <CartItems cartItems={cartItems} />
+        <AddressForm />
+      </div>
     </div>
   )
 }

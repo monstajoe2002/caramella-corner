@@ -19,7 +19,7 @@ export default function CartItems({
     .reduce((sum, item) => sum + Number(item.price) * item.quantity!, 0)
     .toFixed(2)
   return (
-    <div className="space-y-2 pt-4">
+    <div className="space-y-2">
       {cartItems.map((item, idx) => (
         <div key={idx}>
           <div className="flex gap-4">
