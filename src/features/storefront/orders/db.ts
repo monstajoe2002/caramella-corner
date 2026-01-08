@@ -39,13 +39,15 @@ export async function insertOrder(
         })
         .catch(() => trx.rollback())
     }
-    // if successfull update customer address if empty and link order to payment
+    // if successful update customer address if empty and link order to payment
     if (newOrder) {
-      const payment = await db.query.payments.findFirst({
+      const payment = await trx.query.payments.findFirst({
         columns: {
           id: true,
         },
+        where: eq(payments.orderId, newOrder.id),
       })
+      // and get product details
       await trx
         .update(customers)
         .set({ name: customerInfo.name, address: customerInfo.address })

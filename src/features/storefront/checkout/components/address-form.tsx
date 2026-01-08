@@ -18,6 +18,8 @@ import { placeOrder } from '../../orders/data'
 import { LoadingSwap } from '@/components/ui/loading-swap'
 import { CartItem } from '@/lib/types'
 import { authClient } from '@/lib/auth-client'
+import { useCartStore } from '@/lib/cart-store'
+import { useRouter } from '@tanstack/react-router'
 interface AddressFormProps {
   customerData: Pick<Customer, 'address'>
   cartItems: Array<Pick<CartItem, 'price' | 'quantity' | 'variant'>>
@@ -30,6 +32,8 @@ export function AddressForm({
 }: AddressFormProps) {
   const { data } = authClient.useSession()
   const [isLoading, setIsLoading] = useState(false)
+  const resetCart = useCartStore((c) => c.reset)
+  const router = useRouter()
   const form = useForm({
     defaultValues: {
       name: data?.user.name || '',
@@ -69,7 +73,11 @@ export function AddressForm({
         toast.error(res.message)
         setIsLoading(false)
       } else {
-        toast.success('Order placed successfully!')
+        resetCart()
+        router.navigate({
+          to: '/order-confirmed',
+          search: { o: res.data?.id! },
+        })
       }
       setIsLoading(false)
     },

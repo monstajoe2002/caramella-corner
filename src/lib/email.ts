@@ -11,3 +11,16 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     html: `<p>Please click <a href="${confirmLink}">here</a> to confirm your email address.</p>`,
   })
 }
+export const sendConfirmationEmail = async (
+  email: string,
+  orderNumber: string,
+) => {
+  await resend.emails.send({
+    from: 'onboarding@resend.dev',
+    to: email,
+    subject: 'Confirm your email',
+    html: `<h1>Your order has been confirmed! ✅</h1> 
+    <p>Your order number is: ${orderNumber}. It should be expected to arrive within 2-3 business days.</p>
+    `,
+  })
+}

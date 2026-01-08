@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import z from 'zod'
 const searchSchema = z.object({
-  oid: z.string().nonempty(),
+  o: z.string().nonempty(),
 })
 export const Route = createFileRoute('/_storefront/order-confirmed')({
   component: RouteComponent,

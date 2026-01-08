@@ -2,6 +2,7 @@ import { createServerFn } from '@tanstack/react-start'
 import * as Sentry from '@sentry/tanstackstart-react'
 import { insertOrder } from './db'
 import { orderSchema } from '@/lib/zod-schemas'
+import { sendConfirmationEmail } from '@/lib/email'
 export const placeOrder = createServerFn({ method: 'POST' })
   .inputValidator(orderSchema)
   .handler(async ({ data: unsafeData }) => {
@@ -13,7 +14,7 @@ export const placeOrder = createServerFn({ method: 'POST' })
           message: 'Error creating product',
         }
       }
-      await insertOrder(
+      const res = await insertOrder(
         {
           ...data,
           price: String(data.price),
@@ -24,7 +25,8 @@ export const placeOrder = createServerFn({ method: 'POST' })
         },
         { ...data.addressInfo, ...data.customerInfo },
       )
-
-      // throw redirect({ href: '..', replace: true })
+      if (success)
+        sendConfirmationEmail(data.customerInfo.email, res.orderNumber)
+      return { data: res }
     })
   })
