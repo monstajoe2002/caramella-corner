@@ -15,12 +15,17 @@ import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { Customer } from '@/db/types'
 import { placeOrder } from '../../orders/data'
-import { useCartStore } from '@/lib/cart-store'
+import { LoadingSwap } from '@/components/ui/loading-swap'
+import { CartItem } from '@/lib/types'
 interface AddressFormProps {
-  data: Pick<Customer, 'address' | 'name' | 'email' | 'id'>
+  customerData: Pick<Customer, 'address' | 'name' | 'email' | 'id'>
+  cartItems: Array<Pick<CartItem, 'price' | 'quantity' | 'variant'>>
+  cartQuantity: number
 }
 export function AddressForm({
-  data: { address, name, email, id },
+  customerData: { address, name, email, id },
+  cartQuantity,
+  cartItems,
 }: AddressFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const form = useForm({
@@ -33,34 +38,34 @@ export function AddressForm({
       onSubmit: addressFormSchema,
     },
     onSubmit: async ({ value: { address, name } }) => {
-      const cartItems = useCartStore((c) => c.items)
-      const cartQuantity = useCartStore((c) => c.totalQuantity)
       const totalPrice = cartItems
         .reduce((sum, item) => sum + Number(item.price) * item.quantity!, 0)
         .toFixed(2)
       setIsLoading(true)
-
-      const res = await placeOrder({
-        data: {
-          price: Number(totalPrice),
-          quantity: cartQuantity,
-          addressInfo: {
-            address,
-            name,
-          },
-          orderItems: cartItems.map((item) => ({
-            priceAtOrder: item.price,
-            quantity: item.quantity!,
-            variantId: item.variant.id,
-          })),
-          customerInfo: {
-            email,
-            id,
-          },
+      const orderData = {
+        price: Number(totalPrice),
+        quantity: cartQuantity,
+        addressInfo: {
+          address,
+          name,
         },
+        orderItems: cartItems.map((item) => ({
+          priceAtOrder: Number(item.price),
+          quantity: item.quantity!,
+          variantId: item.variant.id,
+        })),
+        customerInfo: {
+          email,
+          id,
+        },
+      }
+      // console.log(orderData)
+      const res = await placeOrder({
+        data: orderData,
       })
       if (res?.error) {
         toast.error(res.message)
+        setIsLoading(false)
       } else {
         toast.success('Order placed successfully!')
       }
@@ -179,8 +184,10 @@ export function AddressForm({
         />
       </FieldGroup>
       <Button type="submit" className="mt-8">
-        <CheckIcon />
-        Checkout
+        <LoadingSwap isLoading={isLoading} className="flex gap-2 items-center">
+          <CheckIcon />
+          Checkout
+        </LoadingSwap>
       </Button>
     </form>
   )

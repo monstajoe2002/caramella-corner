@@ -33,12 +33,17 @@ export const Route = createFileRoute('/_storefront/checkout')({
 function RouteComponent() {
   const { name, address, customerId, email } = Route.useLoaderData()
   const cartItems = useCartStore((c) => c.items)
+  const cartQuantity = useCartStore((c) => c.totalQuantity)
   return (
     <div>
       <h1 className="text-start">Confirm Checkout</h1>
       <div className="flex flex-col justify-around min-h-[calc(100vh-100px)]">
         <CartItems cartItems={cartItems} />
-        <AddressForm data={{ name, address, email, id: customerId }} />
+        <AddressForm
+          customerData={{ name, address, email, id: customerId }}
+          cartItems={cartItems}
+          cartQuantity={cartQuantity}
+        />
       </div>
     </div>
   )

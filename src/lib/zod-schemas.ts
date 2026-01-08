@@ -51,7 +51,7 @@ const orderItemSchema = z.object({
 })
 export const orderSchema = z.object({
   addressInfo: addressFormSchema.omit({ paymentMethod: true }),
-  customerInfo: customerFormSchema.extend({ id: z.uuid().nonempty() }),
+  customerInfo: customerFormSchema.extend({ id: z.string().nonempty() }),
   price: z.number('Price must be a number').positive(),
   quantity: z.number().int().nonnegative(),
   orderItems: z.array(orderItemSchema),
