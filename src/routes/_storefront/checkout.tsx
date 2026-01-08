@@ -1,6 +1,7 @@
 import CartItems from '@/features/storefront/cart/components/cart-items'
 import { AddressForm } from '@/features/storefront/checkout/components/address-form'
 import { getSessionCustomer } from '@/features/storefront/customers/data'
+import { storefrontAuthMiddleware } from '@/features/storefront/middleware'
 import { useCartStore } from '@/lib/cart-store'
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import z from 'zod'
@@ -8,11 +9,10 @@ const searchSchema = z.object({
   c: z.string().nonempty(),
 })
 export const Route = createFileRoute('/_storefront/checkout')({
-  // TODO: fix notfound component
-  notFoundComponent: () => {
-    return <p>Cart not found!</p>
-  },
   component: RouteComponent,
+  server: {
+    middleware: [storefrontAuthMiddleware],
+  },
   validateSearch: searchSchema,
   beforeLoad: ({ search }) => {
     if (!search.c) {
@@ -22,10 +22,10 @@ export const Route = createFileRoute('/_storefront/checkout')({
   loader: async () => {
     const customer = await getSessionCustomer()
     return {
-      name: customer!.name,
-      address: customer!.address,
-      customerId: customer!.id,
-      email: customer!.email,
+      name: customer?.name || '',
+      address: customer?.address || '',
+      customerId: customer?.id || '',
+      email: customer?.email || '',
     }
   },
 })

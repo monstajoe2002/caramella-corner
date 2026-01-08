@@ -7,7 +7,7 @@ import { ShoppingBagIcon } from 'lucide-react'
 
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
-import { Field, FieldLabel, FieldError } from '../../ui/field'
+import { Field, FieldLabel, FieldError } from '@/components/ui/field'
 import { authClient } from '@/lib/auth-client'
 import { LoadingSwap } from '@/components/ui/loading-swap'
 import { useState } from 'react'
