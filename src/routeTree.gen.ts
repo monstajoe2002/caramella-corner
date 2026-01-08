@@ -14,6 +14,7 @@ import { Route as StorefrontRouteRouteImport } from './routes/_storefront/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as StorefrontIndexRouteImport } from './routes/_storefront/index'
+import { Route as StorefrontOrderConfirmedRouteImport } from './routes/_storefront/order-confirmed'
 import { Route as StorefrontCheckoutRouteImport } from './routes/_storefront/checkout'
 import { Route as AuthVerifyRouteImport } from './routes/_auth/verify'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
@@ -55,6 +56,12 @@ const StorefrontIndexRoute = StorefrontIndexRouteImport.update({
   path: '/',
   getParentRoute: () => StorefrontRouteRoute,
 } as any)
+const StorefrontOrderConfirmedRoute =
+  StorefrontOrderConfirmedRouteImport.update({
+    id: '/order-confirmed',
+    path: '/order-confirmed',
+    getParentRoute: () => StorefrontRouteRoute,
+  } as any)
 const StorefrontCheckoutRoute = StorefrontCheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
@@ -148,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof AuthLoginRoute
   '/verify': typeof AuthVerifyRoute
   '/checkout': typeof StorefrontCheckoutRoute
+  '/order-confirmed': typeof StorefrontOrderConfirmedRoute
   '/': typeof StorefrontIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/categories/$slug': typeof StorefrontCategoriesSlugRoute
@@ -169,6 +177,7 @@ export interface FileRoutesByTo {
   '/login': typeof AuthLoginRoute
   '/verify': typeof AuthVerifyRoute
   '/checkout': typeof StorefrontCheckoutRoute
+  '/order-confirmed': typeof StorefrontOrderConfirmedRoute
   '/': typeof StorefrontIndexRoute
   '/admin': typeof AdminIndexRoute
   '/categories/$slug': typeof StorefrontCategoriesSlugRoute
@@ -194,6 +203,7 @@ export interface FileRoutesById {
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/verify': typeof AuthVerifyRoute
   '/_storefront/checkout': typeof StorefrontCheckoutRoute
+  '/_storefront/order-confirmed': typeof StorefrontOrderConfirmedRoute
   '/_storefront/': typeof StorefrontIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/_storefront/categories/$slug': typeof StorefrontCategoriesSlugRoute
@@ -218,6 +228,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/verify'
     | '/checkout'
+    | '/order-confirmed'
     | '/'
     | '/admin/'
     | '/categories/$slug'
@@ -239,6 +250,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/verify'
     | '/checkout'
+    | '/order-confirmed'
     | '/'
     | '/admin'
     | '/categories/$slug'
@@ -263,6 +275,7 @@ export interface FileRouteTypes {
     | '/_auth/login'
     | '/_auth/verify'
     | '/_storefront/checkout'
+    | '/_storefront/order-confirmed'
     | '/_storefront/'
     | '/admin/'
     | '/_storefront/categories/$slug'
@@ -324,6 +337,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof StorefrontIndexRouteImport
+      parentRoute: typeof StorefrontRouteRoute
+    }
+    '/_storefront/order-confirmed': {
+      id: '/_storefront/order-confirmed'
+      path: '/order-confirmed'
+      fullPath: '/order-confirmed'
+      preLoaderRoute: typeof StorefrontOrderConfirmedRouteImport
       parentRoute: typeof StorefrontRouteRoute
     }
     '/_storefront/checkout': {
@@ -464,6 +484,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 
 interface StorefrontRouteRouteChildren {
   StorefrontCheckoutRoute: typeof StorefrontCheckoutRoute
+  StorefrontOrderConfirmedRoute: typeof StorefrontOrderConfirmedRoute
   StorefrontIndexRoute: typeof StorefrontIndexRoute
   StorefrontCategoriesSlugRoute: typeof StorefrontCategoriesSlugRoute
   StorefrontProductsSlugRoute: typeof StorefrontProductsSlugRoute
@@ -473,6 +494,7 @@ interface StorefrontRouteRouteChildren {
 
 const StorefrontRouteRouteChildren: StorefrontRouteRouteChildren = {
   StorefrontCheckoutRoute: StorefrontCheckoutRoute,
+  StorefrontOrderConfirmedRoute: StorefrontOrderConfirmedRoute,
   StorefrontIndexRoute: StorefrontIndexRoute,
   StorefrontCategoriesSlugRoute: StorefrontCategoriesSlugRoute,
   StorefrontProductsSlugRoute: StorefrontProductsSlugRoute,
