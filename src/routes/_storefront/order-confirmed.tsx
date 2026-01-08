@@ -9,5 +9,10 @@ export const Route = createFileRoute('/_storefront/order-confirmed')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/_storefront/order-confirmed"!</div>
+  return (
+    <div>
+      Order Confirmed! Thank you for your purchase. We've sent a confirmation to
+      your email.
+    </div>
+  )
 }
