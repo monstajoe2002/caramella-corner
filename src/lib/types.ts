@@ -18,4 +18,5 @@ export interface CartState {
   totalQuantity: number
   addToCart: (product: CartItem) => void
   removeFromCart: (productId: string, variantId?: string) => void
+  reset: () => void
 }
