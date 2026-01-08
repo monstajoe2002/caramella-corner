@@ -50,7 +50,7 @@ const orderItemSchema = z.object({
   variantId: z.uuid(),
 })
 export const orderSchema = z.object({
-  addressInfo: addressFormSchema,
+  addressInfo: addressFormSchema.omit({ paymentMethod: true }),
   customerInfo: customerFormSchema.extend({ id: z.uuid().nonempty() }),
   price: z.number('Price must be a number').positive(),
   quantity: z.number().int().nonnegative(),

@@ -2,7 +2,7 @@ import { createServerFn } from '@tanstack/react-start'
 import * as Sentry from '@sentry/tanstackstart-react'
 import { insertOrder } from './db'
 import { orderSchema } from '@/lib/zod-schemas'
-export const createOrder = createServerFn({ method: 'POST' })
+export const placeOrder = createServerFn({ method: 'POST' })
   .inputValidator(orderSchema)
   .handler(async ({ data: unsafeData }) => {
     return await Sentry.startSpan({ name: 'createOrder' }, async () => {

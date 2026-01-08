@@ -14,11 +14,15 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { Customer } from '@/db/types'
+import { placeOrder } from '../../orders/data'
+import { useCartStore } from '@/lib/cart-store'
 interface AddressFormProps {
-  data: Pick<Customer, 'address' | 'name'>
+  data: Pick<Customer, 'address' | 'name' | 'email' | 'id'>
 }
-export function AddressForm({ data: { address, name } }: AddressFormProps) {
-  const [isLoading, setIsLoading] = useState()
+export function AddressForm({
+  data: { address, name, email, id },
+}: AddressFormProps) {
+  const [isLoading, setIsLoading] = useState(false)
   const form = useForm({
     defaultValues: {
       name: name || '',
@@ -28,21 +32,39 @@ export function AddressForm({ data: { address, name } }: AddressFormProps) {
     validators: {
       onSubmit: addressFormSchema,
     },
-    onSubmit: async ({ value }) => {
-      toast('You submitted the following values:', {
-        description: (
-          <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-            <code>{JSON.stringify(value, null, 2)}</code>
-          </pre>
-        ),
-        position: 'bottom-right',
-        classNames: {
-          content: 'flex flex-col gap-2',
+    onSubmit: async ({ value: { address, name } }) => {
+      const cartItems = useCartStore((c) => c.items)
+      const cartQuantity = useCartStore((c) => c.totalQuantity)
+      const totalPrice = cartItems
+        .reduce((sum, item) => sum + Number(item.price) * item.quantity!, 0)
+        .toFixed(2)
+      setIsLoading(true)
+
+      const res = await placeOrder({
+        data: {
+          price: Number(totalPrice),
+          quantity: cartQuantity,
+          addressInfo: {
+            address,
+            name,
+          },
+          orderItems: cartItems.map((item) => ({
+            priceAtOrder: item.price,
+            quantity: item.quantity!,
+            variantId: item.variant.id,
+          })),
+          customerInfo: {
+            email,
+            id,
+          },
         },
-        style: {
-          '--border-radius': 'calc(var(--radius)  + 4px)',
-        } as React.CSSProperties,
       })
+      if (res?.error) {
+        toast.error(res.message)
+      } else {
+        toast.success('Order placed successfully!')
+      }
+      setIsLoading(false)
     },
   })
 
