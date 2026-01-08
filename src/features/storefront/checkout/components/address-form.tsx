@@ -17,20 +17,22 @@ import { Customer } from '@/db/types'
 import { placeOrder } from '../../orders/data'
 import { LoadingSwap } from '@/components/ui/loading-swap'
 import { CartItem } from '@/lib/types'
+import { authClient } from '@/lib/auth-client'
 interface AddressFormProps {
-  customerData: Pick<Customer, 'address' | 'name' | 'email' | 'id'>
+  customerData: Pick<Customer, 'address'>
   cartItems: Array<Pick<CartItem, 'price' | 'quantity' | 'variant'>>
   cartQuantity: number
 }
 export function AddressForm({
-  customerData: { address, name, email, id },
+  customerData: { address },
   cartQuantity,
   cartItems,
 }: AddressFormProps) {
+  const { data } = authClient.useSession()
   const [isLoading, setIsLoading] = useState(false)
   const form = useForm({
     defaultValues: {
-      name: name || '',
+      name: data?.user.name || '',
       address: address || '',
       paymentMethod: 'cash',
     },
@@ -55,8 +57,8 @@ export function AddressForm({
           variantId: item.variant.id,
         })),
         customerInfo: {
-          email,
-          id,
+          email: data?.user.email || '',
+          id: data?.user.id || '',
         },
       }
       // console.log(orderData)
