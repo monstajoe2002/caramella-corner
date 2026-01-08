@@ -18,9 +18,9 @@ export const sendConfirmationEmail = async (
   await resend.emails.send({
     from: 'onboarding@resend.dev',
     to: email,
-    subject: 'Confirm your email',
+    subject: 'Order Confirmation',
     html: `<h1>Your order has been confirmed! ✅</h1> 
-    <p>Your order number is: ${orderNumber}. It should be expected to arrive within 2-3 business days.</p>
+    <p>Your order number is: <b>#${orderNumber}</b>. It should be expected to arrive within 2-3 business days.</p>
     `,
   })
 }
