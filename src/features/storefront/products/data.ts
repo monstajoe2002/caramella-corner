@@ -5,11 +5,15 @@ import {
   searchActiveProducts as searchActiveProductsDb,
 } from './db'
 import * as Sentry from '@sentry/tanstackstart-react'
-export const getActiveProducts = createServerFn().handler(async () => {
-  return await Sentry.startSpan({ name: 'getActiveProducts' }, async () => {
-    return await getActiveProductsDb()
+export const getActiveProducts = createServerFn({ method: 'GET' })
+  .inputValidator((data?: { limit?: number; offset?: number }) => data)
+  .handler(async ({ data }) => {
+    const limit = data?.limit
+    const offset = data?.offset
+    return await Sentry.startSpan({ name: 'getActiveProducts' }, async () => {
+      return await getActiveProductsDb({ limit, offset })
+    })
   })
-})
 export const getProductBySlug = createServerFn({ method: 'GET' })
   .inputValidator((data: { slug: string }) => data)
   .handler(async ({ data: { slug } }) => {

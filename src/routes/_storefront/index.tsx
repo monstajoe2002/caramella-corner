@@ -1,11 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { getProductsWithVariants } from '@/features/admin/products/data'
 import FeaturedProductsCarousel from '@/components/storefront/featured-products-carousel'
 import { seo } from '@/lib/utils'
+import { getActiveProducts } from '@/features/storefront/products/data'
 
 export const Route = createFileRoute('/_storefront/')({
   component: App,
-  loader: () => getProductsWithVariants(),
+  loader: () => getActiveProducts({ data: { limit: 5 } }),
   head: () => ({
     meta: seo({
       title: 'Home | Caramella Corner',
