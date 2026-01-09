@@ -1,5 +1,5 @@
 import { Separator } from '@/components/ui/separator'
-import { getOrderById } from '@/features/storefront/orders/db'
+import { getOrderById } from '@/features/storefront/orders/data'
 import { createFileRoute } from '@tanstack/react-router'
 import z from 'zod'
 const searchSchema = z.object({
@@ -9,7 +9,8 @@ export const Route = createFileRoute('/_storefront/order-confirmed')({
   component: RouteComponent,
   validateSearch: searchSchema,
   loaderDeps: ({ search: { o } }) => ({ orderId: o }),
-  loader: async ({ deps: { orderId } }) => getOrderById(orderId),
+  loader: async ({ deps: { orderId } }) =>
+    getOrderById({ data: { id: orderId } }),
 })
 
 function RouteComponent() {

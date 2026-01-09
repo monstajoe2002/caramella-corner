@@ -7,7 +7,7 @@ import {
   products,
   variants,
 } from '@/db/schema'
-import { Customer, NewOrderWithItems, OrderWithCustomer } from '@/db/types'
+import { Customer, NewOrderWithItems } from '@/db/types'
 import { generateOrderNumber } from '@/lib/utils'
 import { eq } from 'drizzle-orm'
 
