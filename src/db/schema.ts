@@ -69,7 +69,13 @@ export const products = pgTable(
     createdAt,
     updatedAt,
   },
-  () => [{ checkDiscount: `CHECK (discount >= 0 AND discount <= 1)` }],
+  (table) => [
+    { checkDiscount: `CHECK (discount >= 0 AND discount <= 1)` },
+    index('products_name_idx').on(table.name),
+    index('products_description_idx').on(table.description),
+    index('products_material_idx').on(table.material),
+    index('products_active_idx').on(table.active),
+  ],
 )
 // Image Table
 export const images = pgTable('images', {

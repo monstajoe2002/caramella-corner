@@ -1,7 +1,7 @@
 import { db } from '@/db'
 import { categories, products } from '@/db/schema'
 import { priceAfterDiscount } from '@/db/schema-helpers'
-import { eq } from 'drizzle-orm'
+import { eq, and, or, ilike } from 'drizzle-orm'
 import { notFound } from '@tanstack/react-router'
 export async function getActiveProducts() {
   return await db.query.products.findMany({
@@ -37,4 +37,20 @@ export async function getProductBySlug(slug: string) {
 
   if (product == null) throw notFound()
   return product
+}
+
+export async function searchActiveProducts(query: string) {
+  const searchTerm = `%${query}%`
+  return await db.query.products.findMany({
+    where: and(
+      eq(products.active, true),
+      or(
+        ilike(products.name, searchTerm),
+        ilike(products.description, searchTerm),
+        ilike(products.material, searchTerm),
+      ),
+    ),
+    with: { variants: true, category: true, images: true },
+    extras: { priceAfterDiscount: priceAfterDiscount(products) },
+  })
 }

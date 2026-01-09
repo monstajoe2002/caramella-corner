@@ -1,8 +1,7 @@
 import * as React from 'react'
-import { useEffect, useState, useRef, useId } from 'react'
-import { MenuIcon, Search, SearchIcon } from 'lucide-react'
+import { useEffect, useState, useRef } from 'react'
+import { MenuIcon, Search } from 'lucide-react'
 import { Button, buttonVariants } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -15,7 +14,12 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
-import { Link } from '@tanstack/react-router'
+import {
+  Link,
+  useNavigate,
+  useRouter,
+  useRouterState,
+} from '@tanstack/react-router'
 import CartSheet from '../../features/storefront/cart/components/cart-sheet'
 import UserAvatar from './user-avatar'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '../ui/input-group'
@@ -57,24 +61,27 @@ export interface NavItem {
   href?: string
   label: string
 }
-// export interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
-//   logo?: React.ReactNode
-//   logoHref?: string
-//   navigationLinks?: NavItem[]
 
-//   searchPlaceholder?: string
-//   onCartClick?: () => void
-//   onSearchSubmit?: (query: string) => void
-// }
-// Default navigation links
 const navigationLinks: NavItem[] = [
   { href: '/products', label: 'Products' },
   { href: '/categories', label: 'Categories' },
 ]
 export const Navbar = React.forwardRef<HTMLElement>(({ ...props }, ref) => {
   const [isMobile, setIsMobile] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   const containerRef = useRef<HTMLElement>(null)
-  const searchId = useId()
+
+  const routerState = useRouterState()
+  const router = useRouter()
+  // Sync search query with URL when on products page
+  useEffect(() => {
+    const location = routerState.location
+    if (location.pathname === '/products') {
+      const q = (location.search as { q?: string })?.q || ''
+      setSearchQuery(q)
+    }
+  }, [routerState.location.pathname, routerState.location.search])
+
   useEffect(() => {
     const checkWidth = () => {
       if (containerRef.current) {
@@ -189,13 +196,34 @@ export const Navbar = React.forwardRef<HTMLElement>(({ ...props }, ref) => {
               </NavigationMenu>
             )}
             {/* Search input */}
-
-            <InputGroup className="max-w-xs w-full">
-              <InputGroupInput placeholder="Search..." />
-              <InputGroupAddon>
-                <Search />
-              </InputGroupAddon>
-            </InputGroup>
+            <form
+              className="max-w-xs w-full"
+              onSubmit={(e) => {
+                e.preventDefault()
+                const query = searchQuery.trim()
+                if (query) {
+                  router.navigate({
+                    to: '/products',
+                    search: { q: query },
+                  })
+                } else {
+                  router.navigate({
+                    to: '/products',
+                  })
+                }
+              }}
+            >
+              <InputGroup className="w-full">
+                <InputGroupInput
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <InputGroupAddon>
+                  <Search />
+                </InputGroupAddon>
+              </InputGroup>
+            </form>
           </div>
         </div>
         {/* Right side */}
