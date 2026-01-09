@@ -31,7 +31,7 @@ import { formatVariant, seo } from '@/lib/utils'
 export const Route = createFileRoute('/_storefront/products/$slug')({
   component: RouteComponent,
   loader: ({ params: { slug } }) => getProductBySlug({ data: { slug } }),
-  head: ({ loaderData: product }) => {
+  head: ({ loaderData: product, params: { slug } }) => {
     const keywords = [
       product?.name,
       product?.category?.name,
@@ -49,13 +49,14 @@ export const Route = createFileRoute('/_storefront/products/$slug')({
       : `Shop ${product?.name} at Caramella Corner. ${product?.category?.name ? `Category: ${product?.category.name}.` : ''} Price: EGP ${product?.priceAfterDiscount}.`
 
     const image = product?.images?.[0]?.ikUrl
-
+    const domain = import.meta.env.VITE_PUBLIC_APP_URL
     return {
       meta: seo({
         title: `${product?.name} | Caramella Corner`,
         description,
         keywords,
         image,
+        url: `${domain}/products/${slug}`,
       }),
     }
   },
