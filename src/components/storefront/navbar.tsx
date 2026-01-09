@@ -83,24 +83,26 @@ export const Navbar = React.forwardRef<HTMLElement>(({ ...props }, ref) => {
         const location = routerState.location
         const currentQuery = (location.search as { q?: string })?.q || ''
 
-        // Only navigate if the query has actually changed
-        if (
-          trimmedQuery !== currentQuery ||
-          location.pathname !== '/products'
+        // Only navigate if there's a query and it has changed
+        if (trimmedQuery && trimmedQuery !== currentQuery) {
+          router.navigate({
+            to: '/products',
+            search: { q: trimmedQuery },
+          })
+        } else if (
+          !trimmedQuery &&
+          currentQuery &&
+          location.pathname === '/products'
         ) {
-          if (trimmedQuery) {
-            router.navigate({
-              to: '/products',
-              search: { q: trimmedQuery },
-            })
-          } else {
-            router.navigate({
-              to: '/products',
-            })
-          }
+          // If query is cleared and we're on products page, clear the search param
+          router.navigate({
+            to: '/products',
+            search: {},
+          })
         }
+        // If query is empty and we're not on products page, don't navigate
       },
-      300, // 300ms debounce delay
+      500, // 500ms debounce delay
     )
 
   // Sync search query with URL when on products page
@@ -253,11 +255,8 @@ export const Navbar = React.forwardRef<HTMLElement>(({ ...props }, ref) => {
                     to: '/products',
                     search: { q: query },
                   })
-                } else {
-                  router.navigate({
-                    to: '/products',
-                  })
                 }
+                // Don't navigate if search field is empty
               }}
             >
               <InputGroup className="w-full">
