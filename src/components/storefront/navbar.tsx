@@ -14,12 +14,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
-import {
-  Link,
-  useNavigate,
-  useRouter,
-  useRouterState,
-} from '@tanstack/react-router'
+import { Link, useRouter, useRouterState } from '@tanstack/react-router'
 import CartSheet from '../../features/storefront/cart/components/cart-sheet'
 import UserAvatar from './user-avatar'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '../ui/input-group'
