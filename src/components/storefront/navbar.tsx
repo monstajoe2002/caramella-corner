@@ -18,6 +18,7 @@ import { Link, useRouter, useRouterState } from '@tanstack/react-router'
 import CartSheet from '../../features/storefront/cart/components/cart-sheet'
 import UserAvatar from './user-avatar'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '../ui/input-group'
+import { useDebounceFn } from '@/hooks/use-debounce-fn'
 // Simple logo component for the navbar
 const Logo = (props: React.SVGAttributes<SVGElement>) => {
   return (
@@ -65,17 +66,66 @@ export const Navbar = React.forwardRef<HTMLElement>(({ ...props }, ref) => {
   const [isMobile, setIsMobile] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const containerRef = useRef<HTMLElement>(null)
+  const isSyncingFromUrlRef = useRef(false)
 
   const routerState = useRouterState()
   const router = useRouter()
+
+  // Debounced navigation function
+  const { run: debouncedNavigate, cancel: cancelDebouncedNavigate } =
+    useDebounceFn(
+      (query: string) => {
+        // Don't navigate if we're syncing from URL
+        if (isSyncingFromUrlRef.current) {
+          return
+        }
+        const trimmedQuery = query.trim()
+        const location = routerState.location
+        const currentQuery = (location.search as { q?: string })?.q || ''
+
+        // Only navigate if the query has actually changed
+        if (
+          trimmedQuery !== currentQuery ||
+          location.pathname !== '/products'
+        ) {
+          if (trimmedQuery) {
+            router.navigate({
+              to: '/products',
+              search: { q: trimmedQuery },
+            })
+          } else {
+            router.navigate({
+              to: '/products',
+            })
+          }
+        }
+      },
+      300, // 300ms debounce delay
+    )
+
   // Sync search query with URL when on products page
   useEffect(() => {
     const location = routerState.location
     if (location.pathname === '/products') {
       const q = (location.search as { q?: string })?.q || ''
-      setSearchQuery(q)
+      if (q !== searchQuery) {
+        isSyncingFromUrlRef.current = true
+        setSearchQuery(q)
+        // Reset the flag after state update completes
+        requestAnimationFrame(() => {
+          isSyncingFromUrlRef.current = false
+        })
+      }
     }
   }, [routerState.location.pathname, routerState.location.search])
+
+  // Debounce search navigation when search query changes (only when user types)
+  useEffect(() => {
+    if (!isSyncingFromUrlRef.current) {
+      debouncedNavigate(searchQuery)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery])
 
   useEffect(() => {
     const checkWidth = () => {
@@ -195,6 +245,8 @@ export const Navbar = React.forwardRef<HTMLElement>(({ ...props }, ref) => {
               className="max-w-xs w-full"
               onSubmit={(e) => {
                 e.preventDefault()
+                // Cancel any pending debounced navigation
+                cancelDebouncedNavigate()
                 const query = searchQuery.trim()
                 if (query) {
                   router.navigate({
