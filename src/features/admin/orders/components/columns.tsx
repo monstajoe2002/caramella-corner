@@ -1,7 +1,88 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { OrderWithCustomer } from '@/db/types'
 import { Badge } from '@/components/ui/badge'
-import { Link } from '@tanstack/react-router'
+import { Link, useRouter } from '@tanstack/react-router'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
+import { ChevronDownIcon } from 'lucide-react'
+import { updateOrderStatus } from '@/features/admin/orders/data'
+import { useState } from 'react'
+
+function StatusCell({ order }: { order: OrderWithCustomer }) {
+  const router = useRouter()
+  const [isUpdating, setIsUpdating] = useState(false)
+  const status = order.status
+
+  const variantMap: Record<
+    typeof status,
+    'default' | 'secondary' | 'destructive' | 'outline'
+  > = {
+    pending: 'outline',
+    delivered: 'default',
+    canceled: 'destructive',
+  }
+
+  const handleStatusChange = async (
+    newStatus: 'pending' | 'delivered' | 'canceled',
+  ) => {
+    if (newStatus === status || isUpdating) return
+
+    setIsUpdating(true)
+    try {
+      await updateOrderStatus({
+        data: { orderId: order.id, status: newStatus },
+      })
+      router.invalidate()
+    } catch (error) {
+      console.error('Failed to update order status:', error)
+    } finally {
+      setIsUpdating(false)
+    }
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          className="h-auto p-0 hover:bg-transparent gap-1"
+          disabled={isUpdating}
+        >
+          <Badge variant={variantMap[status] || 'outline'}>
+            {status.charAt(0).toUpperCase() + status.slice(1)}
+          </Badge>
+          <ChevronDownIcon className="h-3 w-3 opacity-50" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start">
+        <DropdownMenuItem
+          onClick={() => handleStatusChange('pending')}
+          disabled={status === 'pending' || isUpdating}
+        >
+          Pending
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => handleStatusChange('delivered')}
+          disabled={status === 'delivered' || isUpdating}
+        >
+          Delivered
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => handleStatusChange('canceled')}
+          disabled={status === 'canceled' || isUpdating}
+          variant="destructive"
+        >
+          Canceled
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
 
 export const columns: ColumnDef<OrderWithCustomer>[] = [
   {
@@ -16,6 +97,21 @@ export const columns: ColumnDef<OrderWithCustomer>[] = [
     header: 'Customer Name',
     cell: ({ row }) => {
       return row.original.customer.name
+    },
+  },
+  {
+    id: 'paymentMethod',
+    header: 'Payment Method',
+    cell: ({ row }) => {
+      const paymentMethod = row.original.payment?.paymentMethod
+      if (!paymentMethod) {
+        return <span className="text-muted-foreground">N/A</span>
+      }
+      return (
+        <Badge variant="secondary">
+          {paymentMethod.charAt(0).toUpperCase() + paymentMethod.slice(1)}
+        </Badge>
+      )
     },
   },
   {
@@ -37,20 +133,7 @@ export const columns: ColumnDef<OrderWithCustomer>[] = [
     accessorKey: 'status',
     header: 'Status',
     cell: ({ row }) => {
-      const status = row.original.status
-      const variantMap: Record<
-        typeof status,
-        'default' | 'secondary' | 'destructive' | 'outline'
-      > = {
-        pending: 'outline',
-        delivered: 'default',
-        canceled: 'destructive',
-      }
-      return (
-        <Badge variant={variantMap[status] || 'outline'}>
-          {status.charAt(0).toUpperCase() + status.slice(1)}
-        </Badge>
-      )
+      return <StatusCell order={row.original} />
     },
   },
 ]

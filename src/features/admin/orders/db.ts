@@ -1,5 +1,5 @@
 import { db } from '@/db'
-import { orders } from '@/db/schema'
+import { orders, orderStatusEnum } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 
 export async function getOrdersWithCustomers() {
@@ -25,4 +25,11 @@ export async function getOrderById(id: string) {
       payment: true,
     },
   })
+}
+
+export async function updateOrderStatus(
+  orderId: string,
+  status: (typeof orderStatusEnum.enumValues)[number],
+) {
+  await db.update(orders).set({ status }).where(eq(orders.id, orderId))
 }
