@@ -1,5 +1,5 @@
 import { db } from '@/db'
-import { orders, customers } from '@/db/schema'
+import { orders } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 
 export async function getOrdersWithCustomers() {
