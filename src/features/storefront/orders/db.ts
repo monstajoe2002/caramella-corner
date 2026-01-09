@@ -7,9 +7,18 @@ import {
   products,
   variants,
 } from '@/db/schema'
-import { Customer, NewOrderWithItems } from '@/db/types'
+import { Customer, NewOrderWithItems, OrderWithCustomer } from '@/db/types'
 import { generateOrderNumber } from '@/lib/utils'
 import { eq } from 'drizzle-orm'
+
+export async function getOrderById(orderId: string) {
+  return (await db.query.orders.findFirst({
+    where: eq(orders.id, orderId),
+    with: {
+      customer: true,
+    },
+  })) as OrderWithCustomer
+}
 
 // TODO: Refactor this function to accept a payment method as an argument
 export async function insertOrder(
