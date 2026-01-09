@@ -13,6 +13,7 @@ import { Image } from '@imagekit/react'
 import { useState, useEffect } from 'react'
 import { Button } from '../ui/button'
 import { ArrowRightIcon } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
 
 interface FeaturedProductsCarouselProps {
   products: Array<Omit<ProductWithVariants, 'category' | 'subcategory'>>
@@ -61,8 +62,13 @@ export default function FeaturedProductsCarousel({
                   <div className="absolute inset-0 bg-linear-to-t from-black to-white transition-opacity duration-500 opacity-25 group-hover:opacity-50" />
                   <div className="absolute inset-0 flex flex-col justify-end items-center gap-2 mb-4">
                     <h2 className="text-primary-foreground">{product.name}</h2>
-                    <Button size={'lg'}>
-                      Explore <ArrowRightIcon />
+                    <Button size={'lg'} asChild>
+                      <Link
+                        to="/products/$slug"
+                        params={{ slug: product.slug }}
+                      >
+                        Explore <ArrowRightIcon />
+                      </Link>
                     </Button>
                   </div>
                 </Card>
