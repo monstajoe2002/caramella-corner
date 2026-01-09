@@ -72,3 +72,8 @@ export type NewOrderItem = typeof orderItems.$inferInsert
 export type OrderItemWithVariant = OrderItem & {
   variant: Variant
 }
+export type OrderItemWithVariantAndProduct = OrderItem & {
+  variant: Variant & {
+    product: Product
+  }
+}

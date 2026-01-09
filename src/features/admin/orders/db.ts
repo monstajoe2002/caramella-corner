@@ -13,7 +13,15 @@ export async function getOrderById(id: string) {
     where: eq(orders.id, id),
     with: {
       customer: true,
-      orderItems: true,
+      orderItems: {
+        with: {
+          variant: {
+            with: {
+              product: true,
+            },
+          },
+        },
+      },
       payment: true,
     },
   })
