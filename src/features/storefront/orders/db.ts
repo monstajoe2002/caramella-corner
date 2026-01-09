@@ -12,12 +12,13 @@ import { generateOrderNumber } from '@/lib/utils'
 import { eq } from 'drizzle-orm'
 
 export async function getOrderById(orderId: string) {
-  return (await db.query.orders.findFirst({
+  return await db.query.orders.findFirst({
     where: eq(orders.id, orderId),
     with: {
       customer: true,
+      payment: true,
     },
-  })) as OrderWithCustomer
+  })
 }
 
 // TODO: Refactor this function to accept a payment method as an argument

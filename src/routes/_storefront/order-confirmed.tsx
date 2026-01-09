@@ -1,4 +1,5 @@
 import { Separator } from '@/components/ui/separator'
+import { getOrderById } from '@/features/storefront/orders/db'
 import { createFileRoute } from '@tanstack/react-router'
 import z from 'zod'
 const searchSchema = z.object({
@@ -7,9 +8,12 @@ const searchSchema = z.object({
 export const Route = createFileRoute('/_storefront/order-confirmed')({
   component: RouteComponent,
   validateSearch: searchSchema,
+  loaderDeps: ({ search: { o } }) => ({ orderId: o }),
+  loader: async ({ deps: { orderId } }) => getOrderById(orderId),
 })
 
 function RouteComponent() {
+  const order = Route.useLoaderData()
   return (
     <div className="py-10 lg:py-20">
       <div className="mx-auto max-w-5xl px-4">
@@ -33,27 +37,22 @@ function RouteComponent() {
 
               <div className="space-y-4 text-sm">
                 <div className="grid grid-cols-3 gap-4">
+                  <dt className="font-semibold">Order Number</dt>
+                  <dd className="col-span-2"># {order?.orderNumber}</dd>
+                </div>
+                <div className="grid grid-cols-3 gap-4">
                   <dt className="font-semibold">Name</dt>
-                  <dd className="col-span-2">Jane Smith</dd>
+                  <dd className="col-span-2">{order?.customer?.name}</dd>
                 </div>
 
                 <div className="grid grid-cols-3 gap-4">
                   <dt className="font-semibold">Address</dt>
-                  <dd className="col-span-2">
-                    456 Oak St #3b, San Francisco,
-                    <br />
-                    CA 94102, United States
-                  </dd>
-                </div>
-
-                <div className="grid grid-cols-3 gap-4">
-                  <dt className="font-semibold">Phone</dt>
-                  <dd className="col-span-2">+1 (415) 555-1234</dd>
+                  <dd>{order?.customer?.address}</dd>
                 </div>
 
                 <div className="grid grid-cols-3 gap-4">
                   <dt className="font-semibold">Email</dt>
-                  <dd className="col-span-2">jane.smith@email.com</dd>
+                  <dd>{order?.customer?.email}</dd>
                 </div>
               </div>
             </div>
