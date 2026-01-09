@@ -76,6 +76,7 @@ export function AddressForm({
         resetCart()
         router.navigate({
           to: '/order-confirmed',
+          replace: true,
           search: { o: res.data?.id! },
         })
       }
