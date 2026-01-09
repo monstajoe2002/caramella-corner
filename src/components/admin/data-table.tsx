@@ -123,18 +123,29 @@ export function DataTable<TData, TValue>({
                       <EmptyMedia variant="icon">
                         <FileIcon />
                       </EmptyMedia>
-                      <EmptyTitle>No {pluralize(label!)}</EmptyTitle>
+                      <EmptyTitle>
+                        No {label ? pluralize(label) : 'results found'}
+                      </EmptyTitle>
                       <EmptyDescription>
-                        This is where you can add {pluralize(label!)} to
-                        organize your products. Click{' '}
-                        <strong>"Create {label}"</strong> below to get started.
+                        {label ? (
+                          <>
+                            This is where you can add {pluralize(label)} to
+                            organize your products. Click{' '}
+                            <strong>"Create {label}"</strong> below to get
+                            started.
+                          </>
+                        ) : (
+                          'No matching records found. Try adjusting your search.'
+                        )}
                       </EmptyDescription>
                     </EmptyHeader>
-                    <EmptyContent>
-                      <Button asChild>
-                        <Link to={newEntryTo}>Create {label}</Link>
-                      </Button>
-                    </EmptyContent>
+                    {newEntryTo && label && (
+                      <EmptyContent>
+                        <Button asChild>
+                          <Link to={newEntryTo}>Create {label}</Link>
+                        </Button>
+                      </EmptyContent>
+                    )}
                   </Empty>
                 </TableCell>
               </TableRow>
