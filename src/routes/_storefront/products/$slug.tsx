@@ -26,11 +26,39 @@ import { Button } from '@/components/ui/button'
 import { useCartStore } from '@/lib/cart-store'
 import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
-import { formatVariant } from '@/lib/utils'
+import { formatVariant, seo } from '@/lib/utils'
 
 export const Route = createFileRoute('/_storefront/products/$slug')({
   component: RouteComponent,
   loader: ({ params: { slug } }) => getProductBySlug({ data: { slug } }),
+  head: ({ loaderData: product }) => {
+    const keywords = [
+      product?.name,
+      product?.category?.name,
+      product?.subcategory?.name,
+      product?.material,
+      'Caramella Corner',
+      'online store',
+      'shopping',
+    ]
+      .filter(Boolean)
+      .join(', ')
+
+    const description = product?.description
+      ? `${product.description} - Available at Caramella Corner for EGP ${product.priceAfterDiscount}.`
+      : `Shop ${product?.name} at Caramella Corner. ${product?.category?.name ? `Category: ${product?.category.name}.` : ''} Price: EGP ${product?.priceAfterDiscount}.`
+
+    const image = product?.images?.[0]?.ikUrl
+
+    return {
+      meta: seo({
+        title: `${product?.name} | Caramella Corner`,
+        description,
+        keywords,
+        image,
+      }),
+    }
+  },
 })
 
 function RouteComponent() {
