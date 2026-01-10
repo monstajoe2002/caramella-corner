@@ -33,7 +33,7 @@ export const Route = createFileRoute('/_storefront/products/')({
           data: {
             query: trimmedQuery,
             limit,
-            offset: Math.max(1, Number(offset)),
+            offset,
           },
         }),
         searchActiveProductsCount({ data: { query: trimmedQuery } }),

@@ -125,10 +125,6 @@ export async function updateProduct(
       // IDs that exist in DB but not in updated list => removed
       const removedIds = existingIds.filter((eid) => !updatedIds.includes(eid))
 
-      console.log('existingIds:', existingIds)
-      console.log('updatedIds:', updatedIds)
-      console.log('removedIds:', removedIds)
-
       if (removedIds.length > 0) {
         console.log(`Deleting images with ids: ${removedIds.join(', ')}`)
         // Delete images with these ids
