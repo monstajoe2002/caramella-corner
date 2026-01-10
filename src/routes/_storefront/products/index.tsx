@@ -1,30 +1,62 @@
-import ProductCard from '@/features/storefront/products/components/card'
+import PaginationWithFirstAndLastPageNavigation from '@/features/storefront/products/components/pagination'
+import z from 'zod'
+import { seo } from '@/lib/utils'
+import { createFileRoute } from '@tanstack/react-router'
 import {
   getActiveProducts,
   searchActiveProducts,
+  getActiveProductsCount,
+  searchActiveProductsCount,
 } from '@/features/storefront/products/data'
-import { seo } from '@/lib/utils'
-import { createFileRoute } from '@tanstack/react-router'
-import z from 'zod'
+import ProductCard from '@/features/storefront/products/components/card'
+
+const ITEMS_PER_PAGE = 10
 
 const searchSchema = z.object({
   q: z.string().optional(),
+  page: z.coerce.number().min(1).optional(),
 })
 
 export const Route = createFileRoute('/_storefront/products/')({
   component: RouteComponent,
   validateSearch: searchSchema,
-  loaderDeps: ({ search: { q } }) => ({ query: q }),
-  loader: async ({ deps: { query } }) => {
+  loaderDeps: ({ search: { q, page } }) => ({ query: q, page }),
+  loader: async ({ deps: { query, page } }) => {
+    const currentPage = page ?? 1
+    const limit = ITEMS_PER_PAGE
+    const offset = (currentPage - 1) * ITEMS_PER_PAGE
+
     if (query && query.trim()) {
+      const trimmedQuery = query.trim()
+      const [products, totalCount] = await Promise.all([
+        searchActiveProducts({
+          data: {
+            query: trimmedQuery,
+            limit,
+            offset: Math.max(1, Number(offset)),
+          },
+        }),
+        searchActiveProductsCount({ data: { query: trimmedQuery } }),
+      ])
+      const totalPages = Math.ceil((totalCount || 0) / ITEMS_PER_PAGE)
       return {
-        products: await searchActiveProducts({ data: { query: query.trim() } }),
-        query: query.trim(),
+        products,
+        query: trimmedQuery,
+        currentPage,
+        totalPages: totalPages > 0 ? totalPages : 1,
       }
     }
+    console.log('Offset: ', offset)
+    const [products, totalCount] = await Promise.all([
+      getActiveProducts({ data: { limit, offset } }),
+      getActiveProductsCount(),
+    ])
+    const totalPages = Math.ceil((totalCount || 0) / ITEMS_PER_PAGE)
+
     return {
-      products: await getActiveProducts(),
-      query: undefined,
+      products,
+      currentPage,
+      totalPages: totalPages > 0 ? totalPages : 1,
     }
   },
   head: ({ loaderData }) => {
@@ -65,12 +97,20 @@ export const Route = createFileRoute('/_storefront/products/')({
 })
 
 function RouteComponent() {
-  const { products } = Route.useLoaderData()
+  const { products, currentPage = 1, totalPages = 1 } = Route.useLoaderData()
   const { q } = Route.useSearch()
   const hasSearchQuery = q && q.trim()
 
+  const navigate = Route.useNavigate()
+
+  function onPageChange(newPage: number) {
+    navigate({ search: { q, page: newPage } })
+  }
+
+  const pagedProducts = products
+
   return (
-    <div>
+    <div className="min-h-[calc(100vh-100px)] flex flex-col justify-between">
       <h1 className="text-start">Products</h1>
       {hasSearchQuery ? (
         <p>
@@ -84,20 +124,29 @@ function RouteComponent() {
           No products found matching your search.
         </p>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center gap-4">
-          {products.map((p) => {
-            const [thumbnail] = p.images
-            return (
-              <ProductCard
-                key={p.id}
-                {...p}
-                category={p.category?.name!}
-                quantity={p.quantity || 0}
-                imageUrl={thumbnail.ikThumbnailUrl}
-              />
-            )
-          })}
-        </div>
+        <>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 grow items-start">
+            {pagedProducts.map((p) => {
+              const [thumbnail] = p.images
+              return (
+                <ProductCard
+                  key={p.id}
+                  {...p}
+                  category={p.category?.name!}
+                  quantity={p.quantity || 0}
+                  imageUrl={thumbnail.ikThumbnailUrl}
+                />
+              )
+            })}
+          </div>
+          {totalPages > 1 && (
+            <PaginationWithFirstAndLastPageNavigation
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={onPageChange}
+            />
+          )}
+        </>
       )}
     </div>
   )

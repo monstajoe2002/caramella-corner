@@ -1,7 +1,7 @@
 import { db } from '@/db'
 import { categories, products } from '@/db/schema'
 import { priceAfterDiscount } from '@/db/schema-helpers'
-import { eq, and, or, ilike } from 'drizzle-orm'
+import { eq, and, or, ilike, sql } from 'drizzle-orm'
 import { notFound } from '@tanstack/react-router'
 export async function getActiveProducts({
   limit = 10,
@@ -17,6 +17,17 @@ export async function getActiveProducts({
     limit,
     offset,
   })
+}
+
+export async function getActiveProductsCount() {
+  const result = await db
+    .select({
+      count: sql<number>`COUNT(*)`,
+    })
+    .from(products)
+    .where(eq(products.active, true))
+
+  return Number(result[0]?.count || 0)
 }
 export async function getActiveProductsByCategorySlug(slug: string) {
   const category = await db.query.categories.findFirst({
@@ -47,7 +58,11 @@ export async function getProductBySlug(slug: string) {
   return product
 }
 
-export async function searchActiveProducts(query: string) {
+export async function searchActiveProducts(
+  query: string,
+  limit?: number,
+  offset?: number,
+) {
   const searchTerm = `%${query}%`
   return await db.query.products.findMany({
     where: and(
@@ -60,5 +75,28 @@ export async function searchActiveProducts(query: string) {
     ),
     with: { variants: true, category: true, images: true },
     extras: { priceAfterDiscount: priceAfterDiscount(products) },
+    limit,
+    offset,
   })
+}
+
+export async function searchActiveProductsCount(query: string) {
+  const searchTerm = `%${query}%`
+  const result = await db
+    .select({
+      count: sql<number>`COUNT(*)`,
+    })
+    .from(products)
+    .where(
+      and(
+        eq(products.active, true),
+        or(
+          ilike(products.name, searchTerm),
+          ilike(products.description, searchTerm),
+          ilike(products.material, searchTerm),
+        ),
+      ),
+    )
+
+  return Number(result[0]?.count || 0)
 }
