@@ -19,38 +19,39 @@ import CartSheet from '../../features/storefront/cart/components/cart-sheet'
 import UserAvatar from './user-avatar'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '../ui/input-group'
 import { useDebounceFn } from '@/hooks/use-debounce-fn'
+import logo from '../../logo.png'
 // Simple logo component for the navbar
-const Logo = (props: React.SVGAttributes<SVGElement>) => {
-  return (
-    <svg
-      width="1em"
-      height="1em"
-      viewBox="0 0 324 323"
-      fill="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-      {...(props as any)}
-    >
-      <rect
-        x="88.1023"
-        y="144.792"
-        width="151.802"
-        height="36.5788"
-        rx="18.2894"
-        transform="rotate(-38.5799 88.1023 144.792)"
-        fill="currentColor"
-      />
-      <rect
-        x="85.3459"
-        y="244.537"
-        width="151.802"
-        height="36.5788"
-        rx="18.2894"
-        transform="rotate(-38.5799 85.3459 244.537)"
-        fill="currentColor"
-      />
-    </svg>
-  )
-}
+// const Logo = (props: React.SVGAttributes<SVGElement>) => {
+//   return (
+//     <svg
+//       width="1em"
+//       height="1em"
+//       viewBox="0 0 324 323"
+//       fill="currentColor"
+//       xmlns="http://www.w3.org/2000/svg"
+//       {...(props as any)}
+//     >
+//       <rect
+//         x="88.1023"
+//         y="144.792"
+//         width="151.802"
+//         height="36.5788"
+//         rx="18.2894"
+//         transform="rotate(-38.5799 88.1023 144.792)"
+//         fill="currentColor"
+//       />
+//       <rect
+//         x="85.3459"
+//         y="244.537"
+//         width="151.802"
+//         height="36.5788"
+//         rx="18.2894"
+//         transform="rotate(-38.5799 85.3459 244.537)"
+//         fill="currentColor"
+//       />
+//     </svg>
+//   )
+// }
 
 // Types
 export interface NavItem {
@@ -212,17 +213,14 @@ export const Navbar = React.forwardRef<HTMLElement>(({ ...props }, ref) => {
           )}
           {/* Main nav */}
           <div className="flex flex-1 items-center gap-6 max-md:justify-between">
-            <button
-              onClick={(e) => e.preventDefault()}
-              className="flex items-center space-x-2 text-primary hover:text-primary/90 transition-colors cursor-pointer"
-            >
+            <Link to="/" className="flex items-center space-x-2 text-primary">
               <div className="text-2xl">
-                <Logo />
+                <img src={logo} className="size-8" />
               </div>
               <span className="hidden font-bold text-xl sm:inline-block">
                 Caramella Corner
               </span>
-            </button>
+            </Link>
             {/* Navigation menu */}
             {!isMobile && (
               <NavigationMenu className="flex w-fit">
