@@ -19,6 +19,7 @@ import CartSheet from '../../features/storefront/cart/components/cart-sheet'
 import UserAvatar from './user-avatar'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '../ui/input-group'
 import { useDebounceFn } from '@/hooks/use-debounce-fn'
+import { ModeToggle } from '../theme-toggle'
 import logo from '../../logo.png'
 // Simple logo component for the navbar
 // const Logo = (props: React.SVGAttributes<SVGElement>) => {
@@ -208,6 +209,9 @@ export const Navbar = React.forwardRef<HTMLElement>(({ ...props }, ref) => {
                     </NavigationMenuItem>
                   </NavigationMenuList>
                 </NavigationMenu>
+                <div className="mt-2 flex justify-start">
+                  <ModeToggle showLabel />
+                </div>
               </PopoverContent>
             </Popover>
           )}
@@ -273,6 +277,7 @@ export const Navbar = React.forwardRef<HTMLElement>(({ ...props }, ref) => {
         {/* Right side */}
         {!isMobile && (
           <div className="flex items-center gap-3">
+            <ModeToggle />
             <CartSheet />
           </div>
         )}

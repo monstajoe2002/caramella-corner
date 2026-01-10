@@ -3,10 +3,10 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import appCss from '../styles.css?url'
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren, useEffect, useState } from 'react'
 import { Toaster } from '@/components/ui/sonner'
 import { ImageKitProvider } from '@imagekit/react'
-import { getThemeServerFn } from '@/lib/theme'
+import { getThemeServerFn, type T as Theme } from '@/lib/theme'
 import { ThemeProvider } from '@/components/theme-provider'
 
 export const Route = createRootRoute({
@@ -29,6 +29,30 @@ export const Route = createRootRoute({
         href: appCss,
       },
     ],
+    scripts: [
+      {
+        children: `
+          (function() {
+            function getCookie(name) {
+              const value = "; " + document.cookie;
+              const parts = value.split("; " + name + "=");
+              if (parts.length === 2) return parts.pop().split(";").shift();
+              return null;
+            }
+            function getTheme() {
+              const stored = getCookie('_preferred-theme') || 'system';
+              if (stored === 'system') {
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+              }
+              return stored;
+            }
+            const theme = getTheme();
+            document.documentElement.classList.remove('light', 'dark');
+            document.documentElement.classList.add(theme);
+          })();
+        `,
+      },
+    ],
   }),
   loader: () => getThemeServerFn(),
 
@@ -43,8 +67,51 @@ function RootQueryClient({ children }: PropsWithChildren) {
 }
 function RootDocument({ children }: { children: React.ReactNode }) {
   const theme = Route.useLoaderData()
+  // Initialize from document element (set by blocking script) or default to 'light'
+  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof document !== 'undefined') {
+      const htmlClass = document.documentElement.className
+      if (htmlClass.includes('dark')) return 'dark'
+      if (htmlClass.includes('light')) return 'light'
+    }
+    return 'light'
+  })
+
+  // Resolve system theme preference
+  useEffect(() => {
+    const resolveTheme = (preference: Theme): 'light' | 'dark' => {
+      if (preference === 'system') {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light'
+      }
+      return preference
+    }
+
+    // Set initial resolved theme
+    setResolvedTheme(resolveTheme(theme))
+
+    // If theme is 'system', listen for system preference changes
+    if (theme === 'system') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+      const handleChange = (e: MediaQueryListEvent) => {
+        setResolvedTheme(e.matches ? 'dark' : 'light')
+      }
+
+      mediaQuery.addEventListener('change', handleChange)
+      return () => mediaQuery.removeEventListener('change', handleChange)
+    }
+  }, [theme])
+
+  // Apply theme class to HTML element
+  useEffect(() => {
+    const htmlElement = document.documentElement
+    htmlElement.classList.remove('light', 'dark')
+    htmlElement.classList.add(resolvedTheme)
+  }, [resolvedTheme])
+
   return (
-    <html className={theme} suppressHydrationWarning lang="en">
+    <html className={resolvedTheme} suppressHydrationWarning lang="en">
       <head>
         <HeadContent />
       </head>
