@@ -13,7 +13,7 @@ export async function getTotalRevenue() {
   return Number(result[0]?.total || 0)
 }
 
-export async function getNewCustomersCount(days: number = 30) {
+export async function getNewCustomersCount({ days = 30 }: { days: number }) {
   const dateThreshold = new Date()
   dateThreshold.setDate(dateThreshold.getDate() - days)
 

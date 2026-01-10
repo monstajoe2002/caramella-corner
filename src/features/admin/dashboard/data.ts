@@ -9,44 +9,32 @@ import {
 
 export const getTotalRevenue = createServerFn({ method: 'GET' }).handler(
   async () => {
-    return await Sentry.startSpan(
-      { name: 'getTotalRevenue' },
-      async () => {
-        return await getTotalRevenueDb()
-      },
-    )
+    return await Sentry.startSpan({ name: 'getTotalRevenue' }, async () => {
+      return await getTotalRevenueDb()
+    })
   },
 )
 
 export const getNewCustomers = createServerFn({ method: 'GET' }).handler(
   async () => {
-    return await Sentry.startSpan(
-      { name: 'getNewCustomers' },
-      async () => {
-        return await getNewCustomersCountDb(30)
-      },
-    )
+    return await Sentry.startSpan({ name: 'getNewCustomers' }, async () => {
+      return await getNewCustomersCountDb({ days: 30 })
+    })
   },
 )
 
 export const getTotalOrders = createServerFn({ method: 'GET' }).handler(
   async () => {
-    return await Sentry.startSpan(
-      { name: 'getTotalOrders' },
-      async () => {
-        return await getTotalOrdersDb()
-      },
-    )
+    return await Sentry.startSpan({ name: 'getTotalOrders' }, async () => {
+      return await getTotalOrdersDb()
+    })
   },
 )
 
 export const getActiveProducts = createServerFn({ method: 'GET' }).handler(
   async () => {
-    return await Sentry.startSpan(
-      { name: 'getActiveProducts' },
-      async () => {
-        return await getActiveProductsCountDb()
-      },
-    )
+    return await Sentry.startSpan({ name: 'getActiveProducts' }, async () => {
+      return await getActiveProductsCountDb()
+    })
   },
 )
