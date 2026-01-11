@@ -1,6 +1,12 @@
 import { ProductWithVariants } from '@/db/types'
 import { ColumnDef } from '@tanstack/react-table'
-import { MoreHorizontal, PencilIcon, Trash2Icon } from 'lucide-react'
+import {
+  CheckCircle2Icon,
+  MoreHorizontal,
+  PencilIcon,
+  Trash2Icon,
+  XCircleIcon,
+} from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -78,8 +84,31 @@ export const columns: ColumnDef<ProductWithVariants>[] = [
     cell: ({ row }) => {
       const [isDialogOpen, setIsDialogOpen] = useState(false)
       const product = row.original
+      const isActive = product.active
       const deleteProductFn = useServerFn(deleteProduct)
       const router = useRouter()
+      const toggleActiveFn = useServerFn(
+        async ({ id, active }: { id: string; active: boolean }) => {
+          // Simulating toggle function, replace with your actual implementation
+          return {
+            success: true,
+            message: `Product ${active ? 'activated' : 'deactivated'}`,
+          }
+        },
+      )
+      const handleToggle = async () => {
+        const newActiveStatus = !isActive
+        const res = await toggleActiveFn({
+          id: product.id,
+          active: newActiveStatus,
+        })
+        if (res.success) {
+          // Invalidate router to refresh page state
+          toast.success(res.message)
+        } else {
+          toast.error(res.message)
+        }
+      }
 
       return (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -96,6 +125,22 @@ export const columns: ColumnDef<ProductWithVariants>[] = [
                   <PencilIcon />
                   <span>Edit</span>
                 </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={handleToggle}
+                variant={isActive ? 'destructive' : 'default'}
+              >
+                {isActive ? (
+                  <>
+                    <XCircleIcon />
+                    <span>Deactivate</span>
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2Icon />
+                    <span>Activate</span>
+                  </>
+                )}
               </DropdownMenuItem>
               <DialogTrigger asChild>
                 <DropdownMenuItem variant="destructive">
