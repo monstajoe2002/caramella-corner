@@ -1,7 +1,7 @@
 import PaginationWithFirstAndLastPageNavigation from '@/features/storefront/products/components/pagination'
 import z from 'zod'
 import { seo } from '@/lib/utils'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useRouterState } from '@tanstack/react-router'
 import {
   getActiveProducts,
   searchActiveProducts,
@@ -9,6 +9,7 @@ import {
   searchActiveProductsCount,
 } from '@/features/storefront/products/data'
 import ProductCard from '@/features/storefront/products/components/card'
+import { ProductCardSkeleton } from '@/features/storefront/products/components/product-card-skeleton'
 
 const ITEMS_PER_PAGE = 10
 
@@ -99,6 +100,8 @@ export const Route = createFileRoute('/_storefront/products/')({
 function RouteComponent() {
   const { products, currentPage = 1, totalPages = 1 } = Route.useLoaderData()
   const { q } = Route.useSearch()
+  const { isLoading } = useRouterState()
+
   const hasSearchQuery = q && q.trim()
 
   const navigate = Route.useNavigate()
@@ -126,18 +129,23 @@ function RouteComponent() {
       ) : (
         <>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 grow items-start">
-            {pagedProducts.map((p) => {
-              const [thumbnail] = p.images
-              return (
-                <ProductCard
-                  key={p.id}
-                  {...p}
-                  category={p.category?.name!}
-                  quantity={p.quantity || 0}
-                  imageUrl={thumbnail.ikThumbnailUrl}
-                />
-              )
-            })}
+            {/* Show skeletons while loading, else show product cards */}
+            {isLoading
+              ? [...Array(ITEMS_PER_PAGE).keys()].map((key) => (
+                  <ProductCardSkeleton key={key} />
+                ))
+              : pagedProducts.map((p) => {
+                  const [thumbnail] = p.images
+                  return (
+                    <ProductCard
+                      key={p.id}
+                      {...p}
+                      category={p.category?.name!}
+                      quantity={p.quantity || 0}
+                      imageUrl={thumbnail.ikThumbnailUrl}
+                    />
+                  )
+                })}
           </div>
           {totalPages > 1 && (
             <PaginationWithFirstAndLastPageNavigation

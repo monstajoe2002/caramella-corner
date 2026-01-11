@@ -2,6 +2,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import FeaturedProductsCarousel from '@/components/storefront/featured-products-carousel'
 import { seo } from '@/lib/utils'
 import { getActiveProducts } from '@/features/storefront/products/data'
+import { useRouterState } from '@tanstack/react-router'
+import { ProductCardSkeleton } from '@/features/storefront/products/components/product-card-skeleton'
 
 export const Route = createFileRoute('/_storefront/')({
   component: App,
@@ -19,6 +21,7 @@ export const Route = createFileRoute('/_storefront/')({
 
 function App() {
   const products = Route.useLoaderData()
+  const { isLoading } = useRouterState()
 
   return (
     <div>
@@ -28,9 +31,19 @@ function App() {
           Your one-stop shop for all your needs
         </p>
       </header>
+
       <section className="mb-10">
         <h2>Featured Products</h2>
-        <FeaturedProductsCarousel products={products} />
+        {/* Show skeletons while loading, else show carousel */}
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[...products.keys()].map((key) => (
+              <ProductCardSkeleton key={key} />
+            ))}
+          </div>
+        ) : (
+          <FeaturedProductsCarousel products={products} />
+        )}
       </section>
     </div>
   )
