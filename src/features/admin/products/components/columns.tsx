@@ -25,7 +25,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { useServerFn } from '@tanstack/react-start'
-import { deleteProduct } from '../data'
+import { deleteProduct, toggleProductActive } from '../data'
 import { ActionButton } from '@/components/ui/action-button'
 import { useState } from 'react'
 import { Link, useRouter } from '@tanstack/react-router'
@@ -87,23 +87,17 @@ export const columns: ColumnDef<ProductWithVariants>[] = [
       const isActive = product.active
       const deleteProductFn = useServerFn(deleteProduct)
       const router = useRouter()
-      const toggleActiveFn = useServerFn(
-        async ({ id, active }: { id: string; active: boolean }) => {
-          // Simulating toggle function, replace with your actual implementation
-          return {
-            success: true,
-            message: `Product ${active ? 'activated' : 'deactivated'}`,
-          }
-        },
-      )
+      const toggleActiveFn = useServerFn(toggleProductActive)
       const handleToggle = async () => {
         const newActiveStatus = !isActive
         const res = await toggleActiveFn({
-          id: product.id,
-          active: newActiveStatus,
+          data: {
+            id: product.id,
+            isActive: newActiveStatus,
+          },
         })
-        if (res.success) {
-          // Invalidate router to refresh page state
+        if (!res?.error) {
+          router.invalidate()
           toast.success(res.message)
         } else {
           toast.error(res.message)

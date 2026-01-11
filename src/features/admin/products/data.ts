@@ -4,6 +4,7 @@ import {
   getProductById as getProductByIdDb,
   getProductsWithVariants as getProductsWithVariantsDb,
   getProductsByCategorySlug as getProductsByCategorySlugDb,
+  toggleProductActive as toggleProductActiveDb,
   insertProduct,
   deleteProduct as deleteProductDb,
   updateProduct,
@@ -75,6 +76,23 @@ export const deleteProduct = createServerFn({ method: 'POST' })
       return {
         error: false,
         message: 'Product deleted',
+      }
+    })
+  })
+export const toggleProductActive = createServerFn({ method: 'POST' })
+  .inputValidator((data: { id: string; isActive: boolean }) => data)
+  .handler(async ({ data: { id, isActive } }) => {
+    return await Sentry.startSpan({ name: 'toggleProductActive' }, async () => {
+      const toggledProduct = await toggleProductActiveDb(id, isActive)
+      if (!toggledProduct) {
+        return {
+          error: true,
+          message: 'Cannot toggle product',
+        }
+      }
+      return {
+        error: false,
+        message: isActive ? 'Product activated' : 'Product deactivated',
       }
     })
   })

@@ -76,6 +76,7 @@ export async function toggleProductActive(
     .update(products)
     .set({ active: isActive })
     .where(eq(products.id, id))
+    .returning()
 }
 
 export async function updateProduct(
