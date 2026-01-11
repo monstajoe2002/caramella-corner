@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { categories, images, products, variants } from '@/db/schema'
-import { NewProductWithVariants } from '@/db/types'
+import { NewProduct, NewProductWithVariants } from '@/db/types'
 import { and, eq, notInArray } from 'drizzle-orm'
 import { notFound } from '@tanstack/react-router'
 import { imagekit } from '@/lib/imagekit'
@@ -66,6 +66,16 @@ export async function insertProduct(product: NewProductWithVariants) {
 
 export async function deleteProduct(id: string) {
   return await db.delete(products).where(eq(products.id, id))
+}
+
+export async function toggleProductActive(
+  id: string,
+  isActive: NewProduct['active'],
+) {
+  return db
+    .update(products)
+    .set({ active: isActive })
+    .where(eq(products.id, id))
 }
 
 export async function updateProduct(
