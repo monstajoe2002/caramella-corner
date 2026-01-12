@@ -1,10 +1,13 @@
 # Project Details and Features
 
-This project is a web application built using TanStack and React frameworks. It serves as an e-commerce admin panel and storefront platform.
+Caramella Corner is a web application built using TanStack and React frameworks. It serves as an e-commerce admin panel and storefront platform.
 
 ## Project Overview
 
-- Admin dashboard for managing products, categories, and orders.
+A full-stack e-commerce platform featuring both an admin dashboard and a customer-facing storefront:
+
+- **Admin Dashboard:** Complete management system for products, categories, and orders.
+- **Storefront:** Modern shopping experience with product browsing, search, and filtering.
 - Product management with image upload and variant options.
 - Category and subcategory management.
 - Order management with customer and payment details.
@@ -17,9 +20,8 @@ This project is a web application built using TanStack and React frameworks. It 
 
 ## Current Status
 
-- The Storefront part of the application is under construction.
-- Admin functionalities are mostly implemented and available.
-- Image removal and deletion functionalitiea are broken.
+- Both Admin and Storefront functionalities are implemented and available.
+- Image removal and deletion functionalities are broken.
 
 ## Features
 
@@ -29,6 +31,15 @@ This project is a web application built using TanStack and React frameworks. It 
 - Manage product variants such as SKU, color, and size.
 - Category and subcategory selection with dynamic loading.
 - Order viewing with customer and payment details.
+- Real-time inventory management.
+
+### Storefront
+
+- Browse products by categories and subcategories.
+- Product search and filtering capabilities.
+- Detailed product pages with images, descriptions, and variants.
+- Responsive design optimized for mobile and desktop.
+- Shopping cart functionality.
 
 ### Technologies
 
@@ -66,14 +77,8 @@ Open your browser and go to [http://localhost:5173](http://localhost:5173) (defa
 pnpm build
 ```
 
-5. **Run tests:** (Optional)
-
-```bash
-pnpm test
-```
-
 ---
 
 *Make sure you have `pnpm` installed globally before running these commands.*
 
-Feel free to explore the admin panel to manage products, categories, and orders. The storefront UI is currently under construction and will be available in upcoming updates.
+Feel free to explore both the admin panel to manage products, categories, and orders, as well as the storefront to experience the shopping interface.
