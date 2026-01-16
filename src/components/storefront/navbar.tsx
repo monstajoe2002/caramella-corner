@@ -63,6 +63,7 @@ export interface NavItem {
 const navigationLinks: NavItem[] = [
   { href: '/products', label: 'Products' },
   { href: '/categories', label: 'Categories' },
+  { href: '/about', label: 'About' },
 ]
 export const Navbar = React.forwardRef<HTMLElement>(({ ...props }, ref) => {
   const [isMobile, setIsMobile] = useState(false)
