@@ -156,8 +156,9 @@ export const Navbar = React.forwardRef<HTMLElement>(({ ...props }, ref) => {
                 </Button>
               </DrawerTrigger>
               <DrawerContent>
-                <DrawerHeader>
+                <DrawerHeader className="flex flex-row items-center justify-between space-y-0">
                   <DrawerTitle>Menu</DrawerTitle>
+                  <UserAvatar />
                 </DrawerHeader>
                 <div className="px-4 pb-6 space-y-1">
                   <nav className="flex flex-col space-y-1">
@@ -246,9 +247,9 @@ export const Navbar = React.forwardRef<HTMLElement>(({ ...props }, ref) => {
           <div className="flex items-center gap-3">
             <ModeToggle />
             <CartSheet />
+            <UserAvatar />
           </div>
         )}
-        <UserAvatar />
       </div>
     </header>
   )
