@@ -9,10 +9,12 @@ import {
   NavigationMenuList,
 } from '@/components/ui/navigation-menu'
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer'
 import { cn } from '@/lib/utils'
 import { Link, useRouter, useRouterState } from '@tanstack/react-router'
 import CartSheet from '../../features/storefront/cart/components/cart-sheet'
@@ -21,38 +23,6 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from '../ui/input-group'
 import { useDebounceFn } from '@/hooks/use-debounce-fn'
 import { ModeToggle } from '../theme-toggle'
 import logo from '../../logo.png'
-// Simple logo component for the navbar
-// const Logo = (props: React.SVGAttributes<SVGElement>) => {
-//   return (
-//     <svg
-//       width="1em"
-//       height="1em"
-//       viewBox="0 0 324 323"
-//       fill="currentColor"
-//       xmlns="http://www.w3.org/2000/svg"
-//       {...(props as any)}
-//     >
-//       <rect
-//         x="88.1023"
-//         y="144.792"
-//         width="151.802"
-//         height="36.5788"
-//         rx="18.2894"
-//         transform="rotate(-38.5799 88.1023 144.792)"
-//         fill="currentColor"
-//       />
-//       <rect
-//         x="85.3459"
-//         y="244.537"
-//         width="151.802"
-//         height="36.5788"
-//         rx="18.2894"
-//         transform="rotate(-38.5799 85.3459 244.537)"
-//         fill="currentColor"
-//       />
-//     </svg>
-//   )
-// }
 
 // Types
 export interface NavItem {
@@ -68,6 +38,7 @@ const navigationLinks: NavItem[] = [
 export const Navbar = React.forwardRef<HTMLElement>(({ ...props }, ref) => {
   const [isMobile, setIsMobile] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const containerRef = useRef<HTMLElement>(null)
   const isSyncingFromUrlRef = useRef(false)
 
@@ -174,8 +145,8 @@ export const Navbar = React.forwardRef<HTMLElement>(({ ...props }, ref) => {
         <div className="flex flex-1 items-center gap-2">
           {/* Mobile menu trigger */}
           {isMobile && (
-            <Popover>
-              <PopoverTrigger asChild>
+            <Drawer open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <DrawerTrigger asChild>
                 <Button
                   className="group h-9 w-9 hover:bg-accent hover:text-accent-foreground"
                   variant="ghost"
@@ -183,38 +154,33 @@ export const Navbar = React.forwardRef<HTMLElement>(({ ...props }, ref) => {
                 >
                   <MenuIcon />
                 </Button>
-              </PopoverTrigger>
-              <PopoverContent align="start" className="w-fit">
-                <NavigationMenu viewport={isMobile}>
-                  <NavigationMenuList className="flex-col items-start gap-0">
+              </DrawerTrigger>
+              <DrawerContent>
+                <DrawerHeader>
+                  <DrawerTitle>Menu</DrawerTitle>
+                </DrawerHeader>
+                <div className="px-4 pb-6 space-y-1">
+                  <nav className="flex flex-col space-y-1">
                     {navigationLinks.map((link, index) => (
-                      <NavigationMenuItem key={index}>
-                        <NavigationMenuLink asChild>
-                          <Link to={link.href}>{link.label}</Link>
-                        </NavigationMenuLink>
-                      </NavigationMenuItem>
+                      <Link
+                        key={index}
+                        to={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="px-3 py-2.5 text-base font-medium rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+                      >
+                        {link.label}
+                      </Link>
                     ))}
-                    <NavigationMenuItem
-                      className="w-full"
-                      role="presentation"
-                      aria-hidden={true}
-                    >
-                      <div
-                        role="separator"
-                        aria-orientation="horizontal"
-                        className="bg-border -mx-1 my-1 h-px"
-                      />
-                    </NavigationMenuItem>
-                    <NavigationMenuItem className="w-full">
+                  </nav>
+                  <div className="border-t border-border pt-4 mt-4">
+                    <div className="flex items-center justify-between">
                       <CartSheet />
-                    </NavigationMenuItem>
-                  </NavigationMenuList>
-                </NavigationMenu>
-                <div className="mt-2 flex justify-start">
-                  <ModeToggle showLabel />
+                      <ModeToggle showLabel />
+                    </div>
+                  </div>
                 </div>
-              </PopoverContent>
-            </Popover>
+              </DrawerContent>
+            </Drawer>
           )}
           {/* Main nav */}
           <div className="flex flex-1 items-center gap-6 max-md:justify-between">
