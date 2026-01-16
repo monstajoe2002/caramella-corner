@@ -16,6 +16,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as StorefrontIndexRouteImport } from './routes/_storefront/index'
 import { Route as StorefrontOrderConfirmedRouteImport } from './routes/_storefront/order-confirmed'
 import { Route as StorefrontCheckoutRouteImport } from './routes/_storefront/checkout'
+import { Route as StorefrontAboutRouteImport } from './routes/_storefront/about'
 import { Route as AuthVerifyRouteImport } from './routes/_auth/verify'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AdminProductsIndexRouteImport } from './routes/admin/products/index'
@@ -65,6 +66,11 @@ const StorefrontOrderConfirmedRoute =
 const StorefrontCheckoutRoute = StorefrontCheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
+  getParentRoute: () => StorefrontRouteRoute,
+} as any)
+const StorefrontAboutRoute = StorefrontAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => StorefrontRouteRoute,
 } as any)
 const AuthVerifyRoute = AuthVerifyRouteImport.update({
@@ -154,6 +160,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof AuthLoginRoute
   '/verify': typeof AuthVerifyRoute
+  '/about': typeof StorefrontAboutRoute
   '/checkout': typeof StorefrontCheckoutRoute
   '/order-confirmed': typeof StorefrontOrderConfirmedRoute
   '/': typeof StorefrontIndexRoute
@@ -176,6 +183,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/login': typeof AuthLoginRoute
   '/verify': typeof AuthVerifyRoute
+  '/about': typeof StorefrontAboutRoute
   '/checkout': typeof StorefrontCheckoutRoute
   '/order-confirmed': typeof StorefrontOrderConfirmedRoute
   '/': typeof StorefrontIndexRoute
@@ -202,6 +210,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteRouteWithChildren
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/verify': typeof AuthVerifyRoute
+  '/_storefront/about': typeof StorefrontAboutRoute
   '/_storefront/checkout': typeof StorefrontCheckoutRoute
   '/_storefront/order-confirmed': typeof StorefrontOrderConfirmedRoute
   '/_storefront/': typeof StorefrontIndexRoute
@@ -227,6 +236,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/verify'
+    | '/about'
     | '/checkout'
     | '/order-confirmed'
     | '/'
@@ -249,6 +259,7 @@ export interface FileRouteTypes {
   to:
     | '/login'
     | '/verify'
+    | '/about'
     | '/checkout'
     | '/order-confirmed'
     | '/'
@@ -274,6 +285,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/_auth/login'
     | '/_auth/verify'
+    | '/_storefront/about'
     | '/_storefront/checkout'
     | '/_storefront/order-confirmed'
     | '/_storefront/'
@@ -351,6 +363,13 @@ declare module '@tanstack/react-router' {
       path: '/checkout'
       fullPath: '/checkout'
       preLoaderRoute: typeof StorefrontCheckoutRouteImport
+      parentRoute: typeof StorefrontRouteRoute
+    }
+    '/_storefront/about': {
+      id: '/_storefront/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof StorefrontAboutRouteImport
       parentRoute: typeof StorefrontRouteRoute
     }
     '/_auth/verify': {
@@ -483,6 +502,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 interface StorefrontRouteRouteChildren {
+  StorefrontAboutRoute: typeof StorefrontAboutRoute
   StorefrontCheckoutRoute: typeof StorefrontCheckoutRoute
   StorefrontOrderConfirmedRoute: typeof StorefrontOrderConfirmedRoute
   StorefrontIndexRoute: typeof StorefrontIndexRoute
@@ -493,6 +513,7 @@ interface StorefrontRouteRouteChildren {
 }
 
 const StorefrontRouteRouteChildren: StorefrontRouteRouteChildren = {
+  StorefrontAboutRoute: StorefrontAboutRoute,
   StorefrontCheckoutRoute: StorefrontCheckoutRoute,
   StorefrontOrderConfirmedRoute: StorefrontOrderConfirmedRoute,
   StorefrontIndexRoute: StorefrontIndexRoute,
