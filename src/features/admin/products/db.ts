@@ -1,7 +1,7 @@
 import { db } from '@/db'
 import { categories, images, products, variants } from '@/db/schema'
 import { NewProductWithVariants } from '@/db/types'
-import { and, eq, notInArray } from 'drizzle-orm'
+import { and, eq, inArray, notInArray } from 'drizzle-orm'
 import { notFound } from '@tanstack/react-router'
 import { imagekit } from '@/lib/imagekit'
 import { priceAfterDiscount } from '@/db/schema-helpers'
@@ -111,52 +111,44 @@ export async function updateProduct(
     }
 
     if (updatedProduct.images) {
-      // Fetch existing images in transaction context
+      // Fetch existing images to determine what to delete
       const existingImages = await trx.query.images.findMany({
         where: eq(images.productId, id),
       })
 
-      const existingIds = existingImages.map((img) => String(img.id))
+      const existingIds = existingImages.map((img) => img.id)
       const updatedIds = updatedProduct.images
         .map((img) => img.id)
         .filter((id): id is string => id != null)
-        .map(String)
 
-      // IDs that exist in DB but not in updated list => removed
+      // IDs that exist in DB but not in updated list => should be deleted
       const removedIds = existingIds.filter((eid) => !updatedIds.includes(eid))
 
       if (removedIds.length > 0) {
         console.log(`Deleting images with ids: ${removedIds.join(', ')}`)
-        // Delete images with these ids
-        await trx.delete(images).where(
-          and(
-            eq(images.productId, id),
-            notInArray(images.id, removedIds), // Use updatedIds (keep these), not removedIds
-          ),
-        )
 
-        // Also delete files in ImageKit for removed images
+        // Delete files from ImageKit first
         const removedIkFileIds = existingImages
-          .filter((img) => removedIds.includes(String(img.id)))
+          .filter((img) => removedIds.includes(img.id))
           .map((img) => img.ikFileId)
-          .filter(Boolean)
 
         if (removedIkFileIds.length > 0) {
           await imagekit.bulkDeleteFiles(removedIkFileIds)
         }
-      } else {
-        console.log('No image deletions necessary.')
+
+        // Delete images from database
+        await trx.delete(images).where(inArray(images.id, removedIds))
       }
 
-      for (const image of updatedProduct.images) {
-        if (image.id) {
-          await trx.update(images).set(image).where(eq(images.id, image.id))
-        } else {
-          await trx.insert(images).values({
-            ...image,
+      // Insert only new images (ones without an id)
+      const newImages = updatedProduct.images.filter((img) => !img.id)
+      if (newImages.length > 0) {
+        await trx.insert(images).values(
+          newImages.map((img) => ({
+            ...img,
             productId: id,
-          })
-        }
+          })),
+        )
       }
     }
 

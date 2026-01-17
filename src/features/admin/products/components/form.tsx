@@ -54,7 +54,7 @@ type ProductFormProps = {
   data?: Omit<ProductWithVariants, 'category' | 'subcategory'>
 }
 type FormImage = {
-  id?: string // ⭐ Make optional to match schema
+  id?: string
   ikFileName: string
   ikFileId: string
   ikUrl: string
@@ -64,8 +64,15 @@ export default function ProductForm({ data }: ProductFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [catId, setCatId] = useState(data?.categoryId || '')
   const [images, setImages] = useState<NewImage[]>(data?.images ?? [])
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const abortControllerRef = useRef(new AbortController())
+
   const createProductFn = useServerFn(createProduct)
   const editProductFn = useServerFn(editProduct)
+  const getCategoriesFn = useServerFn(getCategories)
+  const getSubcategoriesByCategoryIdFn = useServerFn(
+    getSubcategoriesByCategoryId,
+  )
   const form = useForm({
     defaultValues: {
       name: data?.name ?? '',
@@ -102,11 +109,8 @@ export default function ProductForm({ data }: ProductFormProps) {
     onSubmit: async ({ value }) => {
       setIsLoading(true)
       const slug = slugify(value.name, { lower: true })
-
-      // Only upload if there are files selected
       const uploadedImages = await handleUpload(slug)
       const allImages = [...images, ...uploadedImages]
-      // Update images state and form field
       setImages(allImages)
 
       // Common data structure for both create and edit
@@ -123,38 +127,20 @@ export default function ProductForm({ data }: ProductFormProps) {
         })),
       }
       try {
-        if (!data) {
-          // Creating new product
-          const res = await createProductFn({ data: productData })
-          if (res.error) {
-            toast.error(res.message)
-          } else {
-            toast.success('Product created successfully!')
-          }
+        const res = !data
+          ? await createProductFn({ data: productData })
+          : await editProductFn({ data: { id: data.id, ...productData } })
+
+        if (res.error) {
+          toast.error(res.message)
         } else {
-          // Editing existing product
-          const res = await editProductFn({
-            data: {
-              id: data.id,
-              ...productData,
-            },
-          })
-          // TODO: fix error handling
-          if (res.error) {
-            toast.error(res.message)
-          } else {
-            toast.success('Product updated successfully!')
-          }
+          toast.success(`Product ${data ? 'updated' : 'created'} successfully!`)
         }
       } finally {
         setIsLoading(false)
       }
     },
   })
-  // Create an AbortController instance to provide an option to cancel the upload if needed.
-  const abortController = new AbortController()
-
-  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleUpload = async (slug?: string) => {
     const fileInput = fileInputRef.current
@@ -185,7 +171,7 @@ export default function ProductForm({ data }: ProductFormProps) {
           file,
           folder: `products/${data?.slug ?? slug}`,
           fileName: file.name,
-          abortSignal: abortController.signal,
+          abortSignal: abortControllerRef.current.signal,
         })
         images.push({
           ikUrl: url ?? '',
@@ -207,30 +193,25 @@ export default function ProductForm({ data }: ProductFormProps) {
     }
 
     fileInput.value = ''
-    return images // Just return, don't update state here - let onSubmit handle it
+    return images
   }
-  const getCategoriesFn = useServerFn(getCategories)
-  const getSubcategoriesByCategoryIdFn = useServerFn(
-    getSubcategoriesByCategoryId,
-  )
-
   const { data: categories } = useQuery({
     queryKey: ['categories'],
     queryFn: getCategoriesFn,
   })
+
   const { data: subcategories } = useQuery({
     queryKey: ['subcategories', catId],
     queryFn: () =>
       getSubcategoriesByCategoryIdFn({ data: { categoryId: catId } }),
     enabled: !!catId,
   })
-  // TODO: Fix image deletion logic
-  const handleDeleteImage = (id: string) => {
+
+  const handleDeleteImage = (uniqueKey: string) => {
     setImages((prev) => {
-      // ⭐ Filter by id OR ikFileId to handle both existing and new images
       const updatedImages = prev.filter((img) => {
         const imgKey = img.id || img.ikFileId
-        return imgKey !== id
+        return imgKey !== uniqueKey
       })
       form.setFieldValue('images', updatedImages as FormImage[])
       return updatedImages
@@ -347,7 +328,7 @@ export default function ProductForm({ data }: ProductFormProps) {
             )
           }}
         />
-        {/* discount field */}
+
         <form.Field
           name="discount"
           children={(field) => {
@@ -392,7 +373,7 @@ export default function ProductForm({ data }: ProductFormProps) {
             )
           }
         />
-        {/* variants field goes here */}
+
         <form.Field
           name="variants"
           mode="array"
@@ -414,7 +395,6 @@ export default function ProductForm({ data }: ProductFormProps) {
                         field.state.value.length > 1 && 'grid-cols-4',
                       )}
                     >
-                      {/* SKU subfield */}
                       <form.Field
                         name={`variants[${index}].sku`}
                         children={(subField) => {
@@ -448,7 +428,7 @@ export default function ProductForm({ data }: ProductFormProps) {
                           )
                         }}
                       />
-                      {/* color subfield */}
+
                       <form.Field
                         name={`variants[${index}].color`}
                         children={(subField) => {
@@ -484,7 +464,7 @@ export default function ProductForm({ data }: ProductFormProps) {
                           )
                         }}
                       />
-                      {/* size subfield */}
+
                       <form.Field
                         name={`variants[${index}].size`}
                         children={(subField) => {
@@ -518,7 +498,7 @@ export default function ProductForm({ data }: ProductFormProps) {
                           )
                         }}
                       />
-                      {/* delete button */}
+
                       {field.state.value.length > 1 && (
                         <InputGroupAddon align="inline-end">
                           <InputGroupButton
@@ -536,7 +516,7 @@ export default function ProductForm({ data }: ProductFormProps) {
                     </div>
                   ))}
                 </FieldGroup>
-                {/* add button outside the grid */}
+
                 <Button
                   type="button"
                   variant="outline"
@@ -563,20 +543,20 @@ export default function ProductForm({ data }: ProductFormProps) {
                 <FieldLabel htmlFor={field.name}>Images</FieldLabel>
                 <div className="flex flex-wrap gap-4 mb-2">
                   {images.map(({ id, ikThumbnailUrl, ikFileId }, idx) => {
-                    const uniqueKey = id || ikFileId || `new-${idx}`
+                    const uniqueKey = id || ikFileId
                     return (
-                      <div>
+                      <div key={uniqueKey} className="relative">
                         <Button
-                          size={'icon-sm'}
+                          size="icon-sm"
                           type="button"
                           onClick={() => handleDeleteImage(uniqueKey)}
-                          variant={'destructive'}
-                          className="rounded-full relative translate-x-16 translate-y-5"
+                          variant="destructive"
+                          className="rounded-full absolute -top-2 -right-2 z-10"
+                          aria-label={`Delete image ${idx + 1}`}
                         >
                           <XIcon />
                         </Button>
                         <Image
-                          key={idx}
                           src={ikThumbnailUrl}
                           alt={`Product image ${idx + 1}`}
                           className="w-20 h-20 object-cover rounded"
