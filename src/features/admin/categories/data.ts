@@ -9,7 +9,6 @@ import {
   insertCategory,
   updateCategory,
 } from './db'
-import { redirect } from '@tanstack/react-router'
 import slugify from 'slugify'
 import * as Sentry from '@sentry/tanstackstart-react'
 const categorySchema = z.object({
@@ -75,7 +74,10 @@ export const createCategory = createServerFn({ method: 'POST' })
         ...data,
         slug: slugify(data.name, { lower: true }),
       })
-      throw redirect({ href: '..', replace: true })
+      return {
+        error: false,
+        message: 'Category created successfully',
+      }
     })
   })
 
@@ -117,6 +119,9 @@ export const editCategory = createServerFn({ method: 'POST' })
         slug: slugify(data.name, { lower: true }),
       })
 
-      throw redirect({ to: '/admin/categories', replace: true })
+      return {
+        error: false,
+        message: 'Category updated successfully',
+      }
     })
   })
