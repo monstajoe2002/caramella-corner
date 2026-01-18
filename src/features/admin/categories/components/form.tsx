@@ -27,6 +27,7 @@ import { createCategory, editCategory } from '../data'
 import slugify from 'slugify'
 import { LoadingSwap } from '@/components/ui/loading-swap'
 import { toast } from 'sonner'
+import { useNavigate } from '@tanstack/react-router'
 const categoryFormSchema = z.object({
   name: z.string().min(1, 'Name is required.'),
   subcategories: z
@@ -49,6 +50,7 @@ export default function CategoryForm({ data }: CategoryFormProps) {
   const [tags, setTags] = useState<{ id: string; name: string }[]>(
     data?.subcategories ?? [],
   )
+  const navigate = useNavigate()
 
   const handleRemove = (value: string) => {
     if (!selected.includes(value)) {
@@ -85,41 +87,40 @@ export default function CategoryForm({ data }: CategoryFormProps) {
     },
     onSubmit: async ({ value }) => {
       setIsLoading(true)
-      if (!data) {
-        const res = await createCategoryFn({
-          data: {
-            name: value.name,
-            // slug: slugify(value.name, { lower: true }),
-            subcategories: selected.map((sel) => ({
-              name: sel,
-              slug: slugify(sel, { lower: true }),
-            })),
-          },
-        })
-       if (res.error) {
-         toast.error(res.message)
-       } else {
-         toast.success('Category created successfully!')
-       }
-      } else {
-        const res = await editCategoryFn({
-          data: {
-            id: data.id,
-            name: value.name,
-            // slug: slugify(value.name, { lower: true }),
-            subcategories: selected.map((sel) => ({
-              name: sel,
-              slug: slugify(sel, { lower: true }),
-            })),
-          },
-        })
+
+      try {
+        const res = !data
+          ? await createCategoryFn({
+              data: {
+                name: value.name,
+                // slug: slugify(value.name, { lower: true }),
+                subcategories: selected.map((sel) => ({
+                  name: sel,
+                  slug: slugify(sel, { lower: true }),
+                })),
+              },
+            })
+          : await editCategoryFn({
+              data: {
+                id: data.id,
+                name: value.name,
+                // slug: slugify(value.name, { lower: true }),
+                subcategories: selected.map((sel) => ({
+                  name: sel,
+                  slug: slugify(sel, { lower: true }),
+                })),
+              },
+            })
+
         if (res.error) {
           toast.error(res.message)
         } else {
-          toast.success('Category updated successfully!')
+          toast.success(res.message)
+          navigate({ to: '/admin/categories', replace: true })
         }
+      } finally {
+        setIsLoading(false)
       }
-      setIsLoading(false)
     },
   })
   // manually update the subcategories field when selected changes
