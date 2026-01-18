@@ -10,7 +10,6 @@ import {
 } from './db'
 import slugify from 'slugify'
 import { productSchema } from '@/lib/zod-schemas'
-import { redirect } from '@tanstack/react-router'
 import * as Sentry from '@sentry/tanstackstart-react'
 export const getProductsWithVariants = createServerFn().handler(async () => {
   return await Sentry.startSpan(
@@ -57,8 +56,10 @@ export const createProduct = createServerFn({ method: 'POST' })
         discount: data.discount / 100,
         price: String(data.price),
       })
-
-      throw redirect({ href: '..', replace: true })
+      return {
+        error: false,
+        message: 'Product created successfully',
+      }
     })
   })
 export const deleteProduct = createServerFn({ method: 'POST' })
@@ -100,6 +101,9 @@ export const editProduct = createServerFn({ method: 'POST' })
         price: String(data.price),
       })
 
-      throw redirect({ to: '/admin/products', replace: true })
+      return {
+        error: false,
+        message: 'Product updated successfully',
+      }
     })
   })
