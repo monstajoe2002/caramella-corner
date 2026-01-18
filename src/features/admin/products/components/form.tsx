@@ -23,6 +23,7 @@ import { useServerFn } from '@tanstack/react-start'
 import { getSubcategoriesByCategoryId } from '../../categories/data'
 import { useQuery } from '@tanstack/react-query'
 import { getCategories } from '../../categories/data'
+import { useNavigate } from '@tanstack/react-router'
 import {
   InputGroup,
   InputGroupAddon,
@@ -66,6 +67,7 @@ export default function ProductForm({ data }: ProductFormProps) {
   const [images, setImages] = useState<NewImage[]>(data?.images ?? [])
   const fileInputRef = useRef<HTMLInputElement>(null)
   const abortControllerRef = useRef(new AbortController())
+  const navigate = useNavigate()
 
   const createProductFn = useServerFn(createProduct)
   const editProductFn = useServerFn(editProduct)
@@ -134,7 +136,8 @@ export default function ProductForm({ data }: ProductFormProps) {
         if (res.error) {
           toast.error(res.message)
         } else {
-          toast.success(`Product ${data ? 'updated' : 'created'} successfully!`)
+          toast.success(res.message)
+          navigate({ to: '/admin/products', replace: true })
         }
       } finally {
         setIsLoading(false)
