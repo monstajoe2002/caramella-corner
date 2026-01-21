@@ -1,7 +1,7 @@
 import { db } from '@/db'
-import { categories, subcategories, products } from '@/db/schema'
+import { categories, subcategories } from '@/db/schema'
 import { NewCategoryWithSubcategories } from '@/db/types'
-import { and, eq, notInArray, inArray } from 'drizzle-orm'
+import { and, eq, notInArray } from 'drizzle-orm'
 import { notFound } from '@tanstack/react-router'
 
 export async function getCategories() {
