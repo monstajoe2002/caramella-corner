@@ -47,7 +47,7 @@ export default function CategoryForm({ data }: CategoryFormProps) {
     data?.subcategories.map((s) => s.name) ?? [],
   )
   const [newTag, setNewTag] = useState<string>('')
-  const [tags, setTags] = useState<{ id: string; name: string }[]>(
+  const [tags, setTags] = useState<{ id: string | null; name: string }[]>(
     data?.subcategories ?? [],
   )
   const navigate = useNavigate()
@@ -69,7 +69,7 @@ export default function CategoryForm({ data }: CategoryFormProps) {
     setTags((prev) => [
       ...prev,
       {
-        id: crypto.randomUUID(),
+        id: null, // New tags don't have a database ID yet
         name: newTag,
       },
     ])
@@ -105,10 +105,20 @@ export default function CategoryForm({ data }: CategoryFormProps) {
                 id: data.id,
                 name: value.name,
                 // slug: slugify(value.name, { lower: true }),
-                subcategories: selected.map((sel) => ({
-                  name: sel,
-                  slug: slugify(sel, { lower: true }),
-                })),
+                subcategories: selected.map((sel) => {
+                  // Find existing subcategory to preserve its ID
+                  const existingSubcat = tags.find((t) => t.name === sel)
+                  // Only include ID if it's a real database ID (not null)
+                  const subcatData: any = {
+                    name: sel,
+                    slug: slugify(sel, { lower: true }),
+                  }
+                  // Only add ID if the subcategory exists in the database
+                  if (existingSubcat?.id) {
+                    subcatData.id = existingSubcat.id
+                  }
+                  return subcatData
+                }),
               },
             })
 
@@ -197,7 +207,7 @@ export default function CategoryForm({ data }: CategoryFormProps) {
                       <TagsGroup>
                         {tags.map((tag) => (
                           <TagsItem
-                            key={tag.id}
+                            key={tag.id ?? tag.name}
                             onSelect={handleSelect}
                             value={tag.name}
                           >

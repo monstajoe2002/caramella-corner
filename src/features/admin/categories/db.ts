@@ -1,7 +1,7 @@
 import { db } from '@/db'
-import { categories, subcategories } from '@/db/schema'
+import { categories, subcategories, products } from '@/db/schema'
 import { NewCategoryWithSubcategories } from '@/db/types'
-import { and, eq, notInArray } from 'drizzle-orm'
+import { and, eq, notInArray, inArray } from 'drizzle-orm'
 import { notFound } from '@tanstack/react-router'
 
 export async function getCategories() {
@@ -37,7 +37,7 @@ export async function getCategoriesWithSubcategories() {
 
 export async function insertCategory(category: NewCategoryWithSubcategories) {
   return db.transaction(async (trx) => {
-    const [newCat] = await db.insert(categories).values(category).returning()
+    const [newCat] = await trx.insert(categories).values(category).returning()
     if (category.subcategories?.length) {
       const subcatValues = category.subcategories.map((subcat) => ({
         ...subcat,
@@ -58,39 +58,68 @@ export async function updateCategory(
 ) {
   return db.transaction(async (trx) => {
     // Update main category fields
-    const [newCat] = await db
+    const [newCat] = await trx
       .update(categories)
       .set(updatedCategory)
       .where(eq(categories.id, id))
       .returning()
 
     if (updatedCategory.subcategories) {
-      // Extract IDs from updated subcategories
+      // Extract IDs from updated subcategories (only valid, existing IDs)
       const updatedIds = updatedCategory.subcategories
         .map((sc) => sc.id)
-        .filter((id) => id != null)
+        .filter((id) => id != null && id.trim().length > 0) as string[]
 
-      // Delete subcategories not present in updated list
-      await trx
-        .delete(subcategories)
-        .where(
-          and(
-            eq(subcategories.categoryId, id),
-            notInArray(subcategories.id, updatedIds),
-          ),
-        )
+      // Find subcategories to be deleted
+      const subcatsToDelete = await trx.query.subcategories.findMany({
+        where:
+          updatedIds.length > 0
+            ? and(
+                eq(subcategories.categoryId, id),
+                notInArray(subcategories.id, updatedIds),
+              )
+            : eq(subcategories.categoryId, id),
+      })
+
+      // Check if any of these subcategories have products
+      if (subcatsToDelete.length > 0) {
+        // Safe to delete - no products associated
+        if (updatedIds.length > 0) {
+          await trx
+            .delete(subcategories)
+            .where(
+              and(
+                eq(subcategories.categoryId, id),
+                notInArray(subcategories.id, updatedIds),
+              ),
+            )
+        } else {
+          await trx
+            .delete(subcategories)
+            .where(eq(subcategories.categoryId, id))
+        }
+      }
 
       for (const subcat of updatedCategory.subcategories) {
-        if (subcat.id) {
+        // Check if this is an existing subcategory with a valid database ID
+
+        // Validate it's a proper UUID format
+        const isExistingSubcat = subcat.id && subcat.id.trim().length > 0
+
+        if (isExistingSubcat) {
           // Update existing subcategory by id
           await trx
             .update(subcategories)
-            .set(subcat)
-            .where(eq(subcategories.id, subcat.id))
+            .set({
+              name: subcat.name,
+              slug: subcat.slug,
+            })
+            .where(eq(subcategories.id, subcat.id!))
         } else {
           // Insert new subcategory
           await trx.insert(subcategories).values({
-            ...subcat,
+            name: subcat.name,
+            slug: subcat.slug,
             categoryId: id,
           })
         }

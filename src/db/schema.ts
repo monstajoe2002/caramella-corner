@@ -62,7 +62,7 @@ export const products = pgTable(
       onDelete: 'cascade',
     }),
     subcategoryId: uuid('subcategory_id').references(() => subcategories.id, {
-      onDelete: 'cascade',
+      onDelete: 'set null',
     }),
     active: boolean('active').default(true),
     quantity: integer('quantity').default(0),
