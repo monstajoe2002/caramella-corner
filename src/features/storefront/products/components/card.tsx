@@ -47,7 +47,7 @@ const ProductCard = ({
       </CardHeader>
 
       <CardContent className="mt-1 text-[15px] text-muted-foreground px-5 grow overflow-hidden flex flex-col">
-        <p className="line-clamp-3 min-h-[4.5rem] mb-3">{description}</p>
+        <p className="line-clamp-3 min-h-18 mb-3">{description}</p>
         <Image
           src={imageUrl}
           className="border border-border w-full rounded-md object-cover aspect-video"

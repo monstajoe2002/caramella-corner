@@ -47,7 +47,6 @@ export const Route = createFileRoute('/_storefront/products/')({
         totalPages: totalPages > 0 ? totalPages : 1,
       }
     }
-    console.log('Offset: ', offset)
     const [products, totalCount] = await Promise.all([
       getActiveProducts({ data: { limit, offset } }),
       getActiveProductsCount(),
@@ -128,7 +127,7 @@ function RouteComponent() {
         </p>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 grow items-stretch">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-16">
             {/* Show skeletons while loading, else show product cards */}
             {isLoading
               ? [...Array(ITEMS_PER_PAGE).keys()].map((key) => (

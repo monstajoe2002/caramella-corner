@@ -10,22 +10,19 @@ export const Route = createFileRoute('/_storefront/categories/$slug')({
 function RouteComponent() {
   const products = Route.useLoaderData()
   return (
-    <div>
-      {' '}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-stretch gap-4">
-        {products.map((p) => {
-          const [thumbnail] = p.images
-          return (
-            <ProductCard
-              key={p.id}
-              {...p}
-              category={p.category?.name!}
-              quantity={p.quantity || 0}
-              imageUrl={thumbnail.ikThumbnailUrl}
-            />
-          )
-        })}
-      </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-16">
+      {products.map((p) => {
+        const [thumbnail] = p.images
+        return (
+          <ProductCard
+            key={p.id}
+            {...p}
+            category={p.category?.name!}
+            quantity={p.quantity || 0}
+            imageUrl={thumbnail.ikThumbnailUrl}
+          />
+        )
+      })}
     </div>
   )
 }
