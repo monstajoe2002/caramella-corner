@@ -28,9 +28,9 @@ const ProductCard = ({
   priceAfterDiscount,
 }: ProductCardProps) => {
   return (
-    <Card className="max-w-xs shadow-none gap-0 pt-0 mt-8 flex flex-col justify-between">
+    <Card className="max-w-xs mx-auto w-full shadow-none gap-0 pt-0 mt-8 flex flex-col justify-between h-full">
       <CardHeader className="py-4 px-5 flex flex-col font-semibold">
-        <h3>{name}</h3>
+        <h3 className="line-clamp-2 min-h-14">{name}</h3>
         <p className="mt-0 text-primary">
           EGP{' '}
           <span
@@ -46,11 +46,11 @@ const ProductCard = ({
         <Badge variant={'secondary'}>{category}</Badge>
       </CardHeader>
 
-      <CardContent className="mt-1 text-[15px] text-muted-foreground px-5 grow overflow-hidden">
-        <p className="line-clamp-3">{description}</p>
+      <CardContent className="mt-1 text-[15px] text-muted-foreground px-5 grow overflow-hidden flex flex-col">
+        <p className="line-clamp-3 min-h-[4.5rem] mb-3">{description}</p>
         <Image
           src={imageUrl}
-          className="border border-border h-full w-full rounded-md object-cover aspect-video"
+          className="border border-border w-full rounded-md object-cover aspect-video"
           alt={name}
         />
       </CardContent>

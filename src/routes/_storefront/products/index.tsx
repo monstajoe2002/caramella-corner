@@ -128,7 +128,7 @@ function RouteComponent() {
         </p>
       ) : (
         <>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 grow items-start">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 grow items-stretch">
             {/* Show skeletons while loading, else show product cards */}
             {isLoading
               ? [...Array(ITEMS_PER_PAGE).keys()].map((key) => (
