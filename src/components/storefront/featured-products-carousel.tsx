@@ -38,13 +38,16 @@ export default function FeaturedProductsCarousel({
   }, [api])
 
   return (
-    <div className="mx-auto w-full px-12">
+    <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-12">
       <Carousel setApi={setApi} opts={{ loop: true }}>
-        <CarouselContent>
+        <CarouselContent className="-ml-2 md:-ml-4">
           {products.map((product, index) => {
             const [firstImage] = product.images
             return (
-              <CarouselItem key={product.id} className="basis-3/5">
+              <CarouselItem
+                key={product.id}
+                className="basis-full sm:basis-4/5 md:basis-3/4 lg:basis-3/5 xl:basis-1/2 pl-2 md:pl-4"
+              >
                 <Card
                   className={cn(
                     { 'opacity-30': index !== current - 1 },
@@ -76,8 +79,8 @@ export default function FeaturedProductsCarousel({
             )
           })}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        <CarouselPrevious className="-left-4 sm:-left-6 lg:-left-12" />
+        <CarouselNext className="-right-4 sm:-right-6 lg:-right-12" />
       </Carousel>
     </div>
   )
