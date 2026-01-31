@@ -65,7 +65,22 @@ export async function insertProduct(product: NewProductWithVariants) {
 }
 
 export async function deleteProduct(id: string) {
-  return await db.delete(products).where(eq(products.id, id))
+  // Get product images before deletion
+  const productImages = await db.query.images.findMany({
+    where: eq(images.productId, id),
+  })
+
+  // Delete product from database
+  const [deletedProduct] = await db
+    .delete(products)
+    .where(eq(products.id, id))
+    .returning()
+
+  // Bulk delete all images in product folder from ImageKit
+  if (productImages.length > 0) {
+    await imagekit.deleteFolder(`products/${deletedProduct.slug}`)
+  }
+  return deletedProduct
 }
 
 export async function updateProduct(
