@@ -1,5 +1,5 @@
 import { db } from '@/db'
-import { images, products, variants } from '@/db/schema'
+import { categories, images, products, variants } from '@/db/schema'
 import { NewProductWithVariants } from '@/db/types'
 import { and, eq, inArray, notInArray } from 'drizzle-orm'
 import { notFound } from '@tanstack/react-router'
@@ -27,6 +27,19 @@ export async function getProductById(id: string) {
 
   if (product == null) throw notFound()
   return product
+}
+export async function getProductsByCategorySlug(slug: string) {
+  const category = await db.query.categories.findFirst({
+    where: eq(categories.slug, slug),
+  })
+
+  if (category == null) throw notFound()
+
+  return await db.query.products.findMany({
+    where: eq(products.categoryId, category.id),
+    with: { variants: true, category: true, images: true, subcategory: true },
+    extras: { priceAfterDiscount: priceAfterDiscount(products) },
+  })
 }
 
 export async function insertProduct(product: NewProductWithVariants) {
