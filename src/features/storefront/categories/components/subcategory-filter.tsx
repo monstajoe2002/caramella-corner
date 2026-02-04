@@ -10,7 +10,7 @@ interface Subcategory {
 interface SubcategoryFilterProps {
   subcategories: Subcategory[]
   selectedSubcategory?: string
-  onSubcategoryChange: (subcategoryId: string | null) => void
+  onSubcategoryChange: (subcategoryId: string) => void
 }
 
 export default function SubcategoryFilter({
@@ -30,7 +30,7 @@ export default function SubcategoryFilter({
               ? 'bg-primary text-primary-foreground hover:bg-primary/80'
               : 'hover:bg-secondary/80',
           )}
-          onClick={() => onSubcategoryChange(null)}
+          onClick={() => onSubcategoryChange('')}
         >
           All
         </Badge>
