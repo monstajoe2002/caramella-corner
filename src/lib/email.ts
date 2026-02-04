@@ -5,7 +5,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
   const confirmLink = `${domain}/verify?token=${token}`
 
   await resend.emails.send({
-    from: 'onboarding@resend.dev',
+    from: 'confirm@caramellacorner.com',
     to: email,
     subject: 'Confirm your email',
     html: `<p>Please click <a href="${confirmLink}">here</a> to confirm your email address.</p>`,
@@ -16,7 +16,7 @@ export const sendConfirmationEmail = async (
   orderNumber: string,
 ) => {
   await resend.emails.send({
-    from: 'onboarding@resend.dev',
+    from: 'orders@caramellacorner.com',
     to: email,
     subject: 'Order Confirmation',
     html: `<h1>Your order has been confirmed! ✅</h1> 
