@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "NODE_OPTIONS='--import ./instrument.server.mjs' vite dev --port 3000",
     "build": "vite build && mkdir -p .output && cp instrument.server.mjs .output/server",
+    "nitro": "npm:nitro-nightly@latest",
     "serve": "vite preview",
     "test": "vitest run",
     "lint": "eslint",
