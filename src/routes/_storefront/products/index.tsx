@@ -10,53 +10,75 @@ import {
 } from '@/features/storefront/products/data'
 import ProductCard from '@/features/storefront/products/components/card'
 import { ProductCardSkeleton } from '@/features/storefront/products/components/product-card-skeleton'
+import CategoryFilter from '@/features/storefront/categories/components/category-filter'
+import SubcategoryFilter from '@/features/storefront/categories/components/subcategory-filter'
+import { getCategoriesWithSubcategories } from '@/features/admin/categories/data'
 
 const ITEMS_PER_PAGE = 10
 
 const searchSchema = z.object({
   q: z.string().optional(),
   page: z.coerce.number().min(1).optional(),
+  category: z.string().optional(),
+  subcategory: z.string().optional(),
 })
 
 export const Route = createFileRoute('/_storefront/products/')({
   component: RouteComponent,
   validateSearch: searchSchema,
-  loaderDeps: ({ search: { q, page } }) => ({ query: q, page }),
-  loader: async ({ deps: { query, page } }) => {
+  loaderDeps: ({ search: { q, page, category, subcategory } }) => ({
+    query: q,
+    page,
+    categoryId: category,
+    subcategoryId: subcategory,
+  }),
+  loader: async ({ deps: { query, page, categoryId, subcategoryId } }) => {
     const currentPage = page ?? 1
     const limit = ITEMS_PER_PAGE
     const offset = (currentPage - 1) * ITEMS_PER_PAGE
-
-    if (query && query.trim()) {
-      const trimmedQuery = query.trim()
-      const [products, totalCount] = await Promise.all([
-        searchActiveProducts({
-          data: {
-            query: trimmedQuery,
-            limit,
-            offset,
-          },
-        }),
-        searchActiveProductsCount({ data: { query: trimmedQuery } }),
-      ])
-      const totalPages = Math.ceil((totalCount || 0) / ITEMS_PER_PAGE)
-      return {
-        products,
-        query: trimmedQuery,
-        currentPage,
-        totalPages: totalPages > 0 ? totalPages : 1,
-      }
+    const filterParams = {
+      categoryId: categoryId || undefined,
+      subcategoryId: subcategoryId || undefined,
     }
-    const [products, totalCount] = await Promise.all([
-      getActiveProducts({ data: { limit, offset } }),
-      getActiveProductsCount(),
-    ])
+
+    const [categoriesWithSubcategories, products, totalCount] =
+      await Promise.all([
+        getCategoriesWithSubcategories(),
+        (async () => {
+          if (query && query.trim()) {
+            return searchActiveProducts({
+              data: {
+                query: query.trim(),
+                limit,
+                offset,
+                ...filterParams,
+              },
+            })
+          }
+          return getActiveProducts({
+            data: { limit, offset, ...filterParams },
+          })
+        })(),
+        (async () => {
+          if (query && query.trim()) {
+            return searchActiveProductsCount({
+              data: { query: query.trim(), ...filterParams },
+            })
+          }
+          return getActiveProductsCount({ data: filterParams })
+        })(),
+      ])
+
     const totalPages = Math.ceil((totalCount || 0) / ITEMS_PER_PAGE)
 
     return {
       products,
+      query: query?.trim(),
       currentPage,
       totalPages: totalPages > 0 ? totalPages : 1,
+      categories: categoriesWithSubcategories,
+      categoryId: categoryId || undefined,
+      subcategoryId: subcategoryId || undefined,
     }
   },
   head: ({ loaderData }) => {
@@ -97,16 +119,52 @@ export const Route = createFileRoute('/_storefront/products/')({
 })
 
 function RouteComponent() {
-  const { products, currentPage = 1, totalPages = 1 } = Route.useLoaderData()
-  const { q } = Route.useSearch()
+  const {
+    products,
+    currentPage = 1,
+    totalPages = 1,
+    categories = [],
+    categoryId,
+    subcategoryId,
+  } = Route.useLoaderData()
+  const { q, category, subcategory } = Route.useSearch()
   const { isLoading } = useRouterState()
 
   const hasSearchQuery = q && q.trim()
 
   const navigate = Route.useNavigate()
 
+  const selectedCategorySubcategories =
+    categoryId != null
+      ? (categories.find((c) => c.id === categoryId)?.subcategories ?? [])
+      : []
+
   function onPageChange(newPage: number) {
-    navigate({ search: { q, page: newPage } })
+    navigate({
+      search: { q, page: newPage, category, subcategory },
+    })
+  }
+
+  function onCategoryChange(newCategoryId: string) {
+    navigate({
+      search: {
+        q,
+        page: 1,
+        category: newCategoryId || undefined,
+        subcategory: undefined,
+      },
+    })
+  }
+
+  function onSubcategoryChange(newSubcategoryId: string) {
+    navigate({
+      search: {
+        q,
+        page: 1,
+        category,
+        subcategory: newSubcategoryId || undefined,
+      },
+    })
   }
 
   const pagedProducts = products
@@ -120,6 +178,18 @@ function RouteComponent() {
         </p>
       ) : (
         <p>Browse all our exclusive products</p>
+      )}
+      <CategoryFilter
+        categories={categories}
+        selectedCategory={categoryId}
+        onCategoryChange={onCategoryChange}
+      />
+      {categoryId != null && selectedCategorySubcategories.length > 0 && (
+        <SubcategoryFilter
+          subcategories={selectedCategorySubcategories}
+          selectedSubcategory={subcategoryId}
+          onSubcategoryChange={onSubcategoryChange}
+        />
       )}
       {products.length === 0 && hasSearchQuery ? (
         <p className="text-muted-foreground">
