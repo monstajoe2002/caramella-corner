@@ -1,7 +1,7 @@
 import Navbar from '@/components/storefront/navbar'
 import { storefrontAuthMiddleware } from '@/features/storefront/middleware'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
-
+import { Analytics } from '@vercel/analytics/react'
 export const Route = createFileRoute('/_storefront')({
   server: {
     middleware: [storefrontAuthMiddleware],
@@ -111,6 +111,7 @@ function RouteComponent() {
       <main className="container container-storefront">
         <Outlet />
       </main>
+      <Analytics />
     </div>
   )
 }
