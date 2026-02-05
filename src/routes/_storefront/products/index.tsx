@@ -170,34 +170,44 @@ function RouteComponent() {
   const pagedProducts = products
 
   return (
-    <div className="min-h-[calc(100vh-100px)] flex flex-col justify-between">
-      <h1 className="text-start">Products</h1>
-      {hasSearchQuery ? (
-        <p>
-          Search results for &quot;{q}&quot; ({products.length} found)
-        </p>
-      ) : (
-        <p>Browse all our exclusive products</p>
-      )}
-      <CategoryFilter
-        categories={categories}
-        selectedCategory={categoryId}
-        onCategoryChange={onCategoryChange}
-      />
-      {categoryId != null && selectedCategorySubcategories.length > 0 && (
-        <SubcategoryFilter
-          subcategories={selectedCategorySubcategories}
-          selectedSubcategory={subcategoryId}
-          onSubcategoryChange={onSubcategoryChange}
+    <div>
+      <header className="mb-6">
+        <h1 className="text-start mb-2">Products</h1>
+        {hasSearchQuery ? (
+          <p className="text-muted-foreground">
+            Search results for &quot;{q}&quot; ({products.length} found)
+          </p>
+        ) : (
+          <p className="text-muted-foreground">
+            Browse all our exclusive products
+          </p>
+        )}
+      </header>
+
+      <section className="mb-8">
+        <CategoryFilter
+          categories={categories}
+          selectedCategory={categoryId}
+          onCategoryChange={onCategoryChange}
         />
-      )}
+        {categoryId != null && selectedCategorySubcategories.length > 0 && (
+          <SubcategoryFilter
+            subcategories={selectedCategorySubcategories}
+            selectedSubcategory={subcategoryId}
+            onSubcategoryChange={onSubcategoryChange}
+          />
+        )}
+      </section>
+
       {products.length === 0 && hasSearchQuery ? (
-        <p className="text-muted-foreground">
-          No products found matching your search.
-        </p>
+        <div className="flex flex-col items-center justify-center py-16">
+          <p className="text-muted-foreground text-lg">
+            No products found matching your search.
+          </p>
+        </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
             {/* Show skeletons while loading, else show product cards */}
             {isLoading
               ? [...Array(ITEMS_PER_PAGE).keys()].map((key) => (
@@ -217,11 +227,13 @@ function RouteComponent() {
                 })}
           </div>
           {totalPages > 1 && (
-            <PaginationWithFirstAndLastPageNavigation
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={onPageChange}
-            />
+            <div className="mt-8">
+              <PaginationWithFirstAndLastPageNavigation
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={onPageChange}
+              />
+            </div>
           )}
         </>
       )}
