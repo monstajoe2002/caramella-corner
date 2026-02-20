@@ -100,21 +100,6 @@ export const columns: ColumnDef<OrderWithCustomer>[] = [
     },
   },
   {
-    id: 'paymentMethod',
-    header: 'Payment Method',
-    cell: ({ row }) => {
-      const paymentMethod = row.original.payment?.paymentMethod
-      if (!paymentMethod) {
-        return <span className="text-muted-foreground">N/A</span>
-      }
-      return (
-        <Badge variant="secondary">
-          {paymentMethod.charAt(0).toUpperCase() + paymentMethod.slice(1)}
-        </Badge>
-      )
-    },
-  },
-  {
     id: 'viewItems',
     header: 'Order Items',
     cell: ({ row }) => {
