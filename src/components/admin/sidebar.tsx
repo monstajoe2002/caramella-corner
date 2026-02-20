@@ -1,4 +1,4 @@
-import { Home, LayoutGrid, Package, Truck } from 'lucide-react'
+import { Home, LayoutGrid, Package, CreditCard, Truck } from 'lucide-react'
 
 import {
   Sidebar,
@@ -29,6 +29,11 @@ const items = [
     title: 'Orders',
     url: '/admin/orders',
     icon: Truck,
+  },
+  {
+    title: 'Payments',
+    url: '/admin/payments',
+    icon: CreditCard,
   },
   {
     title: 'Categories',
